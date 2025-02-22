@@ -33,13 +33,13 @@ const createUser = async (req, res, next) => {
 
 const getUsers = async (req, res, next) => {
   const users = await Admin.find();
-  res.status(200).json({
-    status: "success",
-    data: users,
-  });
+  res.send('<a href="/api/v1/users/auth/google">Authenticate with google</a>');
 };
-
+const back = async(req,res,next)=>{
+  console.log("saha");
+}
 module.exports = {
   createUser,
   getUsers,
+  back
 };
