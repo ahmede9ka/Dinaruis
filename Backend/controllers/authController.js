@@ -3,7 +3,10 @@ const User = require("./../models/userModel");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const { configDotenv } = require("dotenv");
-
+const Admin = require("../models/adminModel");
+//const { APIFeatures } = require("../utils/apifeatures");
+const Investor = require("../models/investorModel");
+const Entrepreneur = require("../models/entrepreneurModel");
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || "maher secret", {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -12,8 +15,17 @@ const signToken = (id) => {
 
 const signup = async (req, res, next) => {
   try {
-    const newUser = await User.create(req.body);
-
+    let newUser;
+    if (req.body.role === "ADMIN") {
+      newUser = await Admin.create(req.body);
+    } else if (req.body.role === "ENTREPRENEUR") {
+      newUser = await Entrepreneur.create(req.body);
+    } else if (req.body.role === "INVESTOR") {
+      newUser = await Investor.create(req.body);
+    } else {
+      return next(new AppError("Please provide a valid role", 400));
+    }
+    console.log(newUser);
     // Token creation (JWT)
     const token = signToken(newUser._id);
     const cookieExpiresIn = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 90;
