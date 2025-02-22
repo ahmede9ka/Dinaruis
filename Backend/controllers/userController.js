@@ -20,7 +20,7 @@ const createUser = async (req, res, next) => {
 
     //console.log(entrepreneur);
     res.status(201).json({
-      status: "successssssssssssss",
+      status: "success",
       data: req.body,
     });
   } catch (error) {
@@ -35,11 +35,11 @@ const getUsers = async (req, res, next) => {
   const users = await Admin.find();
   res.send('<a href="/api/v1/users/auth/google">Authenticate with google</a>');
 };
-const back = async(req,res,next)=>{
+const back = async (req, res, next) => {
   console.log("saha");
-}
+};
 module.exports = {
   createUser,
   getUsers,
-  back
+  back,
 };
