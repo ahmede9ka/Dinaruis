@@ -17,9 +17,22 @@ router.post("/login", login);
 // ✅ Google OAuth Routes
 router.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  (req, res, next) => {
+    const role = req.query.role; // Default to "INVESTOR"
+    passport.authenticate("google", {
+      scope: ["email", "profile"],
+      state: JSON.stringify({ role }), // Pass the role in the state parameter
+    })(req, res, next);
+  }
 );
 
-router.get("/auth/google/callback",back);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { session: false }),
+  (req, res) => {
+    // Send JWT token to client after authentication
+    res.json({ user: req.user, token: req.user.token });
+  }
+);
 
 module.exports = router;

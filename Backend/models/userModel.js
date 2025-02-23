@@ -1,38 +1,41 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const slugify = require("slugify");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
+
 const userSchema = new Schema({
   firstName: {
     type: String,
-    required: [true, "A user must have a firstname"],
+    required: [true, "A user must have a first name"],
   },
   lastName: {
     type: String,
-    required: [true, "A user must have a lastname"],
+    required: [true, "A user must have a last name"],
   },
   email: {
     type: String,
-    required: [true, "A user must have a name"],
+    required: [true, "A user must have an email"],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Please provide a valid email "],
+    validate: [validator.isEmail, "Please provide a valid email"],
   },
   password: {
     type: String,
-    required: [true, "A user must have a password"],
     minlength: 8,
-    select: false,
+    select: false, // Hide password in queries
+  },
+  googleId: {
+    type: String, // Store Google OAuth ID for users logging in with Google
+    unique: true,
+    sparse: true, // Allows null values without breaking unique constraint
   },
   DateOfBirth: {
     type: Date,
-    required: true,
+    //required: true,
   },
   phoneNumber: {
     type: String,
-    required: [true, "A user must have a name"],
+    //required: [true, "A user must have a phone number"],
   },
   role: {
     type: String,
@@ -41,20 +44,17 @@ const userSchema = new Schema({
   },
 });
 
-// before saving or updating to hash the password
+// Hash password before saving
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || !this.password) return next(); // Skip hashing if no password (Google login)
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  this.passwordConfirm = undefined;
   next();
 });
 
-userSchema.methods.correctPassword = async function (
-  candidatePassword,
-  userPassword
-) {
+// Method to compare passwords
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
