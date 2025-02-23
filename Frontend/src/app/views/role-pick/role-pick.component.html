@@ -1,0 +1,23 @@
+<div class="bg-gray-100 dark:bg-gray-800 min-h-screen py-16 lg:py-24 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+    <div class="flex justify-center mb-8">
+      <p class="max-w-lg text-3xl font-semibold leading-relaxed text-gray-900 dark:text-white text-center">
+        {{ title }}
+      </p>
+    </div>
+    <div class="card-container flex justify-center space-x-4 mb-8">
+      <app-card
+        *ngFor="let role of roles"
+        [title]="role.title"
+        [description]="role.description"
+        [iconPath]="role.iconPath"
+        (click)="selectRole(role)"
+        [isSelected]="selectedRole === role"
+      ></app-card>
+    </div>
+    <div class="flex justify-end">
+      <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" (click)="next()">
+        Next
+      </button>
+    </div>
+  </div>
+  

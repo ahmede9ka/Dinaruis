@@ -1,0 +1,39 @@
+.card-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap to the next line */
+    justify-content: center;
+    gap: 16px; /* Space between cards */
+}
+
+.app-card {
+    flex: 1 1 300px; /* Allow cards to grow and shrink, with a base width of 300px */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    margin: 10px; /* Margin for spacing */
+}
+
+.selected-card {
+    border: 2px solid transparent; /* Prevent layout shift */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.7); /* Light effect */
+    transition: box-shadow 0.3s ease; /* Smooth transition for the light effect */
+}
+
+.app-card svg {
+    transition: fill 0.2s ease; /* Smooth transition for icon color */
+}
+
+/* Change icon color to white when selected */
+.selected-card svg {
+    fill: white; 
+}
+
+/* Default icon color */
+.app-card svg {
+    fill: gray; /* Default icon color */
+}
+
+/* Media query for responsiveness */
+@media (max-width: 600px) {
+    .app-card {
+        flex-basis: 100%; /* Full width on small screens */
+    }
+}
