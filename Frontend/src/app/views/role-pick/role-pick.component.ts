@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { CommonModule } from '@angular/common';
 import { NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-role-pick',
   imports: [CardComponent,CommonModule,],
@@ -10,7 +11,7 @@ import { NgZone } from '@angular/core';
 })
 export class RolePickComponent {
   title = 'Choose Your Role';
-  constructor(private ngZone: NgZone) {}
+  constructor(private ngZone: NgZone,private router:Router) {}
   // Define card data for roles
   roles = [
     {
@@ -34,7 +35,8 @@ export class RolePickComponent {
   next() {
     if (this.selectedRole) {
         this.ngZone.run(() => {
-            alert('Proceeding with role: ' + this.selectedRole.title);
+            this.router.navigate(['/login']);
+            
         });
     } else {
         this.ngZone.run(() => {
