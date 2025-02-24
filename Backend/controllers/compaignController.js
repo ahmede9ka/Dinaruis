@@ -4,11 +4,11 @@ const Admin = require("../models/adminModel");
 //const { APIFeatures } = require("../utils/apifeatures");
 const AppError = require("../utils/appError");
 const Investor = require("../models/investorModel");
-const Compaign = require("../models/compaignModel");
+const Campaign = require("../models/campaignModel");
 
-const createCompaign = async (req, res, next) => {
+const createCampaign = async (req, res, next) => {
   try {
-    console.log(req.user);
+    //console.log(req.user);
     const user = await User.findById(req.user.id);
     if (!user) {
       return next(new AppError("User not found", 404));
@@ -19,35 +19,35 @@ const createCompaign = async (req, res, next) => {
       user: req.user._id, // Attach authenticated user ID
     };
 
-    const newCompaign = await Compaign.create(data);
+    const newCampaign = await Campaign.create(data);
 
     res.status(201).json({
       status: "success",
-      data: newCompaign,
+      data: newCampaign,
     });
   } catch (error) {
     res.status(400).json({
       status: "failed",
-      message: `Error creating new compaign : ${error.message}`,
+      message: `Error creating new Campaign : ${error.message}`,
     });
   }
 };
 
-const getCompaign = async (req, res, next) => {
-  const compaign = await Compaign.find();
+const getCampaign = async (req, res, next) => {
+  const Campaign = await Campaign.find();
   res.status(200).json({
     status: "success",
-    data: compaign,
+    data: Campaign,
   });
 };
 
-const deleteCompaign = async (req, res, next) => {
+const deleteCampaign = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const compaign = await Compaign.findByIdAndDelete(id);
+    const Campaign = await Campaign.findByIdAndDelete(id);
 
-    if (!compaign) {
-      return next(new AppError("No compaign found with that ID", 404));
+    if (!Campaign) {
+      return next(new AppError("No Campaign found with that ID", 404));
     }
     res.status(204).json({
       status: "success",
@@ -56,13 +56,13 @@ const deleteCompaign = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: "failed",
-      message: `Error deleting compaign : ${error.message}`,
+      message: `Error deleting Campaign : ${error.message}`,
     });
   }
 };
 
 module.exports = {
-  createCompaign,
-  getCompaign,
-  deleteCompaign,
+  createCampaign,
+  getCampaign,
+  deleteCampaign,
 };

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const compaignSchema = new Schema({
+const campaignSchema = new Schema({
   title: {
     type: String,
     required: [true, "A campaign must have a title"],
@@ -42,5 +42,5 @@ const compaignSchema = new Schema({
   },
 });
 
-const Compaign = mongoose.model("Compaign", compaignSchema);
-module.exports = Compaign;
+const Campaign = mongoose.model("Campaign", campaignSchema);
+module.exports = Campaign;

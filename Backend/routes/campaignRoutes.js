@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const {
-  createCompaign,
-  getCompaign,
-  deleteCompaign,
+  createCampaign,
+  getCampaign,
+  deleteCampaign,
 } = require("../controllers/compaignController");
 const { protect } = require("../controllers/authController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
 
-router.post("/create", protect, createCompaign);
-router.get("/", protect, getCompaign);
-router.delete("/:id", protect, deleteCompaign);
+router.post("/create", protect, createCampaign);
+router.get("/", protect, getCampaign);
+router.delete("/:id", protect, deleteCampaign);
 
 module.exports = router;

@@ -1,27 +1,47 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const Campaign = require("../models/campaignModel");
 
 const processDonation = async (req, res) => {
   try {
-    const { amount } = req.body;
-
+    const { amount, campaign_id } = req.body;
+    const campaign = await Campaign.findById(campaign_id);
+    if (!campaign) {
+      return res.status(400).json({ error: "Compaign not found" });
+    }
     if (!amount) {
-      return res.status(400).json({ error: "Missing amount field" });
+      return res.status(400).json({ error: "Amount is required" });
     }
 
-    // Create a payment intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Convert to cents (Stripe uses the smallest currency unit)
-      currency: currency,
-      payment_method: paymentMethodId,
-      confirm: true, // Immediately confirm the payment
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: campaign.title,
+            },
+            unit_amount: amount * 100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: "http://localhost:3000/complete",
+      cancel_url: "http://localhost:3000/cancel",
     });
+
     return res.status(200).json({
-      success: true,
-      message: "Donation successful",
-      paymentIntent,
+      status: "success",
+      message: "Donation initiated",
+      user_id: req.user.id,
+      campaign_id: campaign_id,
+      url: session.url,
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({
+      status: "failed",
+      error: error.message,
+    });
   }
 };
 

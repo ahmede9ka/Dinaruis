@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
-const compaignRouter = require("./routes/compaignRoutes");
+const campaignRouter = require("./routes/campaignRoutes");
 
 app.use(
   cors({
@@ -29,7 +29,7 @@ app.use(express.static(`${__dirname}/public`));
 
 // Routes
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/compaigns", compaignRouter);
+app.use("/api/v1/campaigns", campaignRouter);
 
 // wrong calls
 app.all("*", (req, res, next) => {
