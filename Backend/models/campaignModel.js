@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const campaignSchema = new Schema({
   title: {
     type: String,
-    required: [true, "A campaign must have a title"],
+    required: [true, "A campaign must have a Title"],
   },
   description: {
     type: String,
