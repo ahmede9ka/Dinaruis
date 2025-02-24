@@ -1,7 +1,12 @@
 const express = require("express");
 const passport = require("../Middlewares/passport");
 const router = express.Router();
-const { createUser, getUsers,back } = require("../controllers/userController");
+const {
+  createUser,
+  getUsers,
+  back,
+  updateUser,
+} = require("../controllers/userController");
 const { signup, login, protect } = require("../controllers/authController");
 
 // ✅ Create user (only for testing, requires authentication)
@@ -13,18 +18,16 @@ router.get("/", getUsers);
 // ✅ Authentication Routes
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/update", protect, updateUser);
 
 // ✅ Google OAuth Routes
-router.get(
-  "/auth/google",
-  (req, res, next) => {
-    const role = req.query.role; // Default to "INVESTOR"
-    passport.authenticate("google", {
-      scope: ["email", "profile"],
-      state: JSON.stringify({ role }), // Pass the role in the state parameter
-    })(req, res, next);
-  }
-);
+router.get("/auth/google", (req, res, next) => {
+  const role = req.query.role; // Default to "INVESTOR"
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+    state: JSON.stringify({ role }), // Pass the role in the state parameter
+  })(req, res, next);
+});
 
 router.get(
   "/auth/google/callback",

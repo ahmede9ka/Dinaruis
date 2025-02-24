@@ -38,8 +38,27 @@ const getUsers = async (req, res, next) => {
 const back = async (req, res, next) => {
   console.log("saha");
 };
+const updateUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: `Error updating user : ${error.message}`,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
   back,
+  updateUser,
 };
