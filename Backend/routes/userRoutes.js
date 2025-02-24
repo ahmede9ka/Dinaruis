@@ -8,6 +8,7 @@ const {
   updateUser,
 } = require("../controllers/userController");
 const { signup, login, protect } = require("../controllers/authController");
+const { processDonation } = require("../controllers/stripeController");
 
 // ✅ Create user (only for testing, requires authentication)
 router.post("/create", protect, createUser);
@@ -19,6 +20,9 @@ router.get("/", getUsers);
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/update", protect, updateUser);
+
+// ✅ Stripe Route
+router.post("/donate", protect, processDonation);
 
 // ✅ Google OAuth Routes
 router.get("/auth/google", (req, res, next) => {
