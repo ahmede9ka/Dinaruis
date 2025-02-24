@@ -23,6 +23,7 @@ app.use(cookieParser());
 // Body parser , reading data from body into req.body
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
 // for serving static files
 app.use(express.static(`${__dirname}/public`));
 

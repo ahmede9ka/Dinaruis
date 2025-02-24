@@ -33,6 +33,16 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
+    const token = req.user.token; // Extract JWT from req.user
+    const user = req.user.user; // Extract user data
+
+    // Set token in an HTTP-only cookie (more secure)
+    res.cookie("jwt", token, {
+      httpOnly: true, // Prevents JavaScript access (protects against XSS)
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      sameSite: "strict", // Prevents CSRF attacks
+      maxAge: 7 * 24 * 60 * 60 * 1000, // Expires in 7 days
+    });
     // Send JWT token to client after authentication
     res.json({ user: req.user, token: req.user.token });
   }
