@@ -5,6 +5,7 @@ import { LoginComponent } from './views/login/login.component';
 import { LostPasswordComponent } from './views/lost-password/lost-password.component';
 import { SignUpComponent } from './views/sign-up/sign-up.component';
 import { CallbackComponent } from './views/callback/callback.component';
+import { DashboardAdminComponent } from './views/dashboard-admin/dashboard-admin.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
   {
     path: 'login/:role', // Dynamic route for login with role parameter
     component: LoginComponent,
+  },
+  {
+    path: 'da',
+    component: DashboardAdminComponent, // Route for OAuth callback
   },
   {
     path: 'lostpassword',
@@ -35,4 +40,5 @@ export const routes: Routes = [
     path: '**', // Wildcard route for 404 page (optional)
     redirectTo: '', // Redirect to home page or a dedicated 404 page
   },
+  
 ];
