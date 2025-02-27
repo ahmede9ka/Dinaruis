@@ -51,35 +51,29 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    // 1) check if email and password exist
     if (!email || !password) {
-      return next(new AppError("Please provide email and password !", 400));
-    }
-    // 2) check if user && password is correct
-    const user = await User.findOne({ email }).select("+password");
-    if (!user || !(await user.correctPassword(password, user.password))) {
-      return next(new AppError("Incorrect Email or password !", 401));
+      return next(new AppError("Please provide email and password!", 400));
     }
 
-    // 3) if everything ok , send token to client
+    const user = await User.findOne({ email }).select("+password");
+    if (!user || !(await user.correctPassword(password, user.password))) {
+      return next(new AppError("Incorrect email or password!", 401));
+    }
 
     const token = signToken(user._id);
     res.cookie("jwt", token, {
-      expires: new Date(
-        Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-      ),
+      expires: new Date(Date.now() + (Number(process.env.JWT_COOKIE_EXPIRES_IN) || 90) * 24 * 60 * 60 * 1000),
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
     });
+
     res.status(200).json({
       status: "success",
-      token: token,
-      user: user,
+      token,
+      user,
     });
   } catch (error) {
-    res.status(400).json({
-      status: "failed",
-      message: `Error login user : ${error.message}`,
-    });
+    next(new AppError(`Error logging in: ${error.message}`, 400));
   }
 };
 

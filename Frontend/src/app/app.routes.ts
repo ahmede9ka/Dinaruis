@@ -29,7 +29,7 @@ export const routes: Routes = [
     component: LostPasswordComponent, // Route for lost password page
   },
   {
-    path: 'signup',
+    path: 'signup/:role',
     component: SignUpComponent, // Route for signup page
   },
   {
