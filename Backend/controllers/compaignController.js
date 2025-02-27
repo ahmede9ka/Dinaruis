@@ -34,10 +34,10 @@ const createCampaign = async (req, res, next) => {
 };
 
 const getCampaign = async (req, res, next) => {
-  const Campaign = await Campaign.find();
+  const campaign = await Campaign.find();
   res.status(200).json({
     status: "success",
-    data: Campaign,
+    data: campaign,
   });
 };
 
