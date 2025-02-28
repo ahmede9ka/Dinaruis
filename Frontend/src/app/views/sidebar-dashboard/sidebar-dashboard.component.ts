@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -15,10 +15,12 @@ export class SidebarDashboardComponent implements OnInit {
 
   adminMenu = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: 'bi bi-speedometer2' },
-    { name: 'Users', path: '/admin/users', icon: 'bi bi-people' },
-    { name: 'Reports', path: '/admin/reports', icon: 'bi bi-bar-chart' },
-    { name: 'Settings', path: '/admin/settings', icon: 'bi bi-gear' }
-  ];
+    { name: 'Campagnes Management', path: '/admin/campaigns', icon: 'bi bi-megaphone' }, // Fixed typo & updated icon
+    { name: 'User Management', path: '/admin/users', icon: 'bi bi-people' }, // Fixed path
+    { name: 'Transaction Management', path: '/admin/transactions', icon: 'bi bi-cash-stack' }, // Fixed path & updated icon
+    { name: 'Settings et Configuration', path: '/admin/settings', icon: 'bi bi-gear' } // Fixed spelling to French
+];
+
 
   entrepreneurMenu = [
     { name: 'Dashboard', path: '/entrepreneur/dashboard', icon: 'bi bi-speedometer2' },
@@ -29,18 +31,24 @@ export class SidebarDashboardComponent implements OnInit {
 
   investorMenu = [
     { name: 'Dashboard', path: '/investor/dashboard', icon: 'bi bi-speedometer2' },
-    { name: 'Investment Opportunities', path: '/investor/opportunities', icon: 'bi bi-briefcase' },
+    { name: 'Explore', path: '/investor/opportunities', icon: 'bi bi-briefcase' }, // Changed 'Explorer' to 'Explore' for consistency
     { name: 'My Investments', path: '/investor/investments', icon: 'bi bi-wallet2' },
-    { name: 'Settings', path: '/investor/settings', icon: 'bi bi-gear' }
-  ];
+    { name: 'My Favorites', path: '/investor/favorites', icon: 'bi bi-star' }, // Fixed path & updated icon for favorites
+    { name: 'Settings & Configuration', path: '/investor/settings', icon: 'bi bi-gear' } // Fixed wording
+];
 
-  constructor(private authService: AuthService) {}
+  role: string | null = '';
+  constructor(private router: Router,private route: ActivatedRoute,private authService: AuthService) {}
+ 
 
   ngOnInit() {
-    // Fetch user role dynamically from AuthService
-    // this.userRole = this.authService.getUserRole(); // Uncomment and use when AuthService is implemented
-    this.userRole = 'admin'; // Hardcoded for now, change based on actual authentication logic
-
+   
+    this.route.paramMap.subscribe(params => {
+      this.role = params.get('role'); // Get the role from URL
+      console.log('Role from URL:', this.role); // Debugging output
+    });
+    this.userRole = this.role ? this.role : '';
+  
     // Assign the correct menu based on role
     switch (this.userRole) {
       case 'admin':
