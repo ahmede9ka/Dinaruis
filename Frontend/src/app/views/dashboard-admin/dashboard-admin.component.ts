@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { SidebarAdminComponent } from "../sidebar-admin/sidebar-admin.component";
 
+import { DashboardNavComponent } from "../dashboard-nav/dashboard-nav.component";
+import { SidebarDashboardComponent } from '../sidebar-dashboard/sidebar-dashboard.component';
 @Component({
   selector: 'app-dashboard-admin',
-  imports: [SidebarAdminComponent],
+  standalone: true,
+  imports: [SidebarDashboardComponent, DashboardNavComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrl: './dashboard-admin.component.css'
 })
