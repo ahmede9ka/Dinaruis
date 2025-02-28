@@ -9,6 +9,7 @@ import { DashboardAdminComponent } from './views/dashboard-admin/dashboard-admin
 import { DashboardEnterpreneurComponent } from './views/dashboard-enterpreneur/dashboard-enterpreneur.component';
 import { DashboardInvestiseurComponent } from './views/dashboard-investiseur/dashboard-investiseur.component';
 import { RoleDashboardComponent } from './views/role-dashboard-component/role-dashboard-component.component';
+import { ExploreComponent } from './views/explore/explore.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
   {
     path: 'signup/:role',
     component: SignUpComponent, // Route for signup page
+  },
+  {
+    path: 'explore',
+    component: ExploreComponent, // Route for signup page
   },
   {
     path: 'callback',
