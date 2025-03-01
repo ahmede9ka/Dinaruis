@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const Donation = require("./donationModel");
 
 const userSchema = new Schema({
   firstName: {
@@ -53,8 +54,23 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+// Middleware to delete associated donations before deleting a user
+userSchema.pre("findOneAndDelete", async function (next) {
+  const user = await this.model.findOne(this.getQuery()); // Get the user being deleted
+
+  if (!user) return next(); // If no user is found, exit middleware
+
+  // Delete all donations associated with this user
+  await Donation.deleteMany({ user: user._id });
+
+  next();
+});
+
 // Method to compare passwords
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 

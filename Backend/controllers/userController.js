@@ -35,6 +35,13 @@ const getUsers = async (req, res, next) => {
   const users = await Admin.find();
   res.send('<a href="/api/v1/users/auth/google">Authenticate with google</a>');
 };
+const getAllUsers = async (req, res, next) => {
+  const users = await User.find();
+  res.status(200).json({
+    status: "success",
+    data: users,
+  });
+};
 const back = async (req, res, next) => {
   console.log("saha");
 };
@@ -55,10 +62,34 @@ const updateUser = async (req, res, next) => {
     });
   }
 };
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "User not found",
+      });
+    }
+
+    res.status(204).json({
+      status: "success",
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: `Error deleting user: ${error.message}`,
+    });
+  }
+};
 
 module.exports = {
   createUser,
   getUsers,
   back,
   updateUser,
+  deleteUser,
+  getAllUsers,
 };

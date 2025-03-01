@@ -8,6 +8,7 @@ const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
 const campaignRouter = require("./routes/campaignRoutes");
+const donationRouter = require("./routes/donationRoutes");
 
 app.use(
   cors({
@@ -30,6 +31,7 @@ app.use(express.static(`${__dirname}/public`));
 // Routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/campaigns", campaignRouter);
+app.use("/api/v1/donation", donationRouter);
 
 // wrong calls
 app.all("*", (req, res, next) => {
