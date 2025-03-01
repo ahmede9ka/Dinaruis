@@ -3,9 +3,12 @@ const Campaign = require("../models/campaignModel");
 const User = require("../models/userModel");
 const Donation = require("../models/donationModel");
 
-const processDonation = async (req, res) => {
+const processDonation = async (req, res, next) => {
   try {
     const { amount, campaign_id } = req.body;
+    if (amount < 1) {
+      return next(new AppError("Amount must be greater than 0", 400));
+    }
     const campaign = await Campaign.findById(campaign_id);
     if (!campaign) {
       return res.status(400).json({ error: "Campaign not found" });
