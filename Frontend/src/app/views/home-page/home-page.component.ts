@@ -15,5 +15,8 @@ import { TeamComponent } from "../team/team.component";
   styleUrl: './home-page.component.css'
 })
 export class HomePageComponent {
+  
+
+
 
 }
