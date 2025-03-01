@@ -5,11 +5,9 @@ import { LoginComponent } from './views/login/login.component';
 import { LostPasswordComponent } from './views/lost-password/lost-password.component';
 import { SignUpComponent } from './views/sign-up/sign-up.component';
 import { CallbackComponent } from './views/callback/callback.component';
-import { DashboardAdminComponent } from './views/dashboard-admin/dashboard-admin.component';
-import { DashboardEnterpreneurComponent } from './views/dashboard-enterpreneur/dashboard-enterpreneur.component';
-import { DashboardInvestiseurComponent } from './views/dashboard-investiseur/dashboard-investiseur.component';
+
 import { RoleDashboardComponent } from './views/role-dashboard-component/role-dashboard-component.component';
-import { ExploreComponent } from './views/explore/explore.component';
+
 
 export const routes: Routes = [
   {
@@ -25,7 +23,7 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: ':role/dashboard',
+    path: ':role/:page/:id',
     component: RoleDashboardComponent, // A wrapper component to determine which dashboard to display
   },
   {
@@ -36,10 +34,8 @@ export const routes: Routes = [
     path: 'signup/:role',
     component: SignUpComponent, // Route for signup page
   },
-  {
-    path: 'explore',
-    component: ExploreComponent, // Route for signup page
-  },
+ 
+  
   {
     path: 'callback',
     component: CallbackComponent, // Route for OAuth callback
