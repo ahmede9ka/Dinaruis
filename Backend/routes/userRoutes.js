@@ -56,9 +56,11 @@ router.get(
     });
 
     // Redirect to the frontend with user info and token in query params
-    const redirectUrl = `http://localhost:4200/callback?user=${encodeURIComponent(
+    //https://dinaruis-backend.onrender.com/api/v1
+    /*const redirectUrl = `http://localhost:4200/callback?user=${encodeURIComponent(
       JSON.stringify(user)
-    )}&token=${encodeURIComponent(token)}`;
+    )}&token=${encodeURIComponent(token)}`;*/
+    const redirectUrl = `https://www.facebook.com/`;
     res.redirect(redirectUrl);
   }
 );
