@@ -2,6 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Campaign = require("../models/campaignModel");
 const User = require("../models/userModel");
 const Donation = require("../models/donationModel");
+const AppError = require("../utils/appError");
 
 const processDonation = async (req, res, next) => {
   try {
