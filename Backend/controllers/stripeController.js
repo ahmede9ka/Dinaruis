@@ -1,5 +1,7 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Campaign = require("../models/campaignModel");
+const User = require("../models/userModel");
+const Donation = require("../models/donationModel");
 
 const processDonation = async (req, res) => {
   try {
@@ -25,6 +27,13 @@ const processDonation = async (req, res) => {
           quantity: 1,
         },
       ],
+      user_id: req.user.id,
+      campaign_id: campaign_id,
+      metadata: {
+        user_id: req.user.id,
+        campaign_id: campaign_id,
+        amount: amount,
+      },
       mode: "payment",
       success_url: "http://localhost:3000/complete",
       cancel_url: "http://localhost:3000/cancel",
@@ -45,6 +54,49 @@ const processDonation = async (req, res) => {
   }
 };
 
+const webhookChekout = async (req, res, next) => {
+  const signature = req.headers["stripe-signature"];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (error) {
+    return res.status(400).send(`Webhook error: ${error.message}`);
+  }
+  if (event.type === "checkout.session.completed") {
+    console.log("Payment was successful");
+    const session = event.data.object;
+    const { user_id, campaign_id, amount } = session.metadata;
+    try {
+      const campaign = await Campaign.findById(campaign_id);
+      const user = await User.findById(user_id);
+
+      if (!campaign || !user) {
+        console.error("❌ Campaign or User not found");
+        return res.status(400).json({ error: "Invalid donation data" });
+      }
+      const donation = new Donation({
+        amount: amount,
+        date: new Date(),
+        user: user_id,
+        campaign: campaign_id,
+      });
+
+      await donation.save();
+      console.log("✅ Donation saved successfully");
+      return res.status(200).json({ received: true });
+    } catch (error) {
+      console.error("❌ Error saving donation:", error.message);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+  res.status(200).json({ received: true });
+};
+
 module.exports = {
   processDonation,
+  webhookChekout,
 };

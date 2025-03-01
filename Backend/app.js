@@ -9,7 +9,7 @@ const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const campaignRouter = require("./routes/campaignRoutes");
 const donationRouter = require("./routes/donationRoutes");
-
+const { webhookChekout } = require("./controllers/stripeController");
 app.use(
   cors({
     origin: "http://localhost:4200", // Replace with your Angular app's URL
@@ -18,6 +18,13 @@ app.use(
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   })
 );
+
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  webhookChekout
+);
+
 // Use cookie-parser middleware
 app.use(cookieParser());
 
