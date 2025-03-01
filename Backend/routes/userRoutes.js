@@ -21,14 +21,14 @@ router.post("/create", protect, createUser);
 router.get("/", getUsers);
 router.get("/getall", getAllUsers);
 
+// ✅ Stripe Route
+router.post("/donate", protect, processDonation);
+
 // ✅ Authentication Routes
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/:id", protect, updateUser);
 router.delete("/:id", protect, deleteUser);
-
-// ✅ Stripe Route
-router.post("/donate", protect, processDonation);
 
 // ✅ Google OAuth Routes
 router.get("/auth/google", (req, res, next) => {

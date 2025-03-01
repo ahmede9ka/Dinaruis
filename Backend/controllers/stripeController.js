@@ -8,7 +8,7 @@ const processDonation = async (req, res) => {
     const { amount, campaign_id } = req.body;
     const campaign = await Campaign.findById(campaign_id);
     if (!campaign) {
-      return res.status(400).json({ error: "Compaign not found" });
+      return res.status(400).json({ error: "Campaign not found" });
     }
     if (!amount) {
       return res.status(400).json({ error: "Amount is required" });
@@ -27,8 +27,6 @@ const processDonation = async (req, res) => {
           quantity: 1,
         },
       ],
-      user_id: req.user.id,
-      campaign_id: campaign_id,
       metadata: {
         user_id: req.user.id,
         campaign_id: campaign_id,
