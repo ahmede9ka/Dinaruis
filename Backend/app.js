@@ -20,7 +20,7 @@ app.use(
 );
 
 app.post(
-  "/webhook-checkout",
+  "/api/v1/webhook-checkout",
   express.raw({ type: "application/json" }),
   webhookChekout
 );
