@@ -21,23 +21,24 @@ const campaignSchema = new Schema({
   },
   image: {
     type: String,
-    required: true,
+    required: [true, "A campaign must have an image"],
   },
   images: {
     type: [String], // Fixed array type
-    required: true,
+    required: [true, "A campaign must have a images"],
   },
   startDate: {
     type: Date,
-    required: true,
+    required: [true, "A campaign must have a starting date"],
+    default: Date.now,
   },
   endDate: {
     type: Date,
-    required: true,
+    required: [true, "A campaign must have an ending date"],
   },
   localisation: {
     type: String,
-    required: true,
+    required: [true, "A campaign must have a location"],
   },
   type: {
     type: String,
@@ -55,7 +56,7 @@ const campaignSchema = new Schema({
   },
   code_postal: {
     type: Number,
-    required: true,
+    required: [true, "A campaign must have a postal code"],
   },
   user: {
     type: Schema.Types.ObjectId,
