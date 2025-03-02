@@ -1,4 +1,171 @@
-<div class="p-4 sm:ml-64">
-    <div class="p-4    mt-14">
-    <p class="text-black ">hello</p></div>
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    User ID
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Username
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Full Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Email
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    User Type
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Role
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Registration Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Last Login
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Total Transactions
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Total Contributions
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example User 1 - Investor -->
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    U123456
+                </th>
+                <td class="px-6 py-4">
+                    johndoe
+                </td>
+                <td class="px-6 py-4">
+                    John Doe
+                </td>
+                <td class="px-6 py-4">
+                    johndoeexample.com
+                </td>
+                <td class="px-6 py-4">
+                    Investor
+                </td>
+                <td class="px-6 py-4">
+                    Admin
+                </td>
+                <td class="px-6 py-4">
+                    Active
+                </td>
+                <td class="px-6 py-4">
+                    2024-01-15
+                </td>
+                <td class="px-6 py-4">
+                    2025-03-01 14:45
+                </td>
+                <td class="px-6 py-4">
+                    35
+                </td>
+                <td class="px-6 py-4">
+                    $1200
+                </td>
+                <td class="px-6 py-4">
+                    <button class="px-4 py-2 text-sm text-white bg-blue-500 rounded">View</button>
+                    <button class="px-4 py-2 text-sm text-white bg-yellow-500 rounded">Edit</button>
+                    <button class="px-4 py-2 text-sm text-white bg-red-500 rounded">Suspend</button>
+                </td>
+            </tr>
+
+            <!-- Example User 2 - Entrepreneur -->
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    U123457
+                </th>
+                <td class="px-6 py-4">
+                    janesmith
+                </td>
+                <td class="px-6 py-4">
+                    Jane Smith
+                </td>
+                <td class="px-6 py-4">
+                    janesmithexample.com
+                </td>
+                <td class="px-6 py-4">
+                    Entrepreneur
+                </td>
+                <td class="px-6 py-4">
+                    User
+                </td>
+                <td class="px-6 py-4">
+                    Suspended
+                </td>
+                <td class="px-6 py-4">
+                    2024-02-01
+                </td>
+                <td class="px-6 py-4">
+                    2025-03-01 16:10
+                </td>
+                <td class="px-6 py-4">
+                    5
+                </td>
+                <td class="px-6 py-4">
+                    $350
+                </td>
+                <td class="px-6 py-4">
+                    <button class="px-4 py-2 text-sm text-white bg-blue-500 rounded">View</button>
+                    <button class="px-4 py-2 text-sm text-white bg-green-500 rounded">Activate</button>
+                    <button class="px-4 py-2 text-sm text-white bg-red-500 rounded">Delete</button>
+                </td>
+            </tr>
+
+            <!-- Example User 3 - Admin -->
+            <tr class="bg-white dark:bg-gray-800">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    U123458
+                </th>
+                <td class="px-6 py-4">
+                    aliceadmin
+                </td>
+                <td class="px-6 py-4">
+                    Alice Admin
+                </td>
+                <td class="px-6 py-4">
+                    aliceadminexample.com
+                </td>
+                <td class="px-6 py-4">
+                    Admin
+                </td>
+                <td class="px-6 py-4">
+                    Admin
+                </td>
+                <td class="px-6 py-4">
+                    Active
+                </td>
+                <td class="px-6 py-4">
+                    2023-11-10
+                </td>
+                <td class="px-6 py-4">
+                    2025-03-01 12:00
+                </td>
+                <td class="px-6 py-4">
+                    N/A
+                </td>
+                <td class="px-6 py-4">
+                    N/A
+                </td>
+                <td class="px-6 py-4">
+                    <button class="px-4 py-2 text-sm text-white bg-blue-500 rounded">View</button>
+                    <button class="px-4 py-2 text-sm text-white bg-yellow-500 rounded">Edit</button>
+                    <button class="px-4 py-2 text-sm text-white bg-red-500 rounded">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

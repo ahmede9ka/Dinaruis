@@ -6,7 +6,7 @@ import { LostPasswordComponent } from './views/lost-password/lost-password.compo
 import { SignUpComponent } from './views/sign-up/sign-up.component';
 import { CallbackComponent } from './views/callback/callback.component';
 
-import { RoleDashboardComponent } from './views/role-dashboard-component/role-dashboard-component.component';
+import { RoleDashboardComponentComponent } from './views/role-dashboard-component/role-dashboard-component.component';
 
 
 export const routes: Routes = [
@@ -24,7 +24,7 @@ export const routes: Routes = [
   },
   {
     path: ':role/:page/:id',
-    component: RoleDashboardComponent, // A wrapper component to determine which dashboard to display
+    component: RoleDashboardComponentComponent, // A wrapper component to determine which dashboard to display
   },
   {
     path: 'lostpassword',

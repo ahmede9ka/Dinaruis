@@ -16,6 +16,7 @@ import { MyFavoritesComponent } from "../my-favorites/my-favorites.component";
 import { DashboardAdminComponent } from "../dashboard-admin/dashboard-admin.component";
 import { DashboardInvestiseurComponent } from "../dashboard-investiseur/dashboard-investiseur.component";
 import { DashboardEnterpreneurComponent } from "../dashboard-enterpreneur/dashboard-enterpreneur.component";
+import { InvestorSettingsComponent } from "../investor-settings/investor-settings.component";
 
 @Component({
   selector: 'app-role-dashboard',
@@ -85,6 +86,9 @@ import { DashboardEnterpreneurComponent } from "../dashboard-enterpreneur/dashbo
             <ng-container *ngIf="page === 'favorites'">
               <app-my-favorites></app-my-favorites>
             </ng-container>
+            <ng-container *ngIf="page === 'settings'">
+              <app-investor-settings></app-investor-settings>
+            </ng-container>
           </ng-container>
           <ng-template #invalidPageForInvestor>
             <p>Invalid page for investor</p>
@@ -124,10 +128,11 @@ import { DashboardEnterpreneurComponent } from "../dashboard-enterpreneur/dashbo
     EntrepreneurSettingsComponent,
     ExploreComponent,
     MyInvestementComponent,
-    MyFavoritesComponent
-  ]
+    MyFavoritesComponent,
+    InvestorSettingsComponent
+]
 })
-export class RoleDashboardComponent {
+export class RoleDashboardComponentComponent {
   role: string | null = null;
   page: string | null = null;
   isValidRole: boolean = false;
