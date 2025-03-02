@@ -29,6 +29,8 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/:id", protect, updateUser);
 router.delete("/:id", protect, deleteUser);
+//getInvestment
+// ✅ Investor Routes
 
 // ✅ Google OAuth Routes
 router.get("/auth/google", (req, res, next) => {

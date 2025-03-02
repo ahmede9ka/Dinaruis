@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const userRouter = require("./routes/userRoutes");
+const investorRouter = require("./routes/investorRoutes");
 const campaignRouter = require("./routes/campaignRoutes");
 const donationRouter = require("./routes/donationRoutes");
 const { webhookChekout } = require("./controllers/stripeController");
@@ -37,6 +38,7 @@ app.use(express.static(`${__dirname}/public`));
 
 // Routes
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/investor", investorRouter);
 app.use("/api/v1/campaigns", campaignRouter);
 app.use("/api/v1/donation", donationRouter);
 

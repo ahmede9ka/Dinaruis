@@ -6,8 +6,6 @@ const Schema = mongoose.Schema;
 const donationSchema = new Schema({
   amount: {
     type: Number,
-    required: [true, "A donation must have an amount"],
-    min: [1, "Amount must be greater than 0"],
   },
   date: {
     type: Date,

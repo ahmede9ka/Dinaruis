@@ -1,14 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const {
-  createDonation,
-  getAllDonations,
-} = require("../controllers/donationController");
 const { protect } = require("../controllers/authController");
-
+const { getInvestment } = require("../controllers/investorController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
 
-router.post("/create", protect, createDonation);
-router.get("/getDonations", protect, getAllDonations);
+router.get("/getInvestment", protect, getInvestment);
+
 module.exports = router;

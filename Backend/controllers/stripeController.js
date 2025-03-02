@@ -7,9 +7,7 @@ const AppError = require("../utils/appError");
 const processDonation = async (req, res, next) => {
   try {
     const { amount, campaign_id } = req.body;
-    if (amount < 1) {
-      return next(new AppError("Amount must be greater than 0", 400));
-    }
+
     const campaign = await Campaign.findById(campaign_id);
     if (!campaign) {
       return res.status(400).json({ error: "Campaign not found" });

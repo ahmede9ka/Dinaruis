@@ -31,6 +31,8 @@ const createUser = async (req, res, next) => {
   }
 };
 
+//const getUsers = async (req, res, next) => {};
+
 const getUsers = async (req, res, next) => {
   const users = await Admin.find();
   res.send('<a href="/api/v1/users/auth/google">Authenticate with google</a>');
@@ -39,6 +41,7 @@ const getAllUsers = async (req, res, next) => {
   const users = await User.find();
   res.status(200).json({
     status: "success",
+    length: users.length,
     data: users,
   });
 };
@@ -62,6 +65,7 @@ const updateUser = async (req, res, next) => {
     });
   }
 };
+
 const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);

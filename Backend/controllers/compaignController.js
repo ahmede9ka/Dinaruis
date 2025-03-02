@@ -34,7 +34,7 @@ const createCampaign = async (req, res, next) => {
 };
 
 const getCampaign = async (req, res, next) => {
-  const campaign = await Campaign.find();
+  const campaign = await Campaign.find().populate("user", "firstName email");
   res.status(200).json({
     status: "success",
     data: campaign,
@@ -44,9 +44,9 @@ const getCampaign = async (req, res, next) => {
 const deleteCampaign = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const Campaign = await Campaign.findByIdAndDelete(id);
+    const campaign = await Campaign.findByIdAndDelete(id);
 
-    if (!Campaign) {
+    if (!campaign) {
       return next(new AppError("No Campaign found with that ID", 404));
     }
     res.status(204).json({

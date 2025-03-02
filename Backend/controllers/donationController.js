@@ -42,5 +42,20 @@ const createDonation = async (req, res, next) => {
     });
   }
 };
+const getAllDonations = async (req, res) => {
+  try {
+    const donations = await Donation.find()
+      .populate("user", "firstName lastName email") // Récupère les champs "name" et "email" de l'utilisateur
+      .populate("campaign", "title description"); // Récupère "title" et "description" de la campagne
 
-module.exports = { createDonation };
+    res.status(200).json({
+      status: "success",
+      results: donations.length,
+      data: { donations },
+    });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+module.exports = { createDonation, getAllDonations };
