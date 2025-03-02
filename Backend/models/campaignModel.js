@@ -12,12 +12,12 @@ const campaignSchema = new Schema({
   },
   status: {
     type: String,
-    required: true,
+    required: [true, "A campaign must have a status"],
     default: "Pending",
   },
   amountGoal: {
     type: Number, // Fixed type
-    required: true,
+    required: [true, "A campaign must have an amountGoal"],
   },
   image: {
     type: String,
