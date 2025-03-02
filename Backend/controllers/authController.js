@@ -62,7 +62,14 @@ const login = async (req, res, next) => {
 
     const token = signToken(user._id);
     res.cookie("jwt", token, {
-      expires: new Date(Date.now() + (Number(process.env.JWT_COOKIE_EXPIRES_IN) || 90) * 24 * 60 * 60 * 1000),
+      expires: new Date(
+        Date.now() +
+          (Number(process.env.JWT_COOKIE_EXPIRES_IN) || 90) *
+            24 *
+            60 *
+            60 *
+            1000
+      ),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
@@ -120,8 +127,60 @@ const protect = async (req, res, next) => {
   }
 };
 
+// middleware funtion to protect the access to tour routes
+const protectAdmin = async (req, res, next) => {
+  // 1) getting the token and check of it's there
+  // we send the token with http headers
+
+  let token = req.cookies.jwt;
+  //console.log(token);
+
+  // 401 not authorized
+  if (!token) {
+    return next(
+      new AppError("You are not logged in ! Please log it to get access", 401)
+    );
+  }
+  try {
+    // Step 2: Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //console.log(decoded); // Decoded information from the token
+
+    // Step 3: Check if the user still exists
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return next(
+        new AppError("The user belonging to this token no longer exists", 401)
+      );
+    }
+    const role = user.role;
+    if (role !== "ADMIN") {
+      return next(
+        new AppError(
+          "You are not authorized to access this route !! Only Admins are allowed",
+          403
+        )
+      );
+    }
+
+    // If everything is fine, attach the user to the request object
+    req.user = user;
+    next(); // Proceed to the next middleware or route handler
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      return next(new AppError("Invalid token! Please log in again.", 401));
+    } else if (error.name === "TokenExpiredError") {
+      return next(new AppError("Token expired! Please log in again.", 401));
+    }
+    // For other unexpected errors, pass the error to the global error handler
+    return next(
+      new AppError("Something went wrong! Please try again later.", 500)
+    );
+  }
+};
 module.exports = {
   signup,
   login,
   protect,
+  protectAdmin,
 };

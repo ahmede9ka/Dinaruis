@@ -38,13 +38,43 @@ const getUsers = async (req, res, next) => {
   res.send('<a href="/api/v1/users/auth/google">Authenticate with google</a>');
 };
 const getAllUsers = async (req, res, next) => {
-  const users = await User.find();
-  res.status(200).json({
-    status: "success",
-    length: users.length,
-    data: users,
-  });
+  try {
+    const users = await User.aggregate([
+      {
+        $lookup: {
+          from: "donations", // 🔹 Jointure avec la collection des donations
+          localField: "_id",
+          foreignField: "user",
+          as: "donations",
+        },
+      },
+      {
+        $addFields: {
+          totalDonated: { $sum: "$donations.amount" }, // 🔹 Somme des montants donnés
+          donationCount: { $size: "$donations" }, // 🔹 Nombre total de donations
+        },
+      },
+      {
+        $project: {
+          password: 0, // 🔹 Exclure le mot de passe
+          donations: 0, // 🔹 Ne pas afficher les détails des donations
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      length: users.length,
+      data: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: `Error getting users: ${error.message}`,
+    });
+  }
 };
+
 const back = async (req, res, next) => {
   console.log("saha");
 };

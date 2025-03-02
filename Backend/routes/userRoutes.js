@@ -11,7 +11,12 @@ const {
   deleteUser,
   getAllUsers,
 } = require("../controllers/userController");
-const { signup, login, protect } = require("../controllers/authController");
+const {
+  signup,
+  login,
+  protect,
+  protectAdmin,
+} = require("../controllers/authController");
 const { processDonation } = require("../controllers/stripeController");
 
 // ✅ Create user (only for testing, requires authentication)
@@ -19,7 +24,7 @@ router.post("/create", protect, createUser);
 
 // ✅ Get all users
 router.get("/", getUsers);
-router.get("/getall", getAllUsers);
+router.get("/getall", protectAdmin, getAllUsers);
 
 // ✅ Stripe Route
 router.post("/donate", protect, processDonation);
@@ -29,8 +34,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/:id", protect, updateUser);
 router.delete("/:id", protect, deleteUser);
-//getInvestment
-// ✅ Investor Routes
 
 // ✅ Google OAuth Routes
 router.get("/auth/google", (req, res, next) => {
