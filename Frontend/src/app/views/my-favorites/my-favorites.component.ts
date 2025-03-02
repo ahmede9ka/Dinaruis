@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-my-favorites',
+  standalone:true,
   imports: [CommonModule],
   templateUrl: './my-favorites.component.html',
   styleUrl: './my-favorites.component.css'

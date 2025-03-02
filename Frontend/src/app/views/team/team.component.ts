@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 @Component({
   selector: 'app-team',
+  standalone:true,
   imports: [],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css'

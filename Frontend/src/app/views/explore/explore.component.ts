@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-explore',
+  standalone:true,
   imports: [CommonModule],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.css'

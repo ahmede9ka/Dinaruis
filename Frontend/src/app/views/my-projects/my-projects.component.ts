@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-my-projects',
+  standalone:true,
   imports: [CommonModule],
   templateUrl: './my-projects.component.html',
   styleUrl: './my-projects.component.css'

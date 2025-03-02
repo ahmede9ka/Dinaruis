@@ -4,11 +4,28 @@ const Schema = mongoose.Schema;
 const campaignSchema = new Schema({
   title: {
     type: String,
-    required: [true, "A campaign must have a Title"],
+    required: [true, "A campaign must have a title"],
   },
   description: {
     type: String,
     required: [true, "A campaign must have a description"],
+  },
+  status: {
+    type: String,
+    required: true,
+    default: "Pending",
+  },
+  amountGoal: {
+    type: Number, // Fixed type
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  images: {
+    type: [String], // Fixed array type
+    required: true,
   },
   startDate: {
     type: Date,
@@ -32,12 +49,17 @@ const campaignSchema = new Schema({
       "MEDICAL",
       "EDUCATIONAL",
       "ENVIRONMENTAL",
+      "OTHER",
     ],
     default: "OTHER",
   },
+  code_postal: {
+    type: Number,
+    required: true,
+  },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "User", // Reference "User" (Entrepreneurs are stored in the same collection)
+    ref: "User",
     required: true,
   },
 });

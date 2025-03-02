@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 @Component({
   selector: 'app-single-section',
+  standalone:true,
   imports: [],
   templateUrl: './single-section.component.html',
   styleUrl: './single-section.component.css'

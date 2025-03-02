@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar-dashboard',
+  standalone:true,
   imports: [CommonModule, RouterModule],
   templateUrl: './sidebar-dashboard.component.html',
   styleUrls: ['./sidebar-dashboard.component.css']  // Fixed typo here

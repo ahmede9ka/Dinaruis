@@ -4,8 +4,10 @@ declare const simpleDatatables: any;
 
 @Component({
   selector: 'app-user-management',
+  standalone:true,
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css']
+  
 })
 export class UserManagementComponent implements AfterViewInit {
   private dataTable: any;
