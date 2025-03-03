@@ -1,4 +1,6 @@
-import { Component, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, AfterViewInit, Renderer2, OnInit } from '@angular/core';
+import { UsersService } from '../../services/users.service';
+import { CommonModule } from '@angular/common';
 
 declare const simpleDatatables: any;
 
@@ -6,14 +8,21 @@ declare const simpleDatatables: any;
   selector: 'app-user-management',
   standalone:true,
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css']
-  
+  styleUrls: ['./user-management.component.css'],
+  imports:[CommonModule]
 })
-export class UserManagementComponent implements AfterViewInit {
+export class UserManagementComponent implements AfterViewInit,OnInit {
   private dataTable: any;
-
-  constructor(private renderer: Renderer2) {}
-
+  token:any;
+  users:any;
+  constructor(private renderer: Renderer2,private userservice:UsersService) {}
+  ngOnInit(){
+    this.token = localStorage.getItem("token");
+    this.userservice.getAllUsers(this.token).subscribe((data:any)=>{
+      console.log(data);
+      this.users = data.data;
+    })
+  }
   ngAfterViewInit(): void {
     const tableElement = document.getElementById("search-table");
     if (tableElement && typeof simpleDatatables.DataTable !== 'undefined') {

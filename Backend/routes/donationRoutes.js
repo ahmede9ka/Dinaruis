@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   createDonation,
   getAllDonations,
+  getDonationsByCampaign
 } = require("../controllers/donationController");
 const { protect } = require("../controllers/authController");
 
@@ -11,4 +12,5 @@ const { protect } = require("../controllers/authController");
 
 router.post("/create", protect, createDonation);
 router.get("/getDonations", protect, getAllDonations);
+router.get("/getDonationByCampaign/:campaign",getDonationsByCampaign)
 module.exports = router;

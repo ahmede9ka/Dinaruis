@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleserviceService } from '../../services/googleservice.service';
 import { LoginService } from '../../services/login.service';
 import { User } from '../../model/class/User';
-import { CommonModule } from '@angular/common';
+import { CommonModule, LowerCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -49,7 +49,8 @@ export class LoginComponent implements OnInit {
         console.log("Login successful:", data);
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user)); // Fixed localStorage issue
-        this.router.navigate(['/']); // Redirect user after login (adjust as needed)
+        const lowerRole = this.role?.toLowerCase();
+        this.router.navigate([`/${lowerRole}/dashboard`]);
       },
       error: (err) => {
         console.error("Login failed:", err);

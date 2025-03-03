@@ -24,7 +24,7 @@ router.post("/create", protect, createUser);
 
 // ✅ Get all users
 router.get("/", getUsers);
-router.get("/getall", protectAdmin, getAllUsers);
+router.get("/getall", protect, getAllUsers);
 
 // ✅ Stripe Route
 router.post("/donate", protect, processDonation);

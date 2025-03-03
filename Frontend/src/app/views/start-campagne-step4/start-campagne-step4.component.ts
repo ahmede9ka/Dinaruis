@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 
 @Component({
   selector: 'app-start-campagne-step4',
+  standalone:true,
   imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './start-campagne-step4.component.html',
   styleUrl: './start-campagne-step4.component.css'

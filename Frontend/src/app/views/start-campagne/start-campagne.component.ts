@@ -15,6 +15,7 @@ interface Category {
 
 @Component({
   selector: 'app-start-campagne',
+  standalone:true,
   imports: [CommonModule,FormsModule,ReactiveFormsModule],
   templateUrl: './start-campagne.component.html',
   styleUrl: './start-campagne.component.css'

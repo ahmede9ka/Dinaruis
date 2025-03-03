@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-start-campagne-step3',
+  standalone:true,
   imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './start-campagne-step3.component.html',
   styleUrl: './start-campagne-step3.component.css'

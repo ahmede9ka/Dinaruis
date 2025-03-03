@@ -84,24 +84,20 @@ const login = async (req, res, next) => {
   }
 };
 
-// middleware funtion to protect the access to tour routes
 const protect = async (req, res, next) => {
-  // 1) getting the token and check of it's there
-  // we send the token with http headers
-
-  let token = req.cookies.jwt;
-  //console.log(token);
-
-  // 401 not authorized
+  // 1) Get the token from the Authorization header
+  const token = req.headers['authorization']?.split(' ')[1]; // "Bearer <token>"
+  
+  // 401: Unauthorized if no token
   if (!token) {
     return next(
-      new AppError("You are not logged in ! Please log it to get access", 401)
+      new AppError("You are not logged in! Please log in to get access", 401)
     );
   }
+
   try {
     // Step 2: Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    //console.log(decoded); // Decoded information from the token
 
     // Step 3: Check if the user still exists
     const user = await User.findById(decoded.id);
@@ -110,7 +106,7 @@ const protect = async (req, res, next) => {
         new AppError("The user belonging to this token no longer exists", 401)
       );
     }
-
+    
     // If everything is fine, attach the user to the request object
     req.user = user;
     next(); // Proceed to the next middleware or route handler
@@ -126,7 +122,6 @@ const protect = async (req, res, next) => {
     );
   }
 };
-
 // middleware funtion to protect the access to tour routes
 const protectAdmin = async (req, res, next) => {
   // 1) getting the token and check of it's there

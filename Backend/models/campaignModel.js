@@ -19,6 +19,11 @@ const campaignSchema = new Schema({
     type: Number, // Fixed type
     required: [true, "A campaign must have an amountGoal"],
   },
+  raisedAmount:{
+    type: Number, // Fixed type
+    required: [true, "A campaign must have an raisedAmount"],
+    default:0,
+  },
   image: {
     type: String,
     required: [true, "A campaign must have an image"],

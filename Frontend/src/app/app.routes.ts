@@ -48,7 +48,7 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: ':role/:page/:id',
+    path: ':role/:page',
     component: RoleDashboardComponentComponent, // A wrapper component to determine which dashboard to display
   },
   {

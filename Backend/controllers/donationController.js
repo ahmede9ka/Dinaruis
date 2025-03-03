@@ -6,6 +6,7 @@ const AppError = require("../utils/appError");
 const Investor = require("../models/investorModel");
 const Campaign = require("../models/campaignModel");
 const Donation = require("../models/donationModel");
+const mongoose = require("mongoose");
 const createDonation = async (req, res, next) => {
   try {
     /*const users = await User.find();
@@ -57,5 +58,34 @@ const getAllDonations = async (req, res) => {
     res.status(500).json({ status: "error", message: error.message });
   }
 };
+//gives the donations of every campaing by the campaign id
+const getDonationsByCampaign = async (req, res) => {
+  try {
+    const { campaign } = req.params; // Get campaign ID from URL
 
-module.exports = { createDonation, getAllDonations };
+    const result = await Donation.aggregate([
+      {
+        $match: { campaign: new mongoose.Types.ObjectId(campaign) } // Filter by campaign ID
+      },
+      {
+        $group: {
+          _id: "$campaign",  // Group by campaign ID
+          totalAmount: { $sum: "$amount" } // Sum the amounts
+        }
+      },
+      {
+        $project: {
+          _id: 0,  // Exclude _id
+          totalAmount: 1
+        }
+      }
+    ]);
+
+    res.json(result.length > 0 ? result[0] : { totalAmount: 0 }); // Ensure a valid response
+  } catch (error) {
+    console.error("Error fetching donations by campaign:", error);
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+module.exports = { createDonation, getAllDonations, getDonationsByCampaign };

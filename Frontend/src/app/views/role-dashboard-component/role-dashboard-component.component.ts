@@ -112,6 +112,7 @@ import { InvestorSettingsComponent } from "../investor-settings/investor-setting
     
 
   `,
+  standalone:true,
   imports: [
     CommonModule,
     DashboardAdminComponent,
