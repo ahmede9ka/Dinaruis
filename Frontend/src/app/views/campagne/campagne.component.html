@@ -1,0 +1,102 @@
+<div class="max-w-7xl mx-auto p-6 font-sans">
+  <!-- Campaign Title -->
+  <h1 class="text-4xl font-bold text-gray-900 mb-6">
+      {{ campaignTitle }}
+  </h1>
+
+  <div class="grid md:grid-cols-3 gap-6">
+      <!-- Main Content -->
+      <div class="md:col-span-2">
+          <!-- Campaign Image -->
+          <div class="rounded-lg overflow-hidden mb-6">
+              <img [src]="campaignImage" alt="Campaign image" class="w-full h-auto object-cover">
+          </div>
+
+          <!-- Organizer Info -->
+          <div class="flex items-center gap-3 mb-4">
+              <img src="organizerAvatar" alt="Organizer" class="w-12 h-12 rounded-full">
+              <p class="text-gray-700">
+                  {{ organizerName }} is organizing this fundraising appeal on behalf of {{ beneficiaryName }}.
+              </p>
+          </div>
+          
+
+          <!-- Donation Protected Badge -->
+          <div class="border-t border-b border-gray-200 py-3 my-4">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm">
+                  <i class="fas fa-shield-alt"></i>
+                  Donation protected
+              </div>
+          </div>
+
+          <!-- Campaign Story -->
+          <div class="text-gray-700 space-y-4">
+              <p>{{ campaignDescription }}</p>
+          </div>
+      </div>
+
+      <!-- Donation Sidebar -->
+      <div class="md:col-span-1">
+          <div class="bg-white rounded-lg border border-gray-200 p-6 sticky top-4 shadow-md">
+              <!-- Progress Stats -->
+              <div class="mb-6">
+                  <h2 class="text-3xl font-bold text-gray-800">{{ formatCurrency(amountRaised) }} raised</h2>
+                  <p class="text-gray-500">
+                      {{ formatCurrency(targetAmount) }} target · {{ totalDonations }} donations
+                  </p>
+                  <div class="mt-4">
+                      <flowbite-progress [progress]="progress" [color]="'blue'" [size]="'lg'" />
+                  </div>
+                  <div class="flex justify-end mt-1">
+                      <span class="text-blue-600 font-medium">{{ progress }}%</span>
+                  </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="space-y-3 mb-6">
+                  <button type="button" class="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium">
+                      Share
+                  </button>
+                  <button type="button" class="w-full py-3 bg-green-500 hover:bg-green-600 transition text-white rounded-lg font-medium">
+                      Donate Now
+                  </button>
+              </div>
+
+              <!-- Recent Donations -->
+              <div class="pt-4 border-t border-gray-200">
+                  <div class="flex items-center gap-3 mb-4 text-blue-700">
+                      <div class="bg-blue-100 p-2 rounded-full">
+                          <i class="fas fa-hand-holding-heart"></i>
+                      </div>
+                      <p class="font-medium">
+                          {{ recentDonorsCount }} people have just made a donation
+                      </p>
+                  </div>
+                  <div class="space-y-4">
+                      <div class="flex items-center gap-3" *ngFor="let donation of recentDonations">
+                          <img [src]="donation.avatar" [alt]="donation.name" class="w-8 h-8 rounded-full">
+                          <div>
+                              <p class="font-medium">{{ donation.name }}</p>
+                              <div class="flex items-center gap-2 text-gray-500">
+                                  <span class="font-medium">{{ formatCurrency(donation.amount) }}</span>
+                                  <span>·</span>
+                                  <a href="#" class="text-sm hover:underline">{{ donation.type }}</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- View More Buttons -->
+                  <div class="grid grid-cols-2 gap-3 mt-6">
+                      <button type="button" class="py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                          See all
+                      </button>
+                      <button type="button" class="py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                          See top
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

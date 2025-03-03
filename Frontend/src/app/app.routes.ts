@@ -11,6 +11,7 @@ import { StartCampagneComponent } from './views/start-campagne/start-campagne.co
 import { StartCampagneStep2Component } from './views/start-campagne-step2/start-campagne-step2.component';
 import { StartCampagneStep3Component } from './views/start-campagne-step3/start-campagne-step3.component';
 import { StartCampagneStep4Component } from './views/start-campagne-step4/start-campagne-step4.component';
+import { CampagneComponent } from './views/campagne/campagne.component';
 
 
 export const routes: Routes = [
@@ -37,6 +38,10 @@ export const routes: Routes = [
   {
     path: 'd',
     component: StartCampagneStep4Component, // Route for role selection
+  },
+  {
+    path: 'f',
+    component: CampagneComponent, // Route for role selection
   },
   {
     path: 'login/:role', // Dynamic route for login with role parameter
