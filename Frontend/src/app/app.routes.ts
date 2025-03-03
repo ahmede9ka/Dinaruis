@@ -7,6 +7,10 @@ import { SignUpComponent } from './views/sign-up/sign-up.component';
 import { CallbackComponent } from './views/callback/callback.component';
 
 import { RoleDashboardComponentComponent } from './views/role-dashboard-component/role-dashboard-component.component';
+import { StartCampagneComponent } from './views/start-campagne/start-campagne.component';
+import { StartCampagneStep2Component } from './views/start-campagne-step2/start-campagne-step2.component';
+import { StartCampagneStep3Component } from './views/start-campagne-step3/start-campagne-step3.component';
+import { StartCampagneStep4Component } from './views/start-campagne-step4/start-campagne-step4.component';
 
 
 export const routes: Routes = [
@@ -17,6 +21,22 @@ export const routes: Routes = [
   {
     path: 'chooserole',
     component: RolePickComponent, // Route for role selection
+  },
+  {
+    path: 'a',
+    component: StartCampagneComponent, // Route for role selection
+  },
+  {
+    path: 'b',
+    component: StartCampagneStep2Component, // Route for role selection
+  },
+  {
+    path: 'c',
+    component: StartCampagneStep3Component, // Route for role selection
+  },
+  {
+    path: 'd',
+    component: StartCampagneStep4Component, // Route for role selection
   },
   {
     path: 'login/:role', // Dynamic route for login with role parameter

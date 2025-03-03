@@ -1,0 +1,62 @@
+<!-- Import Flowbite Tailwind CSS for styling -->
+<div class="fundraising-container flex flex-col md:flex-row h-screen w-screen p-6 gap-6">
+    <!-- Sidebar Section -->
+    <div class="sidebar bg-blue-900 p-6 rounded-lg md:w-1/3 flex flex-col justify-center text-white">
+      <h1 class="text-2xl font-bold">Tell Your Story</h1>
+      <p class="mt-2">A compelling title and story will help people connect with your cause.</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content bg-white p-6 shadow-lg rounded-lg md:w-2/3 flex flex-col justify-center border border-gray-200">
+      <form [formGroup]="fundraisingForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Campaign Title -->
+        <div class="form-section mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Campaign Title</h2>
+            <p class="text-gray-600 mt-1">Choose a clear and inspiring title for your fundraiser.</p>
+
+            <div class="mt-4">
+                <label for="campaign-title" class="block text-gray-700">Title</label>
+                <input 
+                    type="text" 
+                    id="campaign-title" 
+                    formControlName="campaignTitle" 
+                    class="border border-gray-300 rounded-lg px-4 py-3 w-full text-gray-900"
+                    placeholder="Help Rebuild Our Community Center">
+                <div *ngIf="fundraisingForm.get('campaignTitle')?.invalid && fundraisingForm.get('campaignTitle')?.touched" 
+                     class="text-red-500 text-sm mt-1">
+                    Title is required.
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Story -->
+        <div class="form-section mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Tell Your Story</h2>
+            <p class="text-gray-600 mt-1">Explain why you are raising funds and how they will be used.</p>
+
+            <div class="mt-4">
+                <label for="campaign-story" class="block text-gray-700">Story</label>
+                <textarea 
+                    id="campaign-story" 
+                    formControlName="campaignStory" 
+                    rows="6"
+                    class="border border-gray-300 rounded-lg px-4 py-3 w-full text-gray-900"
+                    placeholder="Write your story here..."></textarea>
+                <div *ngIf="fundraisingForm.get('campaignStory')?.invalid && fundraisingForm.get('campaignStory')?.touched" 
+                     class="text-red-500 text-sm mt-1">
+                    Story must be at least 20 characters.
+                </div>
+            </div>
+        </div>
+
+        <!-- Continue Button -->
+        <div class="form-actions flex justify-end">
+            <button type="submit" class="bg-blue-900 text-white px-6 py-3 rounded-full shadow-md transition-all duration-300 ease-in-out hover:bg-blue-800 hover:shadow-lg hover:scale-105">
+                Review
+            </button>
+        </div>
+  
+      </form>
+    </div>
+</div>

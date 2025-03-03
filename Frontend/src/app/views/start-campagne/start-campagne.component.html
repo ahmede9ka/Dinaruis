@@ -1,0 +1,84 @@
+<!-- Import Flowbite Tailwind CSS for styling -->
+<div class="fundraising-container flex flex-col md:flex-row h-screen w-screen p-6 gap-6">
+  <!-- Sidebar Section -->
+  <div class="sidebar bg-blue-900 p-6 rounded-lg md:w-1/3 flex flex-col justify-center text-white">
+    <h1 class="text-2xl font-bold">Let's begin your fundraising journey!</h1>
+    <p class="mt-2">We're here to guide you every step of the way.</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content bg-white p-6 shadow-lg rounded-lg md:w-2/3 flex flex-col justify-center border border-gray-200">
+    <form [formGroup]="fundraisingForm" (ngSubmit)="onSubmit()">
+      <!-- Location Section -->
+      <div class="form-section mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">Where will the funds go?</h2>
+        <p class="text-gray-700 mt-1">
+          Choose the location where you plan to withdraw your funds. 
+          <a href="#" class="text-blue-700 underline">Countries in which we support fundraisers.</a>
+        </p>
+
+        <div class="form-row grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <!-- Country Dropdown -->
+          <div class="form-group relative">
+            <label class="block text-gray-900">Country</label>
+            <div class="dropdown relative" (click)="toggleCountryDropdown()">
+              <div class="dropdown-header flex justify-between items-center border border-gray-300 rounded-full px-4 py-2 cursor-pointer text-gray-900 bg-gray-100">
+                <span>{{ fundraisingForm.get('country')?.value || 'Select a country' }}</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div *ngIf="showCountryDropdown" class="dropdown-menu absolute top-full left-0 w-full bg-white shadow-md rounded-lg z-10 border border-gray-200">
+                <div *ngFor="let country of countries" (click)="selectCountry(country)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-900">
+                  {{ country.name }}
+                </div>
+              </div>
+            </div>
+            <div *ngIf="fundraisingForm.get('country')?.invalid && fundraisingForm.get('country')?.touched" class="text-red-500 text-sm mt-1">
+              Country is required
+            </div>
+          </div>
+          
+          <!-- Postcode Input -->
+          <div class="form-group">
+            <label for="postcode" class="block text-gray-900">Postcode</label>
+            <input 
+              type="text" 
+              id="postcode" 
+              formControlName="postcode" 
+              class="border border-gray-300 rounded-full px-4 py-2 w-full text-gray-900 bg-gray-100"
+              placeholder="5734">
+            <div *ngIf="fundraisingForm.get('postcode')?.invalid && fundraisingForm.get('postcode')?.touched" class="text-red-500 text-sm mt-1">
+              Please enter a valid postcode
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Category Selection -->
+      <div class="form-section mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">What best describes why you're fundraising?</h2>
+        <div class="categories-container flex flex-wrap gap-3 mt-4">
+          <div 
+            *ngFor="let category of categories" 
+            class="category-button bg-gray-100 border border-gray-300 rounded-full px-6 py-3 text-sm cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-200 text-gray-900 shadow-sm"
+            [class.bg-blue-900]="selectedCategory === category.id"
+            [class.text-white]="selectedCategory === category.id"
+            [class.border-blue-900]="selectedCategory === category.id"
+            [class.shadow-md]="selectedCategory === category.id"
+            [class.scale-105]="selectedCategory === category.id"
+            (click)="selectCategory(category.id)">
+            {{ category.name }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions flex justify-end">
+        <button (click)="nextStep()" type="submit" class="btn-continue bg-blue-900 text-white px-6 py-3 rounded-full shadow-md transition-all duration-300 ease-in-out hover:bg-blue-800 hover:shadow-lg hover:scale-105">
+          Continue
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

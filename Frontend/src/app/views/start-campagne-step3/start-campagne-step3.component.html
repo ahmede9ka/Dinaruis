@@ -1,0 +1,58 @@
+<!-- Import Flowbite Tailwind CSS for styling -->
+<div class="fundraising-container flex flex-col md:flex-row h-screen w-screen p-6 gap-6">
+    <!-- Sidebar Section -->
+    <div class="sidebar bg-blue-900 p-6 rounded-lg md:w-1/3 flex flex-col justify-center text-white">
+      <h1 class="text-2xl font-bold">Showcase your campaign with great images!</h1>
+      <p class="mt-2">A compelling cover image and supporting visuals can boost engagement.</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content bg-white p-6 shadow-lg rounded-lg md:w-2/3 flex flex-col justify-center border border-gray-200">
+      <form [formGroup]="fundraisingForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Cover Image Upload -->
+        <div class="form-section mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Upload Your Cover Image</h2>
+            <p class="text-gray-600 mt-1">This will be the main image representing your campaign.</p>
+
+            <div class="mt-4">
+                <label class="block text-gray-700">Cover Image</label>
+                <input type="file" (change)="onCoverImageUpload($event)" accept="image/*" class="mt-2 border border-gray-300 rounded-lg p-2 w-full">
+
+                <!-- Preview Cover Image -->
+                <div *ngIf="coverImagePreview" class="mt-4">
+                    <img [src]="coverImagePreview" alt="Cover Image Preview" class="w-full h-48 object-cover rounded-lg shadow-md">
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Images Upload (Max 5) -->
+        <div class="form-section mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Upload Additional Images (Optional)</h2>
+            <p class="text-gray-600 mt-1">You can add up to 5 images to support your campaign.</p>
+
+            <div class="mt-4">
+                <input type="file" (change)="onAdditionalImageUpload($event)" accept="image/*" multiple class="mt-2 border border-gray-300 rounded-lg p-2 w-full">
+                
+                <!-- Preview Additional Images -->
+                <div *ngIf="additionalImages.length > 0" class="mt-4 flex flex-wrap gap-2">
+                    <div *ngFor="let img of additionalImages; let i = index" class="relative">
+                        <img [src]="img" alt="Additional Image Preview" class="w-24 h-24 object-cover rounded-lg shadow-md">
+                        <button type="button" (click)="removeAdditionalImage(i)" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continue Button -->
+        <div class="form-actions flex justify-end">
+            <button (click)="nextStep()" type="submit" class="bg-blue-900 text-white px-6 py-3 rounded-full shadow-md transition-all duration-300 ease-in-out hover:bg-blue-800 hover:shadow-lg hover:scale-105">
+                Continue
+            </button>
+        </div>
+  
+      </form>
+    </div>
+</div>
