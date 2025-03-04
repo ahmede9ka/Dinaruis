@@ -8,5 +8,13 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard-investiseur.component.css'
 })
 export class DashboardInvestiseurComponent {
-
+  user:any
+    constructor(){}
+    ngOnInit(){
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        this.user = JSON.parse(userData);
+        console.log(this.user.firstName);
+      }
+    }
 }

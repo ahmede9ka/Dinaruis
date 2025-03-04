@@ -11,8 +11,13 @@ import ApexCharts from 'apexcharts';
   styleUrl: './dashboard-admin.component.css'
 })
 export class DashboardAdminComponent implements OnInit {
+  user:any
   ngOnInit(): void {
-    // Area Chart
+    const userData = localStorage.getItem("user");
+      if (userData) {
+        this.user = JSON.parse(userData);
+        console.log(this.user.firstName);
+      }
     const ctxArea = document.getElementById("area-chart") as HTMLCanvasElement | null;
     if (ctxArea) {
       const context = ctxArea.getContext("2d");

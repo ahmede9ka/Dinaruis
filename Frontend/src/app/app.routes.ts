@@ -12,6 +12,7 @@ import { StartCampagneStep2Component } from './views/start-campagne-step2/start-
 import { StartCampagneStep3Component } from './views/start-campagne-step3/start-campagne-step3.component';
 import { StartCampagneStep4Component } from './views/start-campagne-step4/start-campagne-step4.component';
 import { CampagneComponent } from './views/campagne/campagne.component';
+import { authGuard } from './guards/auth.guard';
 
 
 export const routes: Routes = [
@@ -49,7 +50,8 @@ export const routes: Routes = [
   },
   {
     path: ':role/:page',
-    component: RoleDashboardComponentComponent, // A wrapper component to determine which dashboard to display
+    component: RoleDashboardComponentComponent,
+    canActivate:[authGuard]
   },
   {
     path: 'lostpassword',

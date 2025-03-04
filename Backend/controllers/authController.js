@@ -89,7 +89,7 @@ const login = async (req, res, next) => {
 
 const protect = async (req, res, next) => {
   // 1) Get the token from the Authorization header
-  console.log(req.cookies.jwt);
+  //console.log(req.cookies.jwt);
   const token = req.cookies.jwt || req.headers["authorization"]?.split(" ")[1]; // "Bearer <token>"
 
   // 401: Unauthorized if no token
