@@ -18,10 +18,55 @@
         <div class="flex items-center">
             <div class="flex items-center ms-3">
               <div>
-                <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                  <span class="sr-only">Open user menu</span>
-                  <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
-                </button>
+                
+                <div class="flex items-center space-x-4">
+                   <!-- User Profile Button -->
+                   <button type="button" 
+                   class="flex items-center space-x-2 text-sm bg-gray-800 rounded-full px-3 py-2 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" 
+                   aria-expanded="false" 
+                   data-dropdown-toggle="dropdown-user">
+             <span class="text-white">Ahmed Kallel</span>
+             <img class="w-8 h-8 rounded-full" 
+                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" 
+                  alt="Ahmed Kallel's profile photo">
+           </button>
+                  <button type="button" data-dropdown-toggle="dropdown-notif"
+                            class="relative p-2 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V9a6 6 0 00-12 0v5c0 .386-.146.74-.405 1.005L4 17h5m6 0a3 3 0 11-6 0"></path>
+                            </svg>
+                            <!-- Notification Badge -->
+                            <span class="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
+                        </button>
+
+                        <!-- Notification Dropdown -->
+                        <div id="dropdown-notif" class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-md shadow-lg dark:bg-gray-700 dark:divide-gray-600 w-64">
+                            <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">Notifications</div>
+                            <ul class="py-1 text-gray-700 dark:text-gray-300">
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        🔔 New comment on your post
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        📩 You have a new message
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        ✅ Task completed successfully
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="px-4 py-2 text-center border-t border-gray-200 dark:border-gray-600">
+                                <a href="#" class="text-sm text-blue-500 hover:underline dark:text-blue-400">View all</a>
+                            </div>
+                        </div>
+                
+                 
+                </div>
+                
               </div>
               
               <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
