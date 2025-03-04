@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config.env" }); // Loads environment variables
 const AppError = require("../utils/appError");
 const User = require("./../models/userModel");
 const jwt = require("jsonwebtoken");
@@ -71,7 +73,8 @@ const login = async (req, res, next) => {
             1000
       ),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", // Secure cookies for HTTPS only
+      sameSite: "None", // Allow cross-site cookies
     });
 
     res.status(200).json({
@@ -86,8 +89,9 @@ const login = async (req, res, next) => {
 
 const protect = async (req, res, next) => {
   // 1) Get the token from the Authorization header
-  const token = req.headers['authorization']?.split(' ')[1]; // "Bearer <token>"
-  
+  console.log(req.cookies.jwt);
+  const token = req.cookies.jwt || req.headers["authorization"]?.split(" ")[1]; // "Bearer <token>"
+
   // 401: Unauthorized if no token
   if (!token) {
     return next(
@@ -106,7 +110,7 @@ const protect = async (req, res, next) => {
         new AppError("The user belonging to this token no longer exists", 401)
       );
     }
-    
+
     // If everything is fine, attach the user to the request object
     req.user = user;
     next(); // Proceed to the next middleware or route handler

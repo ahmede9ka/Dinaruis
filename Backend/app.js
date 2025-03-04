@@ -13,10 +13,8 @@ const donationRouter = require("./routes/donationRoutes");
 const { webhookChekout } = require("./controllers/stripeController");
 app.use(
   cors({
-    origin: "http://localhost:4200", // Replace with your Angular app's URL
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    origin: "http://localhost:4200", // Change to your frontend domain
+    credentials: true, // Allow cookies
   })
 );
 
