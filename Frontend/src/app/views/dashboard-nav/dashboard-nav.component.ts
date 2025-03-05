@@ -1,4 +1,5 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-nav',
@@ -8,8 +9,16 @@ import { Component, ElementRef, Renderer2 } from '@angular/core';
   styleUrl: './dashboard-nav.component.css'
 })
 export class DashboardNavComponent {
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
-
+  constructor(private renderer: Renderer2, private el: ElementRef, private router:Router) {}
+  
+  logout(): void {
+   
+        console.log("Logout successful");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        this.router.navigate(['/']);
+   
+  }
   ngOnInit() {
     const userMenuButton = this.el.nativeElement.querySelector("[data-dropdown-toggle='dropdown-user']");
     const dropdownMenu = this.el.nativeElement.querySelector("#dropdown-user");
