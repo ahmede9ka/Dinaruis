@@ -20,7 +20,8 @@ interface Campaign {
   templateUrl: './my-favorites.component.html',
   styleUrl: './my-favorites.component.css'
 })
-export class MyFavoritesComponent implements OnInit {searchQuery: string = '';
+export class MyFavoritesComponent implements OnInit {
+  searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 3; // Number of items per page
   get totalPages(): number {

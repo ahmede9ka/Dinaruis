@@ -13,6 +13,7 @@ import { StartCampagneStep3Component } from './views/start-campagne-step3/start-
 import { StartCampagneStep4Component } from './views/start-campagne-step4/start-campagne-step4.component';
 import { CampagneComponent } from './views/campagne/campagne.component';
 import { authGuard } from './guards/auth.guard';
+import { LoginAdminComponent } from './views/login-admin/login-admin.component';
 
 
 export const routes: Routes = [
@@ -47,6 +48,10 @@ export const routes: Routes = [
   {
     path: 'login/:role', // Dynamic route for login with role parameter
     component: LoginComponent,
+  },
+  {
+    path: 'loginadmin', // Dynamic route for login with role parameter
+    component: LoginAdminComponent,
   },
   {
     path: ':role/:page',
