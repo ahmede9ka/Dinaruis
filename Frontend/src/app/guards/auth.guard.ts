@@ -18,14 +18,14 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
   } catch (error) {
     console.error("Invalid user data in localStorage", error);
     localStorage.removeItem("user"); // Clear corrupted data
-    router.navigate(['/chooserole']);
+    router.navigate(['/']);
     return false;
   }
 
   // Redirect to choose role if user is not authenticated
   if (!user || !user.role) {
-    router.navigate(['/chooserole']);
     return false;
+    
   }
 
   // Ensure user role matches the role from the route
@@ -58,5 +58,5 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
   }
 
   console.log("No token found, but user role is valid.");
-  return true; // Allow access if user role matches, even without a token
+  return false; // Allow access if user role matches, even without a token
 };

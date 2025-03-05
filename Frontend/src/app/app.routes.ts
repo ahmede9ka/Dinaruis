@@ -13,6 +13,7 @@ import { StartCampagneStep3Component } from './views/start-campagne-step3/start-
 import { StartCampagneStep4Component } from './views/start-campagne-step4/start-campagne-step4.component';
 import { CampagneComponent } from './views/campagne/campagne.component';
 import { authGuard } from './guards/auth.guard';
+import { loginsignupGuard } from './guards/loginsignup.guard';
 import { LoginAdminComponent } from './views/login-admin/login-admin.component';
 
 
@@ -24,6 +25,7 @@ export const routes: Routes = [
   {
     path: 'chooserole',
     component: RolePickComponent, // Route for role selection
+    canActivate:[loginsignupGuard]
   },
   {
     path: 'a',
@@ -45,28 +47,33 @@ export const routes: Routes = [
     path: 'f',
     component: CampagneComponent, // Route for role selection
   },
-  {
-    path: 'login/:role', // Dynamic route for login with role parameter
-    component: LoginComponent,
-  },
+  
   {
     path: 'loginadmin', // Dynamic route for login with role parameter
     component: LoginAdminComponent,
+    canActivate:[loginsignupGuard]
+  },
+  {
+    path: 'login/:role', // Dynamic route for login with role parameter
+    component: LoginComponent,
+    canActivate:[loginsignupGuard]
+  },
+ 
+  {
+    path: 'lostpassword',
+    component: LostPasswordComponent,
+    
+  },
+  {
+    path: 'signup/:role',
+    component: SignUpComponent,
+    canActivate:[loginsignupGuard]
   },
   {
     path: ':role/:page',
     component: RoleDashboardComponentComponent,
     canActivate:[authGuard]
   },
-  {
-    path: 'lostpassword',
-    component: LostPasswordComponent, // Route for lost password page
-  },
-  {
-    path: 'signup/:role',
-    component: SignUpComponent, // Route for signup page
-  },
- 
   
   {
     path: 'callback',
