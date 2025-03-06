@@ -32,7 +32,7 @@ router.post("/donate", protect, processDonation);
 // ✅ Authentication Routes
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/:id", protect, updateUser);
+router.put("/:id", protect, updateUser);
 router.delete("/:id", protect, deleteUser);
 
 // ✅ Google OAuth Routes
