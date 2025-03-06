@@ -10,7 +10,8 @@ const userRouter = require("./routes/userRoutes");
 const investorRouter = require("./routes/investorRoutes");
 const campaignRouter = require("./routes/campaignRoutes");
 const donationRouter = require("./routes/donationRoutes");
-const transactionRouter = require("./routes/transactionRoutes")
+const transactionRouter = require("./routes/transactionRoutes");
+const { sendMail } = require("./controllers/sendmailController");
 
 const { webhookChekout } = require("./controllers/stripeController");
 app.use(
@@ -42,6 +43,8 @@ app.use("/api/v1/investor", investorRouter);
 app.use("/api/v1/campaigns", campaignRouter);
 app.use("/api/v1/donation", donationRouter);
 app.use("/api/v1/transactions", transactionRouter);
+
+app.post("/api/v1/sendmail", sendMail);
 // wrong calls
 app.all("*", (req, res, next) => {
   /*const err = new Error(`Can't find ${req.originalUrl} on this server !`);
