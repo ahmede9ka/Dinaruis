@@ -1,0 +1,49 @@
+/* Styling for the charts and cards */
+canvas {
+    max-width: 100%;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .rounded-lg {
+    border-radius: 8px;
+  }
+  
+  .shadow-md {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bg-gray-50 {
+    background-color: #f9fafb;
+  }
+  
+  .dark\:bg-gray-800 {
+    background-color: #2d3748;
+  }
+  
+  .text-gray-900 {
+    color: #1a202c;
+  }
+  
+  .text-gray-700 {
+    color: #4a5568;
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  

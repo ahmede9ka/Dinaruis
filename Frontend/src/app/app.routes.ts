@@ -25,7 +25,7 @@ export const routes: Routes = [
   {
     path: 'chooserole',
     component: RolePickComponent, // Route for role selection
-    canActivate:[loginsignupGuard]
+    //canActivate:[loginsignupGuard]
   },
   {
     path: 'a',
@@ -51,12 +51,12 @@ export const routes: Routes = [
   {
     path: 'loginadmin', // Dynamic route for login with role parameter
     component: LoginAdminComponent,
-    canActivate:[loginsignupGuard]
+    //canActivate:[loginsignupGuard]
   },
   {
     path: 'login/:role', // Dynamic route for login with role parameter
     component: LoginComponent,
-    canActivate:[loginsignupGuard]
+    //canActivate:[loginsignupGuard]
   },
  
   {
@@ -67,12 +67,12 @@ export const routes: Routes = [
   {
     path: 'signup/:role',
     component: SignUpComponent,
-    canActivate:[loginsignupGuard]
+    //canActivate:[loginsignupGuard]
   },
   {
     path: ':role/:page',
     component: RoleDashboardComponentComponent,
-    canActivate:[authGuard]
+    //canActivate:[authGuard]
   },
   
   {
