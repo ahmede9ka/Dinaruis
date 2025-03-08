@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadUser();
+    
   }
 
   loadUser(): void {

@@ -1,0 +1,33 @@
+<section class="bg-gray-900 py-16">
+    <div class="container mx-auto px-6">
+      <div class="max-w-[540px] mx-auto">
+        <div class="flex justify-center">
+          <div class="text-base inline-flex border border-[#4CAF50] px-5 py-1 rounded-lg tracking-tight text-white bg-gradient-to-r from-[#4C51BF] to-[#4CAF50] shadow-lg shadow-[#4CAF50]/50 animate-pulse transition-all duration-400 font-bold font-sans">
+            Testimonials
+          </div>
+        </div>
+  
+        <h2 class="text-4xl md:text-5xl font-bold text-white text-center mt-5 tracking-wide">
+          What our users <span class="text-[#4CAF50]">Say</span>
+        </h2>
+  
+        <p class="text-white mt-2 mx-auto text-base text-center">
+          Empowering creators and backers to connect and achieve their dreams. See what our users have to say about Dinaruis.
+        </p>
+      </div>
+    </div>
+  
+    <div class="flex justify-center gap-6 mt-10 max-h-[640px] overflow-hidden">
+      <div *ngFor="let testimonial of testimonials" class="testimonial p-8 rounded-3xl border border-[#5A67D8] shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-500 w-full bg-gradient-to-r from-[#5A67D8] via-[#434190] to-[#4C51BF]">
+        <div class="text-white text-lg font-serif italic mb-6 w-60">{{ testimonial.text }}</div>
+        <div class="flex items-center gap-2 mt-5">
+          <img width="40" height="40" src="{{testimonial.imageSrc}}" alt="{{testimonial.name}}" class="h-12 w-12 rounded-full border-4 border-[#4CAF50] transition-all duration-300 hover:scale-110" />
+          <div class="flex flex-col">
+            <div class="font-semibold tracking-tight leading-5 text-white">{{ testimonial.name }}</div>
+            <div class="leading-5 tracking-tight text-[#A0AEC0]">{{ testimonial.username }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

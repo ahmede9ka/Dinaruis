@@ -20,7 +20,8 @@ import { LoginAdminComponent } from './views/login-admin/login-admin.component';
 export const routes: Routes = [
   {
     path: '',
-    component: HomePageComponent, // Default route (home page)
+    component: HomePageComponent,
+   // Default route (home page)
   },
   {
     path: 'chooserole',

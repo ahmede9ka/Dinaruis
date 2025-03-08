@@ -6,11 +6,12 @@ import { ContactSectionComponent } from "../contact-section/contact-section.comp
 import { FeatureSectionComponent } from "../feature-section/feature-section.component";
 import { SingleSectionComponent } from "../single-section/single-section.component";
 import { TeamComponent } from "../team/team.component";
+import { TestimonialsComponent } from "../testimonials/testimonials.component";
 
 @Component({
   selector: 'app-home-page',
   standalone:true,
-  imports: [NavbarComponent, FooterComponent, HeaderComponent, ContactSectionComponent, FeatureSectionComponent, SingleSectionComponent, TeamComponent],
+  imports: [NavbarComponent, FooterComponent, HeaderComponent, ContactSectionComponent, FeatureSectionComponent, SingleSectionComponent, TeamComponent, TestimonialsComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })

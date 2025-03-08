@@ -26,7 +26,7 @@ import { InvestorSettingsComponent } from "../investor-settings/investor-setting
 
     <div class="pt-4 sm:ml-64">
   
-    <div class="    mt-14">
+    <div class="    mt-14" >
       <!-- Conditional rendering based on the role -->
       <ng-container *ngIf="isValidRole">
         <ng-container *ngIf="role === 'admin'">
