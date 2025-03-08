@@ -98,6 +98,6 @@ export class StartCampagneComponent implements OnInit {
     }
   }
   nextStep() {
-    this.router.navigate(['/b']); // Redirect to Step 2
+    this.router.navigate(['/entrepreneur/start-campagne/step2']); // Redirect to Step 2
   }
 }

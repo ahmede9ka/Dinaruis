@@ -24,9 +24,9 @@ import { InvestorSettingsComponent } from "../investor-settings/investor-setting
     <app-dashboard-nav></app-dashboard-nav>
     <app-sidebar-dashboard></app-sidebar-dashboard>
 
-    <div class="p-4 sm:ml-64">
+    <div class="pt-4 sm:ml-64">
   
-    <div class="p-4    mt-14">
+    <div class="    mt-14">
       <!-- Conditional rendering based on the role -->
       <ng-container *ngIf="isValidRole">
         <ng-container *ngIf="role === 'admin'">
@@ -151,7 +151,7 @@ export class RoleDashboardComponentComponent {
   private isValidPageForRole(role: string, page: string): boolean {
     const validPagesForAdmin = ['dashboard', 'userManagement', 'transactionsManagement', 'campagnesManagement', 'settings'];
     const validPagesForEntrepreneur = ['dashboard', 'myProjects', 'fundingRequests', 'settings'];
-    const validPagesForInvestor = ['dashboard', 'explore', 'investments', 'favorites'];
+    const validPagesForInvestor = ['dashboard', 'explore', 'investments', 'favorites','settings'];
 
     if (role === 'admin') {
       return validPagesForAdmin.includes(page);

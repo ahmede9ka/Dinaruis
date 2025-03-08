@@ -28,19 +28,19 @@ export const routes: Routes = [
     //canActivate:[loginsignupGuard]
   },
   {
-    path: 'a',
+    path: 'entrepreneur/start-campagne/step1',
     component: StartCampagneComponent, // Route for role selection
   },
   {
-    path: 'b',
+    path: 'entrepreneur/start-campagne/step2',
     component: StartCampagneStep2Component, // Route for role selection
   },
   {
-    path: 'c',
+    path: 'entrepreneur/start-campagne/step3',
     component: StartCampagneStep3Component, // Route for role selection
   },
   {
-    path: 'd',
+    path: 'entrepreneur/start-campagne/step4',
     component: StartCampagneStep4Component, // Route for role selection
   },
   {

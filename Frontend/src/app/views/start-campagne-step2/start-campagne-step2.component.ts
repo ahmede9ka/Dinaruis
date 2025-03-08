@@ -56,6 +56,6 @@ export class StartCampagneStep2Component {
     }
   }
   nextStep() {
-    this.router.navigate(['/c']); // Redirect to Step 2
+    this.router.navigate(['/entrepreneur/start-campagne/step3']); // Redirect to Step 2
   }
 }

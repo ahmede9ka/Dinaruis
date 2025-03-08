@@ -1,72 +1,74 @@
 <div class="bg-gray-100 dark:bg-gray-900 p-6">
   <h1 class="text-3xl font-bold text-gray-700 dark:text-white mb-6">Tableau de Bord Admin</h1>
 
-  <!-- Statistiques Globales -->
+  <!-- Section 1: 3 KPI in a row -->
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
     <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
       <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Montant Total Collecté</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">${{ totalCollecte }}</p>
+      <p class="text-3xl font-bold text-white dark:text-white">${{ totalCollecte }}</p>
     </div>
     <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
       <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Campagnes Totales</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalCampagnes }}</p>
+      <p class="text-3xl font-bold text-white dark:text-white">{{ totalCampagnes }}</p>
     </div>
     <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
       <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Utilisateurs Totaux</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalUtilisateurs }}</p>
+      <p class="text-3xl font-bold text-white dark:text-white">{{ totalUtilisateurs }}</p>
     </div>
   </div>
 
-  <!-- Additional Statistics -->
+  <!-- Section 2: 2 KPI (stacked) + 2 dashboards (side by side) -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-    
-    
-    <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
-      <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Demandes en Attente</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ demandesEnAttente }}</p>
+    <div class="space-y-5 mt-2">
+      <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
+        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Demandes en Attente</h2>
+        <p class="text-3xl font-bold text-white dark:text-white">{{ demandesEnAttente }}</p>
+      </div>
+      <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
+        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Contributions</h2>
+        <p class="text-3xl font-bold text-white dark:text-white">{{ totalContributions }}</p>
+      </div>
+    </div>
+    <div class="gap-4 ">
+      <div class="h-60  bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+        <canvas id="fondsCollectesChart"></canvas>
+      </div>
+      
+    </div>
+    <div class=" gap-4">
+      
+      <div class="h-60 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+        <canvas id="repartitionCampagnesChart"></canvas>
+      </div>
     </div>
   </div>
 
-  
-  <!-- Graphiques -->
+  <!-- Section 3: Top Investors + Campagne Validation Graph -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-    <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
-      <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Contributions</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalContributions }}</p>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+      <h2 class="text-2xl font-semibold text-white dark:text-white mb-4">Top 5 Investors</h2>
+      <table class="table-auto w-full">
+        <thead>
+          <tr class="border-b">
+            <th class="py-2 px-4 text-left text-lg font-medium text-white dark:text-white">Investor</th>
+            <th class="py-2 px-4 text-left text-lg font-medium text-white dark:text-white">Total Invested</th>
+            <th class="py-2 px-4 text-left text-lg font-medium text-white dark:text-white">Projects</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let investor of topInvestors" class="border-b">
+            <td class="py-2 px-4 text-white dark:text-white flex items-center">
+              <img [src]="investor.photo" alt="Investor Photo" class="w-8 h-8 rounded-full mr-3">
+              {{ investor.name }}
+            </td>
+            <td class="py-2 px-4 text-white dark:text-white">${{ investor.totalInvested | number }}</td>
+            <td class="py-2 px-4 text-white dark:text-white">{{ investor.numberOfProjects }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="h-60 w-full mb-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
-      <canvas id="fondsCollectesChart"></canvas>
+    <div class="w-full col-span-2  bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+      <canvas id="campagneValidationChart"></canvas>
     </div>
-    <div class="h-60 w-full mb-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
-      <canvas id="repartitionCampagnesChart"></canvas>
-    </div>
-    <!-- Top Investors Table -->
-  <div class="mt-8">
-    <h2 class="text-2xl font-semibold text-gray-700 dark:text-white mb-6">Top 5 Investors</h2>
-    <table class=" table-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <thead>
-        <tr class="border-b">
-          <th class="py-2 px-4 text-left text-lg font-medium text-gray-700 dark:text-white">Investor</th>
-          <th class="py-2 px-4 text-left text-lg font-medium text-gray-700 dark:text-white">Total Invested</th>
-          <th class="py-2 px-4 text-left text-lg font-medium text-gray-700 dark:text-white">Projects</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let investor of topInvestors" class="border-b">
-          <td class="py-2 px-4 text-gray-700 dark:text-white flex items-center">
-            <img [src]="investor.photo" alt="Investor Photo" class="w-8 h-8 rounded-full mr-3">
-            {{ investor.name }}
-          </td>
-          <td class="py-2 px-4 text-gray-700 dark:text-white">${{ investor.totalInvested | number }}</td>
-          <td class="py-2 px-4 text-gray-700 dark:text-white">{{ investor.numberOfProjects }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  </div>
-
-  <div class="h-60 mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
-    <canvas id="campagneValidationChart"></canvas>
   </div>
 </div>

@@ -68,6 +68,6 @@ export class StartCampagneStep3Component {
     }
   }
   nextStep() {
-    this.router.navigate(['/d']); // Redirect to Step 2
+    this.router.navigate(['/entrepreneur/start-campagne/step4']); // Redirect to Step 2
   }
 }

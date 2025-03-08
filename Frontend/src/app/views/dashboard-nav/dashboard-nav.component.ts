@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-nav',
   standalone:true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashboard-nav.component.html',
   styleUrl: './dashboard-nav.component.css'
 })
@@ -19,7 +20,14 @@ export class DashboardNavComponent {
         this.router.navigate(['/']);
    
   }
+ 
+  user:any;
   ngOnInit() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      this.user = JSON.parse(userData);
+      console.log(this.user.firstName);
+    };
     const userMenuButton = this.el.nativeElement.querySelector("[data-dropdown-toggle='dropdown-user']");
     const dropdownMenu = this.el.nativeElement.querySelector("#dropdown-user");
 
@@ -35,5 +43,8 @@ export class DashboardNavComponent {
         }
       });
     }
+  }
+  startCampagne(): void {
+    this.router.navigate(['/entrepreneur/start-campagne/step1']);
   }
 }
