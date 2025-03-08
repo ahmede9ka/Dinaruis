@@ -7,7 +7,8 @@ const transactionSchema = new Schema({
   date: {
     type: Date,
     required: true,
-    default: Date.now, // ✅ Set default date to today
+    default: () => new Date().setHours(0, 0, 0, 0), // Set default to today's date without time
+    set: (date) => new Date(date).setHours(0, 0, 0, 0), // Strip time component when setting
   },
   user: {
     type: Schema.Types.ObjectId,

@@ -11,6 +11,9 @@ const investorRouter = require("./routes/investorRoutes");
 const campaignRouter = require("./routes/campaignRoutes");
 const donationRouter = require("./routes/donationRoutes");
 const transactionRouter = require("./routes/transactionRoutes");
+
+const adminRouter = require("./routes/adminRoutes");
+
 const { sendMail } = require("./controllers/sendmailController");
 
 const { webhookChekout } = require("./controllers/stripeController");
@@ -43,6 +46,7 @@ app.use("/api/v1/investor", investorRouter);
 app.use("/api/v1/campaigns", campaignRouter);
 app.use("/api/v1/donation", donationRouter);
 app.use("/api/v1/transactions", transactionRouter);
+app.use("/api/v1/admin", adminRouter);
 
 app.post("/api/v1/sendmail", sendMail);
 // wrong calls
