@@ -45,6 +45,32 @@ const getCampaign = async (req, res, next) => {
     });
   }
 };
+const getCampaignsByEntrepreneur = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Correctly extract user ID from params
+
+    const campaigns = await Campaign.find({ user: id }); // Find campaigns by user ID
+
+    if (!campaigns || campaigns.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "No campaigns found for this user",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: campaigns,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: `Error fetching campaigns: ${error.message}`,
+    });
+  }
+};
+
+
 
 // Update a campaign
 const updateCampaign = async (req, res, next) => {
@@ -109,4 +135,5 @@ module.exports = {
   getCampaign,
   updateCampaign, // ✅ Added update function
   deleteCampaign,
+  getCampaignsByEntrepreneur
 };

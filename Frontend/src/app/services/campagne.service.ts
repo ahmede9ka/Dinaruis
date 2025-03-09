@@ -22,4 +22,11 @@ export class CampagneService {
   getDonationByCampaign(campaign:any):Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/donation/getDonationByCampaign/${campaign}`);
   }
+  getCampaignsByEntrepreneur(id:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/campaigns/${id}`,{headers});
+  }
 }
