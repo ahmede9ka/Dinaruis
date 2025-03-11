@@ -26,7 +26,7 @@ export class DashboardNavComponent {
     const userData = localStorage.getItem('user');
     if (userData) {
       this.user = JSON.parse(userData);
-      console.log(this.user.firstName);
+      console.log(this.user.role);
     };
     const userMenuButton = this.el.nativeElement.querySelector("[data-dropdown-toggle='dropdown-user']");
     const dropdownMenu = this.el.nativeElement.querySelector("#dropdown-user");

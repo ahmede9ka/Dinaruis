@@ -49,6 +49,7 @@ export class SidebarDashboardComponent implements OnInit {
       console.log('Role from URL:', this.role); // Debugging output
     });
     this.userRole = this.role ? this.role : '';
+    console.log('User role:', this.userRole); // Debugging output
    
     // Assign the correct menu based on role
     switch (this.userRole) {
