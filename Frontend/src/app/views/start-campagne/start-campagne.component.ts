@@ -70,6 +70,9 @@ export class StartCampagneComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+      console.log('Form submitted:', this.fundraisingForm.value);
+    
   }
 
   toggleCountryDropdown(): void {
@@ -78,17 +81,24 @@ export class StartCampagneComponent implements OnInit {
 
   selectCountry(country: any): void {
     this.fundraisingForm.patchValue({ country: country.name });
+    console.log('Form submitted:', this.fundraisingForm.value);
     this.showCountryDropdown = false;
+    console.log(country);
   }
 
   selectCategory(categoryId: string): void {
     this.selectedCategory = categoryId;
     this.fundraisingForm.patchValue({ category: categoryId });
+    console.log('Form submitted:', this.fundraisingForm.value);
+    console.log(this.selectedCategory);
   }
 
   onSubmit(): void {
     if (this.fundraisingForm.valid) {
       console.log('Form submitted:', this.fundraisingForm.value);
+      this.router.navigate(['/entrepreneur/start-campagne/step2'], {
+        state: { formData: this.fundraisingForm.value }
+      });
       // Handle form submission
     } else {
       // Mark all fields as touched to trigger validation
@@ -98,6 +108,6 @@ export class StartCampagneComponent implements OnInit {
     }
   }
   nextStep() {
-    this.router.navigate(['/entrepreneur/start-campagne/step2']); // Redirect to Step 2
+    
   }
 }

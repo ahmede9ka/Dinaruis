@@ -14,13 +14,23 @@ export class StartCampagneStep3Component {
   fundraisingForm: FormGroup;
   coverImagePreview: string | null = null;
   additionalImages: string[] = [];
-
+  formData:any;
   constructor(private fb: FormBuilder,private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    this.formData = navigation?.extras.state?.['formData'] || {}; 
+    console.log('Received data:', this.formData);
     this.fundraisingForm = this.fb.group({
+      country: ['', Validators.required],
+      postcode: ['', [Validators.required, Validators.pattern('^[0-9]{4,6}$')]],
+      selectedCategory: [null, Validators.required],
       targetAmount: ['', [Validators.required, Validators.min(1)]],
       coverImage: [null, Validators.required],
       additionalImages: [[]]
     });
+    this.fundraisingForm.patchValue({ selectedCategory: this.formData.selectedCategory });
+    this.fundraisingForm.patchValue({country:this.formData.country});
+    this.fundraisingForm.patchValue({postcode:this.formData.postcode});
+    this.fundraisingForm.patchValue({targetAmount:this.formData.targetAmount});
   }
 
   // Handle Cover Image Upload
@@ -62,12 +72,16 @@ export class StartCampagneStep3Component {
   onSubmit() {
     if (this.fundraisingForm.valid) {
       console.log('Form Data:', this.fundraisingForm.value);
+      this.router.navigate(['/entrepreneur/start-campagne/step4'], {
+        state: { formData: this.fundraisingForm.value }
+      });
       // Proceed to next step
     } else {
+      console.log('Form Data:', this.fundraisingForm.value);
       console.log('Form is invalid');
     }
   }
   nextStep() {
-    this.router.navigate(['/entrepreneur/start-campagne/step4']); // Redirect to Step 2
+     // Redirect to Step 2
   }
 }

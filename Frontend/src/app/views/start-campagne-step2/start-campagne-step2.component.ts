@@ -13,13 +13,22 @@ import { Router } from '@angular/router';
 export class StartCampagneStep2Component {
   fundraisingForm: FormGroup;
   recommendedTarget: number | null = null;
+  formData: any;
   constructor(private fb: FormBuilder,private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    this.formData = navigation?.extras.state?.['formData'] || {}; 
+    console.log('Received data:', this.formData);
     this.fundraisingForm = this.fb.group({
       country: ['', Validators.required],
       postcode: ['', [Validators.required, Validators.pattern('^[0-9]{4,6}$')]],
       selectedCategory: [null, Validators.required],
       targetAmount: ['', [Validators.required, Validators.min(1)]]
     });
+    
+    this.fundraisingForm.patchValue({ selectedCategory: this.formData.category });
+    this.fundraisingForm.patchValue({country:this.formData.country});
+    this.fundraisingForm.patchValue({postcode:this.formData.postcode});
+
   }
   // Update recommended target amount dynamically
   updateRecommendedAmount() {
@@ -50,12 +59,14 @@ export class StartCampagneStep2Component {
   onSubmit() {
     if (this.fundraisingForm.valid) {
       console.log('Form Data:', this.fundraisingForm.value);
-      // Proceed to the next step (e.g., navigate to the next page)
+      this.router.navigate(['/entrepreneur/start-campagne/step3'], {
+        state: { formData: this.fundraisingForm.value }
+      });
     } else {
       console.log('Form is invalid');
     }
   }
   nextStep() {
-    this.router.navigate(['/entrepreneur/start-campagne/step3']); // Redirect to Step 2
+    //this.router.navigate(['/entrepreneur/start-campagne/step3']); // Redirect to Step 2
   }
 }
