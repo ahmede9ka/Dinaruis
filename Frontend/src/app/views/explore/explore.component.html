@@ -1,6 +1,6 @@
-<div class="flex mb-4 items-center space-x-4 ">
-  <h1 class="text-gray-700 text-3xl font-bold">Welcome Investor 👋</h1> 
-  <br>
+<div class="flex flex-col md:flex-row mb-4 items-center md:space-x-4">
+  <h1 class="text-gray-700 text-3xl font-bold">Welcome Investor 👋</h1>
+
   <!-- Search Bar -->
   <input 
     type="text" 
@@ -13,34 +13,41 @@
   <button 
     (click)="openFilterModal()" 
     class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+    aria-label="Open Filters"
   >
     Filter
   </button>
 </div>
 
+<!-- Campaigns Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <!-- Loop through campaigns array -->
-  <div *ngFor="let campaign of paginatedCampaigns()" class="max-w-sm rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800 relative">
-    <img [src]="campaign.imageUrl" alt="Campaign Image" class="w-full h-52 object-cover rounded-t-2xl">
-    
+  <div *ngFor="let campaign of paginatedCampaigns()" 
+       class="max-w-sm rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800 relative">
+
+    <!-- Campaign Image -->
+    <img [src]="campaign.image" alt="{{ campaign.title }}" class="w-full h-52 object-cover rounded-t-2xl">
+
     <!-- Favorite Icon -->
-    <button (click)="toggleFavorite(campaign)" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
+    <button 
+      (click)="toggleFavorite(campaign)" 
+      class="absolute top-4 right-4 text-gray-500 hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400"
+      aria-label="Toggle Favorite"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
         class="w-6 h-6 cursor-pointer" [ngClass]="campaign.isFavorite ? 'text-red-500' : 'text-gray-500 hover:text-red-500'">
         <path fill-rule="evenodd" clip-rule="evenodd"
           d="M12 4.248c-3.148-2.63-8.316-1.856-10.08 2.078-1.221 2.866-.435 5.978 1.685 8.267C5.813 17.572 9.084 20 12 22c2.916-2 6.187-4.428 8.395-7.407 2.12-2.29 2.906-5.401 1.685-8.267C20.316 2.392 15.148 1.618 12 4.248z" />
       </svg>
     </button>
+
     <!-- Type Badge -->
-  <div class="absolute top-4 left-4  text-white px-4 py-1 rounded-full text-sm" [ngClass]="getTypeClass(campaign.type)">
-    {{ campaign.type }}
-  </div>
-    
-    
+    <div class="absolute top-4 left-4 text-white px-4 py-1 rounded-full text-sm" [ngClass]="getTypeClass(campaign.type)">
+      {{ campaign.type }}
+    </div>
+
     <div class="p-6">
       <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ campaign.title }}</h2>
-      <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ campaign.shortDescription }}</p>
-      <button (click)="viewCampaignDetails(campaign.id)" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500 text-sm font-medium mt-3">Read More</button>
+      <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ campaign.description }}</p>
     </div>
 
     <!-- Progress Bar Section -->
@@ -48,39 +55,44 @@
       <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">Progress: {{ campaign.progress }}%</div>
       <div class="relative pt-1">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 py-1 px-2 rounded-lg">{{ campaign.donatedAmount }} Donated</span>
-          <span class="text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 py-1 px-2 rounded-lg">Goal: {{ campaign.goalAmount }}</span>
+          <span class="text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 py-1 px-2 rounded-lg">{{ campaign.raisedAmount }} Donated</span>
+          <span class="text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 py-1 px-2 rounded-lg">Goal: {{ campaign.amountGoal }}</span>
         </div>
         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
           <div class="bg-blue-600 dark:bg-blue-400 h-2.5 rounded-full transition-all duration-500" [style.width.%]="campaign.progress"></div>
         </div>
-        <div class="text-xs font-semibold mt-3 text-gray-700 dark:text-gray-400">Deadline: {{ campaign.deadline }}</div>
+        <div class="text-xs font-semibold mt-3 text-gray-700 dark:text-gray-400">Deadline: {{ campaign.endDate }}</div>
+        <button 
+          (click)="investInCampaign(campaign._id)" 
+          class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
+          Invest
+        </button>
       </div>
-      
-      <!-- CTA Button -->
-      <button (click)="investInCampaign(campaign.id)" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all">Invest Now</button>
     </div>
   </div>
 </div>
+
 <!-- Pagination Controls -->
 <div class="flex justify-center mt-6 space-x-4">
   <button 
     (click)="prevPage()" 
     [disabled]="currentPage === 1" 
-    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+  >
     Prev
   </button>
   <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
   <button 
     (click)="nextPage()" 
     [disabled]="currentPage === totalPages" 
-    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+  >
     Next
   </button>
 </div>
 
 <!-- Filter Modal -->
-<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-opacity-30">
+<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black bg-opacity-30">
   <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-96">
     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select a Filter</h3>
 
@@ -112,14 +124,13 @@
           <option value="all">All</option>
           <option value="fundraising">Fundraising</option>
           <option value="awareness">Awareness</option>
-          <!-- Add more campaign types as needed -->
         </select>
       </label>
 
       <!-- Modal Actions -->
       <div class="mt-4 flex justify-between">
-        <button (click)="closeFilterModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600">Cancel</button>
-        <button (click)="applyFilters()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Apply</button>
+        <button (click)="closeFilterModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Cancel</button>
+        <button (click)="applyFilters()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Apply</button>
       </div>
     </div>
   </div>

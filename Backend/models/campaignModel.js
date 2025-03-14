@@ -68,6 +68,14 @@ const campaignSchema = new Schema({
     ref: "User",
     required: true,
   },
+  progress:{
+    type:Number,
+    default:0
+  },
+  isFavorite :{
+    type:Boolean,
+    default:false
+  }
 });
 
 const Campaign = mongoose.model("Campaign", campaignSchema);

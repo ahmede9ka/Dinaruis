@@ -19,4 +19,11 @@ export class TransactionService {
       });
       return this.http.get<any>(`${this.apiUrl}`,{headers});
     }
+    getTransactionsById(id:any,token:any): Observable<any> {
+      const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/${id}`,{headers});
+    }
 }

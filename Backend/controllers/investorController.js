@@ -25,6 +25,25 @@ const getInvestment = async (req, res, next) => {
     });
   }
 };
+const getInvestmentById = async (req, res, next) => {
+  try {
+    /*const donations = await Transaction.find({ user: req.user.id }).populate(
+      "campaign",
+      "title description"
+    );*/
+    const {id} = req.params;
+    const donations = await Donation.findById(id);
+    res.status(200).json({
+      status: "success",
+      data: donations,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: `Error getting donations : ${error.message}`,
+    });
+  }
+};
 const invest = async (req, res, next) => {
   try {
     const donation = new Donation({
@@ -45,4 +64,7 @@ const invest = async (req, res, next) => {
     });
   }
 };
-module.exports = { getInvestment, invest };
+module.exports = {
+  getInvestment, 
+  invest,
+  getInvestmentById };
