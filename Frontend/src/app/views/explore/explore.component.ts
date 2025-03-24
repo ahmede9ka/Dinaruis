@@ -59,7 +59,7 @@ export class ExploreComponent implements OnInit {
   fetchCampaigns(id: any) {
     this.campaignservice.getCampaigns(this.token).subscribe((data: any) => {
       this.campaigns = data.data;
-      console.log(this.campaigns)
+      console.log(this.campaigns);
     });
   }
 

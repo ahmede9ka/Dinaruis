@@ -2,7 +2,26 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import 'flowbite';
+import { CampagneService } from '../../services/campagne.service';
 
+
+interface Campaign {
+  _id:string;
+  title: string;
+  description: string;
+  amountGoal: number;
+  image: string;
+  images: string[];
+  startDate: Date;
+  endDate: Date;
+  localisation: string;
+  type: string;
+  code_postal: string;
+  user: string;
+  progress: number; // Added this
+  isFavorite: boolean; // Added this
+  raisedAmount:number;
+}
 @Component({
   selector: 'app-dashboard-enterpreneur',
   standalone: true,
@@ -25,17 +44,42 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
   selectedTimeRange: string = 'Select Time Range'; // Default text
   dropdownOpen: boolean = false;
   timeRanges: string[] = ['Last 24 hours', 'Last Week', 'Last Month', 'Last 3 Months']; // Example options
-
-  constructor() {}
+  token:any;
+  campaigns: Campaign[] = []; 
+  nbcampaings:number=0;
+  totaldonations:number=0;
+  totalDonators:number=0;
+  constructor(private campaignservice:CampagneService) {}
 
   ngOnInit() {
     const userData = localStorage.getItem('user');
+    this.token = localStorage.getItem('token');
     if (userData) {
       this.user = JSON.parse(userData);
       console.log(this.user.firstName);
+      this.fetchCampaignsOfEntrepreneur();
+      this.getTotalDonators();
     }
   }
+  fetchCampaignsOfEntrepreneur(){
+    this.campaignservice.getCampaignsByEntrepreneur(this.user._id,this.token).subscribe((data:any)=>{
+      this.campaigns = data.data;
+      this.nbcampaings = this.campaigns.length;
+      this.campaigns.forEach(element => {
+        this.totaldonations = element.raisedAmount;
+        this.campaignservice.getTotalContributors(element._id,this.token).subscribe((data)=>{
+          console.log(data);
+          this.totalDonators = data.data["totalContributors"];
+          console.log(this.totalDonators);
+        })
+      });
+      console.log(data);
+    })
+  }
+  getTotalDonators(){
 
+    
+  }
   ngAfterViewInit() {
     this.initializeCharts();
   }

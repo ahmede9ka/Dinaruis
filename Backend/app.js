@@ -13,7 +13,8 @@ const donationRouter = require("./routes/donationRoutes");
 const transactionRouter = require("./routes/transactionRoutes");
 
 const adminRouter = require("./routes/adminRoutes");
-
+app.use(express.json({ limit: '20mb' })); // Adjust as needed
+app.use(express.urlencoded({ limit: '20mb', extended: true }));
 const { sendMail } = require("./controllers/sendmailController");
 
 const { webhookChekout } = require("./controllers/stripeController");

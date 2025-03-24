@@ -1,5 +1,5 @@
 export class Campaign {
-  _id: string;
+  
   title: string;
   description: string;
   amountGoal: number;
@@ -15,7 +15,6 @@ export class Campaign {
   isFavorite?: boolean; // Added this
   raisedAmount:number;
   constructor(
-    _id:string='',
     title: string = '',
     raisedAmount:number=0,
     description: string = '',
@@ -31,7 +30,6 @@ export class Campaign {
     progress: number = 0, // Default value added
     isFavorite: boolean = false // Default value added
   ) {
-    this._id=_id;
     this.title = title;
     this.raisedAmount = raisedAmount;
     this.description = description;

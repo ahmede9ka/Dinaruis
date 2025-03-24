@@ -36,4 +36,11 @@ export class CampagneService {
     });
     return this.http.post<any>(`${this.apiUrl}/campaigns/create`,data,{headers});
   }
+  getTotalContributors(id:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/campaigns/unique/contributors/${id}`,{headers});
+  }
 }

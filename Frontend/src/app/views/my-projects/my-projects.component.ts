@@ -4,16 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { CampagneService } from '../../services/campagne.service';
 
 interface Campaign {
-  id: number;
+  _id:string;
   title: string;
-  shortDescription: string;
-  imageUrl: string;
+  description: string;
+  amountGoal: number;
+  image: string;
+  images: string[];
+  startDate: Date;
+  endDate: Date;
+  localisation: string;
   type: string;
-  donatedAmount: number;
-  goalAmount: number;
-  progress: number;
-  deadline: string;
-  isFavorite: boolean;
+  code_postal: string;
+  user: string;
+  progress: number; // Added this
+  isFavorite: boolean; // Added this
+  raisedAmount:number;
 }
 
 @Component({
@@ -29,6 +34,27 @@ export class MyProjectsComponent implements OnInit {
   itemsPerPage: number = 3; // Number of items per page
   campaigns: Campaign[] = []; // Initialize campaigns properly
   token:any;
+  constructor(private campaignService: CampagneService) {}
+
+  ngOnInit(): void {
+    const userData = localStorage.getItem('user');
+    this.token = localStorage.getItem('token');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData); // Properly parse JSON string
+        console.log(user._id);
+        if (user?._id) {
+          this.fetchCampaigns(user._id);
+        } else {
+          console.error('User ID is missing in localStorage data');
+        }
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+      }
+    } else {
+      console.error('No user data found in localStorage');
+    }
+  }
   get totalPages(): number {
     return Math.ceil(this.filteredCampaigns().length / this.itemsPerPage);
   }
@@ -107,34 +133,14 @@ export class MyProjectsComponent implements OnInit {
     }
   }
 
-  constructor(private campaignService: CampagneService) {}
-
-  ngOnInit(): void {
-    const userData = localStorage.getItem('user');
-    this.token = localStorage.getItem('token');
-    if (userData) {
-      try {
-        const user = JSON.parse(userData); // Properly parse JSON string
-        console.log(user._id);
-        if (user?._id) {
-          this.fetchCampaigns(user._id);
-        } else {
-          console.error('User ID is missing in localStorage data');
-        }
-      } catch (error) {
-        console.error('Error parsing user data from localStorage:', error);
-      }
-    } else {
-      console.error('No user data found in localStorage');
-    }
-  }
+  
 
   fetchCampaigns(userId: number) {
     this.campaignService.getCampaignsByEntrepreneur(userId,this.token).subscribe(
       (response: any) => {
         if (response?.data) {
           this.campaigns = response.data;
-          console.log(this.campaigns);
+          console.log("campaigns:",this.campaigns);
         } else {
           console.error('Invalid API response format:', response);
         }
@@ -145,7 +151,7 @@ export class MyProjectsComponent implements OnInit {
     );
   }
 
-  viewCampaignDetails(campaignId: number): void {
+  viewCampaignDetails(campaignId: string): void {
     console.log('Viewing details for campaign ID:', campaignId);
     // Logic to navigate to the campaign detail page or show modal
   }
@@ -154,7 +160,7 @@ export class MyProjectsComponent implements OnInit {
     campaign.isFavorite = !campaign.isFavorite;
   }
 
-  investInCampaign(id: number) {
+  investInCampaign(id: string) {
     console.log(`Investing in campaign ID: ${id}`);
     // Add logic to process investments
   }

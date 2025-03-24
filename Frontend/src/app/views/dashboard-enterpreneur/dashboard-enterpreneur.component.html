@@ -10,16 +10,16 @@
       <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
           <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Campaigns</h2>
           <p class="text-3xl font-bold text-gray-900 dark:text-white">
-              {{ totalCampaigns.active + totalCampaigns.completed + totalCampaigns.pending }}
+              {{ nbcampaings }}
           </p>
       </div>
       <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
           <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Collected</h2>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">${{ totalCollected }}</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">${{ totaldonations }}</p>
       </div>
       <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
           <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Contributors</h2>
-          <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalContributors }}</p>
+          <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalDonators }}</p>
       </div>
   </div>
 

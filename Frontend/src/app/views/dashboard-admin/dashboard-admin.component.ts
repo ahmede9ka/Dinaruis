@@ -4,6 +4,7 @@ import { Component,OnInit  } from '@angular/core';
 import { Chart } from 'chart.js';
 import ApexCharts from 'apexcharts';
 import { CommonModule } from '@angular/common';
+import { AdminService } from '../../services/admin.service';
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
@@ -31,9 +32,26 @@ export class DashboardAdminComponent implements OnInit {
   fondsCollectesData: any = [50000, 100000, 200000, 400000, 500000];  // Fund collection over time
   repartitionCampagnesData: any = [30, 20, 25, 25];  // Distribution of campaigns by category
   campagneValidationData: any = [2, 3, 5, 4, 7];  // Pending campaigns for validation
-
+  numberOfUsers:number=0;
+  users:any;
+  token:any;
+  totalAmount:number=0;
+  totalAmountThisMonth:number=0;
+  totalAmountToday:number=0;
+  constructor(private adminservice:AdminService){}
   ngOnInit() {
+    this.token = localStorage.getItem("token");
     this.createCharts();
+    this.adminservice.TotalNumberOfUsers(this.token).subscribe((data:any)=>{
+      this.users = data.data;
+      this.numberOfUsers = this.users["INVESTOR"]+this.users["ENTREPRENEUR"]+this.users["ADMIN"]
+    })
+    this.adminservice.AllDonations(this.token).subscribe((data:any)=>{
+      this.totalAmount = data.data.totalAmount;
+      console.log(this.totalAmount)
+      this.totalAmountThisMonth = data.data.totalAmountThisMonth;
+      this.totalAmountToday = data.data.totalAmountToday
+    })
   }
 
   // Create charts for visual representation

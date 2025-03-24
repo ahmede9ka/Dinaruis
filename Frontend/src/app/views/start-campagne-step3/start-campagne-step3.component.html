@@ -32,9 +32,10 @@
             <p class="text-gray-600 mt-1">You can add up to 5 images to support your campaign.</p>
 
             <div class="mt-4">
-                <input type="file" (change)="onAdditionalImageUpload($event)" accept="image/*" multiple class="mt-2 border border-gray-300 rounded-lg p-2 w-full">
+                <input type="file" (change)="onFileSelected($event)" accept="image/*" multiple class="mt-2 border border-gray-300 rounded-lg p-2 w-full">
                 
                 <!-- Preview Additional Images -->
+                 <!--
                 <div *ngIf="additionalImages.length > 0" class="mt-4 flex flex-wrap gap-2">
                     <div *ngFor="let img of additionalImages; let i = index" class="relative">
                         <img [src]="img" alt="Additional Image Preview" class="w-24 h-24 object-cover rounded-lg shadow-md">
@@ -43,6 +44,7 @@
                         </button>
                     </div>
                 </div>
+                -->
             </div>
         </div>
 

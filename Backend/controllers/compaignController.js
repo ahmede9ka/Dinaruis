@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const Campaign = require("../models/campaignModel");
-
+const Transaction = require("../models/transactionModel")
 // Create a new campaign
 const createCampaign = async (req, res, next) => {
   try {
@@ -102,7 +102,43 @@ const updateCampaign = async (req, res, next) => {
   }
 };
 
-// Delete a campaign
+const GetTotalContributors = async (req, res, next) => {
+  try {
+    // Find all campaigns (or you could limit by specific criteria if needed)
+
+    const campaign = await Campaign.findById(req.params.id);
+
+    if (!campaign || campaign.length === 0) {
+      return next(new AppError("No campaign found", 404));
+    }
+
+    // Use a Set to store unique user IDs across all donations for all campaigns
+    const uniqueContributors = new Set();
+
+    
+    const donations = await Transaction.find({ campaign: campaign._id });
+
+      // Add the user ID from each donation to the Set
+      donations.forEach(donation => {
+        uniqueContributors.add(donation.user.toString()); // Assuming user is a reference to a user ID
+      });
+    
+
+    // The size of the Set will give the number of unique contributors
+    res.status(200).json({
+      status: "success",
+      data: {
+        totalContributors: uniqueContributors.size,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: `Error fetching contributors: ${error.message}`,
+    });
+  }
+};
+
 const deleteCampaign = async (req, res, next) => {
   try {
     const campaign = await Campaign.findById(req.params.id);
@@ -135,5 +171,6 @@ module.exports = {
   getCampaign,
   updateCampaign, // ✅ Added update function
   deleteCampaign,
-  getCampaignsByEntrepreneur
+  getCampaignsByEntrepreneur,
+  GetTotalContributors
 };
