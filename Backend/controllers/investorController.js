@@ -163,11 +163,25 @@ const invest = async (req, res, next) => {
     });
   }
 };
+const getAllInvestors = async (req, res, next) => {
+  try {
+    // Find all users with role 'INVESTOR'
+    const investors = await User.find({ role: "INVESTOR" });
+
+    res.status(200).json({
+      status: "success",
+      data: investors, // Return the 'investors' data here
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: `Error fetching investors: ${error.message}`,
+    });
+  }
+};
+
 module.exports = {
   getInvestment,
   invest,
   getInvestmentById,
-  getTotalInvestment,
-  getSupportedProjectsCount,
-  getMonthlyInvestment,
 };

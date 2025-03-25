@@ -37,7 +37,7 @@ export class AdminService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.get<any>(`http://localhost:8000/api/v1/admin/allDonations`, { headers });
+    return this.http.get<any>(`http://localhost:8000/api/v1/admin/getDonationsByMonth`, { headers });
   }
   getCampaignsByCategory(token:any): Observable<any> {
     const headers = new HttpHeaders({

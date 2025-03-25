@@ -23,5 +23,6 @@ router.get(
 router.get("/getMonthlyInvestment/:id", protect, getMonthlyInvestment);
 
 router.post("/donate", protect, invest);
+router.get("/getInvestors", protect, getAllInvestors);
 
 module.exports = router;
