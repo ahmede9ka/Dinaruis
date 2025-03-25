@@ -8,6 +8,7 @@ const {
   getTotalInvestment,
   getSupportedProjectsCount,
   getMonthlyInvestment,
+  getAllInvestors,
 } = require("../controllers/investorController");
 // create user is just for testing
 //router.post("/create", protect, createUser);

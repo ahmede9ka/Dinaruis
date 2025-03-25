@@ -184,4 +184,8 @@ module.exports = {
   getInvestment,
   invest,
   getInvestmentById,
+  getSupportedProjectsCount,
+  getMonthlyInvestment,
+  getTotalInvestment,
+  getAllInvestors,
 };
