@@ -165,9 +165,58 @@ const invest = async (req, res, next) => {
     });
   }
 };
+
+const getMonthlyCollectedAmount = async (req, res) => {
+  try {
+    const entrepreneurId = req.params.id;
+    const currentYear = new Date().getUTCFullYear();
+
+    // 1) Find all campaigns by this entrepreneur
+    const campaigns = await Campaign.find({ user: entrepreneurId });
+
+    if (campaigns.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No campaigns found for this entrepreneur" });
+    }
+
+    // Extract campaign IDs
+    const campaignIds = campaigns.map((camp) => camp._id);
+
+    // 2) Find all donations related to these campaigns
+    const donations = await Donation.find({
+      campaign: { $in: campaignIds },
+      date: {
+        $gte: new Date(`${currentYear}-01-01T00:00:00.000Z`), // Start of year
+        $lt: new Date(`${currentYear + 1}-01-01T00:00:00.000Z`), // End of year
+      },
+    });
+
+    // 3) Calculate total donations by month
+    const monthlyTotals = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      totalAmount: 0,
+    }));
+
+    donations.forEach((donation) => {
+      const month = new Date(donation.date).getUTCMonth(); // 0-based index
+      monthlyTotals[month].totalAmount += donation.amount;
+    });
+
+    // 4) Return the result
+    res.status(200).json({
+      //entrepreneurId,
+      monthlyDonations: monthlyTotals,
+    });
+  } catch (error) {
+    console.error("Error in getMonthlyDonationsByEntrepreneur:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getTotalDonationsByEntrepreneur,
   getCampaignStatusCount,
   getUniqueInvestorsByEntrepreneur,
   invest,
+  getMonthlyCollectedAmount,
 };

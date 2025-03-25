@@ -6,6 +6,7 @@ const {
   getCampaignStatusCount,
   getUniqueInvestorsByEntrepreneur,
   invest,
+  getMonthlyCollectedAmount,
 } = require("../controllers/entrepreneurController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
@@ -22,5 +23,10 @@ router.get(
   getUniqueInvestorsByEntrepreneur
 );
 router.post("/donate", protect, invest);
+router.get(
+  "/getMonthlyCollectedAmount/:id",
+  protect,
+  getMonthlyCollectedAmount
+);
 
 module.exports = router;
