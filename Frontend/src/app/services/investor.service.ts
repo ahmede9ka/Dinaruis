@@ -33,4 +33,11 @@ export class InvestorService {
       });
       return this.http.post<any>(`${this.apiUrl}/donate`,data, { headers });
     }
+    getAllInvestors(token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/getInvestors`, { headers });
+    }
 }

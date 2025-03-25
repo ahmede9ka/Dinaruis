@@ -1,10 +1,11 @@
-import { Component,OnInit  } from '@angular/core';
-
-
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import ApexCharts from 'apexcharts';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../services/admin.service';
+import { CampagneService } from '../../services/campagne.service';
+import { InvestorService } from '../../services/investor.service';
+import { TransactionService } from '../../services/transaction.service';
+
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
@@ -13,57 +14,90 @@ import { AdminService } from '../../services/admin.service';
   styleUrl: './dashboard-admin.component.css'
 })
 export class DashboardAdminComponent implements OnInit {
-  topInvestors = [
-    { name: 'Investor A', totalInvested: 150000, numberOfProjects: 10, photo: 'https://picsum.photos/40/40?random=1' },
-    { name: 'Investor B', totalInvested: 120000, numberOfProjects: 8, photo: 'https://picsum.photos/40/40?random=2' },
-    { name: 'Investor C', totalInvested: 100000, numberOfProjects: 7, photo: 'https://picsum.photos/40/40?random=3' },
-    { name: 'Investor D', totalInvested: 95000, numberOfProjects: 6, photo: 'https://picsum.photos/40/40?random=4' },
-    { name: 'Investor E', totalInvested: 90000, numberOfProjects: 5, photo: 'https://picsum.photos/40/40?random=5' },
-  ];
-  // Data Model (sample values, replace with dynamic data later)
-  totalCollecte: number = 1000000;  // Example total amount collected
-  totalCampagnes: number = 50;  // Example total number of campaigns
-  totalUtilisateurs: number = 2000;  // Example total number of users
-  totalContributions: number = 5000;  // Example number of contributions
-  demandesEnAttente: number = 10;  // Example number of pending campaigns
-  selectedTimeRange: string = 'Mois';  // Default time range for chart
+  numberOfUsers: number = 0;
+  users: any;
+  token: any;
+  totalAmount: number = 0;
+  totalAmountThisMonth: number = 0;
+  totalAmountToday: number = 0;
+  nbcampaigns: number = 0;
+  donationsByMonth: any;
+  category: any;
+  datacategory: any;
+  status:any;
+  countstatus:any;
+  pending:any;
+  nbInvestors:any;
+  nbTransactions:any;
+  constructor(private adminService: AdminService,
+     private campagneService: CampagneService,
+    private investorService:InvestorService,
+    private transactionService:TransactionService) {}
 
-  // Graph Data (mock data for charts)
-  fondsCollectesData: any = [50000, 100000, 200000, 400000, 500000];  // Fund collection over time
-  repartitionCampagnesData: any = [30, 20, 25, 25];  // Distribution of campaigns by category
-  campagneValidationData: any = [2, 3, 5, 4, 7];  // Pending campaigns for validation
-  numberOfUsers:number=0;
-  users:any;
-  token:any;
-  totalAmount:number=0;
-  totalAmountThisMonth:number=0;
-  totalAmountToday:number=0;
-  constructor(private adminservice:AdminService){}
   ngOnInit() {
     this.token = localStorage.getItem("token");
-    this.createCharts();
-    this.adminservice.TotalNumberOfUsers(this.token).subscribe((data:any)=>{
+
+    this.adminService.TotalNumberOfUsers(this.token).subscribe((data: any) => {
       this.users = data.data;
-      this.numberOfUsers = this.users["INVESTOR"]+this.users["ENTREPRENEUR"]+this.users["ADMIN"]
-    })
-    this.adminservice.AllDonations(this.token).subscribe((data:any)=>{
+      this.numberOfUsers = this.users["INVESTOR"] + this.users["ENTREPRENEUR"] + this.users["ADMIN"];
+    });
+
+    this.adminService.AllDonations(this.token).subscribe((data: any) => {
       this.totalAmount = data.data.totalAmount;
-      console.log(this.totalAmount)
       this.totalAmountThisMonth = data.data.totalAmountThisMonth;
-      this.totalAmountToday = data.data.totalAmountToday
+      this.totalAmountToday = data.data.totalAmountToday;
+    });
+
+    this.campagneService.getCampaigns(this.token).subscribe((data: any) => {
+      this.nbcampaigns = data.data.length;
+    });
+
+    this.adminService.getDonationsByMonth(this.token).subscribe((data: any) => {
+      this.donationsByMonth = data.data;
+      this.createFondsCollectesChart();
+    });
+
+    this.adminService.getCampaignsByCategory(this.token).subscribe((data: any) => {
+      this.category = data.data.map((item: any) => item.category);
+      this.datacategory = data.data.map((item: any) => item.amount);
+      this.createRepartitionCampagnesChart();
+    });
+    this.adminService.TotalNumberOfCampaignsByStatus(this.token).subscribe((data: any) => {
+      if (!data || !data.data || !data.data.statusCounts) return; // Ensure data exists
+    
+      this.status = data.data.statusCounts.map((item: any) => item.status);
+      this.countstatus = data.data.statusCounts.map((item: any) => item.count);
+    
+      console.log(this.status);
+    
+      for (let i = 0; i < this.status.length; i++) {  // Fixed `length` typo
+        console.log(this.status[i]);
+        if (this.status[i] === "Pending") {
+          this.pending = this.countstatus[i];
+          break;
+        }
+      }
+    
+      this.createCampagneValidationChart();
+    });
+    this.investorService.getAllInvestors(this.token).subscribe((data:any)=>{
+      this.nbInvestors = data.data.length;
     })
+    this.transactionService.getAllTransactions(this.token).subscribe((data:any)=>{
+      this.nbTransactions = data.data.length;
+    })
+    //console.log(this.pending);
   }
 
-  // Create charts for visual representation
-  createCharts() {
-    // Evolution des Fonds Collectés (Line Chart)
+  // Function to create Fonds Collectés Chart (Line Chart)
+  createFondsCollectesChart() {
     new Chart('fondsCollectesChart', {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],  // Example time periods (can adjust)
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
           label: 'Fonds collectés',
-          data: this.fondsCollectesData,
+          data: this.donationsByMonth,
           borderColor: '#FF5733',
           backgroundColor: 'rgba(255, 87, 51, 0.2)',
           borderWidth: 2,
@@ -78,16 +112,22 @@ export class DashboardAdminComponent implements OnInit {
         }
       }
     });
+  }
 
-    // Répartition des Campagnes (Doughnut Chart)
+  // Function to create Répartition des Campagnes Chart (Doughnut Chart)
+  createRepartitionCampagnesChart() {
+    if (!this.category || !this.datacategory) return;
+
+    const backgroundColors = this.category.map(() => this.getRandomColor());
+
     new Chart('repartitionCampagnesChart', {
       type: 'doughnut',
       data: {
-        labels: ['Technologie', 'Social', 'Environnement', 'Autres'],
+        labels: this.category,
         datasets: [{
           label: 'Répartition des campagnes',
-          data: this.repartitionCampagnesData,
-          backgroundColor: ['#FF5733', '#33FF57', '#33A8FF', '#FFD700'],
+          data: this.datacategory,
+          backgroundColor: backgroundColors,
           borderWidth: 1
         }]
       },
@@ -95,15 +135,17 @@ export class DashboardAdminComponent implements OnInit {
         responsive: true
       }
     });
+  }
 
-    // Campagnes en Attente de Validation (Bar Chart)
+  // Function to create Campagnes en Attente de Validation Chart (Bar Chart)
+  createCampagneValidationChart() {
     new Chart('campagneValidationChart', {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: this.status,
         datasets: [{
-          label: 'Demandes de campagne',
-          data: this.campagneValidationData,
+          label: 'Status count',
+          data: this.countstatus, // Static data (can be updated dynamically)
           backgroundColor: '#FF5733',
           borderColor: '#1F2937',
           borderWidth: 1
@@ -119,10 +161,13 @@ export class DashboardAdminComponent implements OnInit {
     });
   }
 
-  // Filter data based on time range (day/week/month)
-  filterData(timeRange: string) {
-    this.selectedTimeRange = timeRange;
-    // Fetch or update chart data based on the selected time range
-    console.log('Selected Time Range:', this.selectedTimeRange);
+  // Function to generate a random color
+  getRandomColor(): string {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 }
