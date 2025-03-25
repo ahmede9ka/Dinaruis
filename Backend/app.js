@@ -11,13 +11,15 @@ const investorRouter = require("./routes/investorRoutes");
 const campaignRouter = require("./routes/campaignRoutes");
 const donationRouter = require("./routes/donationRoutes");
 const transactionRouter = require("./routes/transactionRoutes");
+const entrepreneurRouter = require("./routes/entrepreneurRoutes");
 
 const adminRouter = require("./routes/adminRoutes");
-app.use(express.json({ limit: '20mb' })); // Adjust as needed
-app.use(express.urlencoded({ limit: '20mb', extended: true }));
+app.use(express.json({ limit: "20mb" })); // Adjust as needed
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
 const { sendMail } = require("./controllers/sendmailController");
 
 const { webhookChekout } = require("./controllers/stripeController");
+const e = require("express");
 app.use(
   cors({
     origin: "http://localhost:4200", // Change to your frontend domain
@@ -48,6 +50,7 @@ app.use("/api/v1/campaigns", campaignRouter);
 app.use("/api/v1/donation", donationRouter);
 app.use("/api/v1/transactions", transactionRouter);
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/entrepreneur", entrepreneurRouter);
 
 app.post("/api/v1/sendmail", sendMail);
 // wrong calls
