@@ -8,6 +8,7 @@ const Campaign = require("../models/campaignModel");
 const Donation = require("../models/donationModel");
 const Transaction = require("../models/transactionModel");
 const Advice = require("../models/adviceModel");
+const mongoose = require("mongoose");
 
 const getInvestment = async (req, res, next) => {
   try {
@@ -68,26 +69,27 @@ const getTotalInvestment = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 const getMonthlyInvestment = async (req, res) => {
   try {
     const investorId = req.params.id;
-    const currentYear = new Date().getFullYear();
+    if (!mongoose.Types.ObjectId.isValid(investorId)) {
+      return res.status(400).json({ message: "Invalid investor ID" });
+    }
 
-    const startOfYear = new Date(Date.UTC(currentYear, 0, 1)); // January 1st at midnight UTC
-    const startOfNextYear = new Date(Date.UTC(currentYear + 1, 0, 1)); // January 1st next year at midnight UTC
+    const currentYear = new Date().getUTCFullYear();
+    const startOfYear = new Date(Date.UTC(currentYear, 0, 1));
+    const startOfNextYear = new Date(Date.UTC(currentYear + 1, 0, 1));
 
-    console.log("Start of Year (UTC):", startOfYear);
-    console.log("Start of Next Year (UTC):", startOfNextYear);
+    //console.log("Start of Year (UTC):", startOfYear);
+    //console.log("Start of Next Year (UTC):", startOfNextYear);
 
     // Aggregation Query to get the total donations by month for the current year
     const monthlyInvestment = await Donation.aggregate([
       {
         $match: {
-          user: investorId, // Filter by investor
-          date: {
-            $gte: startOfYear, // Adjusted to UTC midnight date
-            $lt: startOfNextYear, // Adjusted to UTC midnight date
-          },
+          user: new mongoose.Types.ObjectId(investorId), // Ensure ID is properly formatted
+          date: { $gte: startOfYear, $lt: startOfNextYear }, // Date range for the current year
         },
       },
       {
@@ -99,9 +101,9 @@ const getMonthlyInvestment = async (req, res) => {
       { $sort: { _id: 1 } }, // Sort by month
     ]);
 
-    console.log("Aggregation Result:", monthlyInvestment);
+    //console.log("Aggregation Result:", monthlyInvestment);
 
-    // Ensure every month has an entry (initialize months with 0 donations if no data exists)
+    // Ensure every month has an entry, initializing months with 0 if missing
     const investmentByMonth = Array.from({ length: 12 }, (_, i) => ({
       month: i + 1,
       totalAmount:
@@ -111,7 +113,7 @@ const getMonthlyInvestment = async (req, res) => {
     res.status(200).json({ investmentByMonth });
   } catch (error) {
     console.error("Error in getMonthlyInvestment:", error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Server error: " + error.message });
   }
 };
 
