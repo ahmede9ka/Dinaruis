@@ -7,6 +7,8 @@ const Investor = require("../models/investorModel");
 const Campaign = require("../models/campaignModel");
 const Donation = require("../models/donationModel");
 const Transaction = require("../models/transactionModel");
+const Advice = require("../models/adviceModel");
+
 const getInvestment = async (req, res, next) => {
   try {
     /*const donations = await Transaction.find({ user: req.user.id }).populate(
@@ -66,31 +68,25 @@ const getTotalInvestment = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 const getMonthlyInvestment = async (req, res) => {
   try {
     const investorId = req.params.id;
     const currentYear = new Date().getFullYear();
 
-    // DEBUG: Check if the donations exist before aggregation
-    const rawDonations = await Donation.find({
-      user: investorId,
-      date: {
-        $gte: new Date(`${currentYear}-01-01T00:00:00.000Z`),
-        $lt: new Date(`${currentYear + 1}-01-01T00:00:00.000Z`),
-      },
-    });
+    const startOfYear = new Date(Date.UTC(currentYear, 0, 1)); // January 1st at midnight UTC
+    const startOfNextYear = new Date(Date.UTC(currentYear + 1, 0, 1)); // January 1st next year at midnight UTC
 
-    console.log("Raw Donations Found:", rawDonations);
+    console.log("Start of Year (UTC):", startOfYear);
+    console.log("Start of Next Year (UTC):", startOfNextYear);
 
-    // Aggregation Query
+    // Aggregation Query to get the total donations by month for the current year
     const monthlyInvestment = await Donation.aggregate([
       {
         $match: {
           user: investorId, // Filter by investor
           date: {
-            $gte: new Date(`${currentYear}-01-01T00:00:00.000Z`),
-            $lt: new Date(`${currentYear + 1}-01-01T00:00:00.000Z`),
+            $gte: startOfYear, // Adjusted to UTC midnight date
+            $lt: startOfNextYear, // Adjusted to UTC midnight date
           },
         },
       },
@@ -105,7 +101,7 @@ const getMonthlyInvestment = async (req, res) => {
 
     console.log("Aggregation Result:", monthlyInvestment);
 
-    // Ensure every month has an entry
+    // Ensure every month has an entry (initialize months with 0 donations if no data exists)
     const investmentByMonth = Array.from({ length: 12 }, (_, i) => ({
       month: i + 1,
       totalAmount:
@@ -180,6 +176,23 @@ const getAllInvestors = async (req, res, next) => {
   }
 };
 
+const getAdvice = async (req, res) => {
+  try {
+    const count = await Advice.countDocuments(); // Get total number of advice entries
+    if (count === 0) {
+      return res.status(404).json({ message: "No advice found" });
+    }
+
+    const randomIndex = Math.floor(Math.random() * count); // Pick a random index
+    const randomAdvice = await Advice.findOne().skip(randomIndex); // Get random advice
+
+    res.status(200).json(randomAdvice);
+  } catch (error) {
+    console.error("Error fetching advice:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getInvestment,
   invest,
@@ -188,4 +201,5 @@ module.exports = {
   getMonthlyInvestment,
   getTotalInvestment,
   getAllInvestors,
+  getAdvice,
 };

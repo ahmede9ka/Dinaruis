@@ -9,6 +9,7 @@ const {
   getSupportedProjectsCount,
   getMonthlyInvestment,
   getAllInvestors,
+  getAdvice,
 } = require("../controllers/investorController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
@@ -25,5 +26,6 @@ router.get("/getMonthlyInvestment/:id", protect, getMonthlyInvestment);
 
 router.post("/donate", protect, invest);
 router.get("/getInvestors", protect, getAllInvestors);
+router.get("/getAdvice", protect, getAdvice);
 
 module.exports = router;
