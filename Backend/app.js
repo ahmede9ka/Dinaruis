@@ -12,14 +12,18 @@ const campaignRouter = require("./routes/campaignRoutes");
 const donationRouter = require("./routes/donationRoutes");
 const transactionRouter = require("./routes/transactionRoutes");
 const entrepreneurRouter = require("./routes/entrepreneurRoutes");
-
 const adminRouter = require("./routes/adminRoutes");
-app.use(express.json({ limit: "20mb" })); // Adjust as needed
-app.use(express.urlencoded({ limit: "20mb", extended: true }));
-const { sendMail } = require("./controllers/sendmailController");
 
+const { sendMail } = require("./controllers/sendmailController");
 const { webhookChekout } = require("./controllers/stripeController");
-const e = require("express");
+
+// ✅ Webhook Route (Before express.json)
+app.post(
+  "/api/v1/webhook-checkout",
+  express.raw({ type: "application/json" }), // Prevents body parsing
+  webhookChekout
+);
+
 app.use(
   cors({
     origin: "http://localhost:4200", // Change to your frontend domain
@@ -27,23 +31,17 @@ app.use(
   })
 );
 
-app.post(
-  "/api/v1/webhook-checkout",
-  express.raw({ type: "application/json" }),
-  webhookChekout
-);
+// ✅ Body Parsers (AFTER webhook)
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
 
-// Use cookie-parser middleware
+// ✅ Cookie Parser
 app.use(cookieParser());
 
-// Body parser , reading data from body into req.body
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }));
-// for serving static files
+// ✅ Serve Static Files
 app.use(express.static(`${__dirname}/public`));
 
-// Routes
+// ✅ Routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/investor", investorRouter);
 app.use("/api/v1/campaigns", campaignRouter);
@@ -53,16 +51,13 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/entrepreneur", entrepreneurRouter);
 
 app.post("/api/v1/sendmail", sendMail);
-// wrong calls
-app.all("*", (req, res, next) => {
-  /*const err = new Error(`Can't find ${req.originalUrl} on this server !`);
-  err.status = 'fail';
-  err.statusCode = 404;*/
 
-  next(new AppError(`Can't find ${req.originalUrl} on this server !`, 404));
+// ✅ Handle Unknown Routes
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// Global Error Handling : the function is with 4 params
+// ✅ Global Error Handling Middleware
 app.use(globalErrorHandler);
 
 module.exports = app;
