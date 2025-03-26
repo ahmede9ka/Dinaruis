@@ -15,6 +15,8 @@ import { CampagneComponent } from './views/campagne/campagne.component';
 import { authGuard } from './guards/auth.guard';
 import { loginsignupGuard } from './guards/loginsignup.guard';
 import { LoginAdminComponent } from './views/login-admin/login-admin.component';
+import { SuccessStripeComponent } from './views/success-stripe/success-stripe.component';
+import { FailStripeComponent } from './views/fail-stripe/fail-stripe.component';
 
 
 export const routes: Routes = [
@@ -79,6 +81,14 @@ export const routes: Routes = [
   {
     path: 'callback',
     component: CallbackComponent, // Route for OAuth callback
+  },
+  {
+    path:'successStripe',
+    component:SuccessStripeComponent
+  },
+  {
+    path:'failStripe',
+    component:FailStripeComponent,
   },
   {
     path: '**', // Wildcard route for 404 page (optional)

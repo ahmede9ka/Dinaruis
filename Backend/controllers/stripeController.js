@@ -35,8 +35,8 @@ const processDonation = async (req, res, next) => {
         amount: amount,
       },
       mode: "payment",
-      success_url: "http://localhost:3000/complete",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: "http://localhost:4200/successStripe",
+      cancel_url: "http://localhost:3000/failStripe",
     });
 
     return res.status(200).json({
