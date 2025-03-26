@@ -4,6 +4,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Campaign = require("../models/campaignModel");
 const User = require("../models/userModel");
 const Donation = require("../models/donationModel");
+const Transaction = require("../models/transactionModel");
 const AppError = require("../utils/appError");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
@@ -48,8 +49,15 @@ const sendMail = async (req, res) => {
       .replace("{{campaignName}}", campaign.title)
       .replace("{{investmentType}}", investmentType)
       .replace("{{investorEmail}}", investor.email)
-      .replace("{{investorPhoneNumber}}", investor.phoneNumber);
-
+      .replace("{{investorPhoneNumber}}", investor.phoneNumber)
+      .replace(
+        "{{date}}",
+        new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      );
     const mailOptions = {
       from: `"Dinaruis" <${process.env.EMAIL_USER}>`,
       to: entrepreneur.email,
@@ -61,6 +69,16 @@ const sendMail = async (req, res) => {
 
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent: ", info.response);
+
+    // Save in the transaction
+    const transaction = new Transaction({
+      user: investor._id,
+      campaign: campaign._id,
+      type: investmentType,
+    });
+
+    await transaction.save();
+    console.log("✅ Test Transaction Created:", transaction);
 
     res.status(200).json({ message: "Email sent successfully!", info });
   } catch (error) {
