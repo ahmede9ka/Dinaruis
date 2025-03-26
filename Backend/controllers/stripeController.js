@@ -89,7 +89,7 @@ const webhookChekout = async (req, res, next) => {
       console.log("✅ Donation saved successfully");
 
       // Update raisedAmount in campaign
-      campaign.raisedAmount += donationAmount;
+      campaign.raisedAmount += amount;
       await campaign.save();
       console.log(
         "✅ Campaign updated: Raised Amount =",
