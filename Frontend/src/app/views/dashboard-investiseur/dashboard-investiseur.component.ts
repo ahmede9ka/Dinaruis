@@ -23,6 +23,7 @@ export class DashboardInvestiseurComponent implements OnInit {
   monthsAmount:any;
   totalInvestment:any;
   advice:string="";
+  supportedProjects:number=0;
   // Charts data (mock data for demonstration)
   evolutionData: any = [100000, 150000, 250000, 400000, 500000];  // Investment over time
   repartitionData: any = [40, 30, 15, 15];  // Investment distribution by sectors
@@ -47,6 +48,10 @@ export class DashboardInvestiseurComponent implements OnInit {
       this.investorService.getAdvice(this.token).subscribe((data:any)=>{
         this.advice  = data.advice;
       })
+      this.investorService.getSupportedProjectCount(this.user._id,this.token).subscribe((data:any)=>{
+        this.supportedProjects = data.supportedProjectsCount;
+      })
+    
     }
     
   }
@@ -140,10 +145,10 @@ export class DashboardInvestiseurComponent implements OnInit {
     new Chart('comparaisonChart', {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: this.months,
         datasets: [{
           label: 'Investissements précédents',
-          data: this.comparaisonData,
+          data: this.monthsAmount,
           backgroundColor: '#FFD700',
           borderColor: '#1F2937',
           borderWidth: 1

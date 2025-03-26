@@ -30,46 +30,49 @@ const getInvestment = async (req, res, next) => {
 };
 const getInvestmentById = async (req, res, next) => {
   try {
-    /*const donations = await Transaction.find({ user: req.user.id }).populate(
-      "campaign",
-      "title description"
-    );*/
     const { id } = req.params;
-    const donations = await Donation.findById(id);
+
+    // Validate if id is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ status: "failed", message: "Invalid ID format" });
+    }
+
+    // Fetch donations where user ID matches
+    const donations = await Donation.find({ user: id }).populate("campaign", "title description");
+
     res.status(200).json({
       status: "success",
       data: donations,
     });
   } catch (error) {
-    res.status(400).json({
-      status: "failed",
-      message: `Error getting donations : ${error.message}`,
-    });
+    next(error); // Proper error handling
   }
 };
 
 const getTotalInvestment = async (req, res) => {
   try {
-    const investorId = req.params.id;
+    const { id: investorId } = req.params;
 
-    // 1) Find all donations made by this investor
-    const donations = await Donation.find({ user: investorId });
+    // Validate investorId format
+    if (!mongoose.Types.ObjectId.isValid(investorId)) {
+      return res.status(400).json({ message: "Invalid investor ID format" });
+    }
 
-    // 2) Calculate total amount donated by the investor (default to 0 if no donations)
+    // Find all donations made by this investor
+    const donations = await Transaction.find({ user: investorId });
+
+    // Calculate total amount donated (handle case where donations might be empty)
     const totalInvestment = donations.reduce(
-      (sum, donation) => sum + donation.amount,
+      (sum, donation) => sum + Number(donation.amount),
       0
     );
 
-    // 3) Return the total investment
-    res.status(200).json({
-      totalInvestment,
-    });
+    res.status(200).json({ totalInvestment });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching total investment:", error);
+    res.status(500).json({ message: "Server error, please try again later" });
   }
 };
-
 const getMonthlyInvestment = async (req, res) => {
   try {
     const investorId = req.params.id;

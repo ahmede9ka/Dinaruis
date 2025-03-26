@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { InvestorService } from '../../services/investor.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-my-investement',
   standalone:true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './my-investement.component.html',
   styleUrl: './my-investement.component.css'
 })
 export class MyInvestementComponent implements OnInit{
   token:any;
+  investments:any;
   constructor(private investorservice:InvestorService){}
   ngOnInit(): void {
     const userData = localStorage.getItem('user');
@@ -32,6 +34,7 @@ export class MyInvestementComponent implements OnInit{
   }
   fetchInvestmentsById(id:any){
     this.investorservice.getInvestmentById(id,this.token).subscribe((data:any)=>{
+      this.investments = data.data;
       console.log(data);
     })
   }

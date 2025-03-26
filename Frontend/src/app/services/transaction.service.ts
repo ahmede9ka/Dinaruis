@@ -33,4 +33,11 @@ export class TransactionService {
       });
       return this.http.get<any>(`${this.apiUrl}/top/investors`,{headers});
     }
+    getTransactionEnt(id:any,token:any): Observable<any> {
+      const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/getTransactionEnt/${id}`,{headers});
+    }
 }

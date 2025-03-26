@@ -106,6 +106,49 @@ const updateTransaction = async (req, res, next) => {
     });
   }
 };
+const getTransactionForEnt = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+
+    // Aggregate to join transactions with campaigns and filter by userId
+    const transactions = await Transaction.aggregate([
+      {
+        $lookup: {
+          from: "campaigns", // Collection name in MongoDB
+          localField: "campaign",
+          foreignField: "_id",
+          as: "campaignDetails",
+        },
+      },
+      {
+        $unwind: "$campaignDetails",
+      },
+      {
+        $match: {
+          "campaignDetails.user": new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $project: {
+          _id: 1, // Include transaction ID
+          amount: 1, // Include transaction amount (example field)
+          date: 1, // Include transaction date (example field)
+          "campaignDetails.title": 1, // Include campaign title
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: transactions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: `Error fetching transactions: ${error.message}`,
+    });
+  }
+};
 
 // Delete Transaction
 const deleteTransaction = async (req, res, next) => {
@@ -185,5 +228,6 @@ module.exports = {
   getTransactionById,
   updateTransaction,
   deleteTransaction,
-  TopInvestors
+  TopInvestors,
+  getTransactionForEnt
 };
