@@ -128,6 +128,56 @@ const deleteTransaction = async (req, res, next) => {
     });
   }
 };
+const TopInvestors = async (req, res, next) => {
+  try {
+    const topInvestors = await Transaction.aggregate([
+      {
+        $group: {
+          _id: '$user', // Group by user (assuming 'user' is the reference to the User model)
+          totalAmount: { $sum: '$amount' }, // Sum up the transaction amounts
+        },
+      },
+      {
+        $lookup: {
+          from: 'users', // Correct collection name for the 'users' collection
+          localField: '_id', // 'user' in Transaction should match '_id' in User collection
+          foreignField: '_id', // Match against the '_id' field in the 'users' collection
+          as: 'userDetails', // The name of the new field to hold matched user data
+        },
+      },
+      {
+        $unwind: '$userDetails', // Unwind the userDetails array to get individual user data
+      },
+      {
+        $project: {
+          _id: 0, // Exclude the internal _id field from the result
+          totalAmount: 1, // Include the totalAmount field
+          'userDetails.firstname': 1, // Include the firstname from the userDetails
+          'userDetails.lastname': 1, // Include the lastname from the userDetails
+        },
+      },
+      {
+        $sort: { totalAmount: -1 }, // Sort by totalAmount in descending order
+      },
+      {
+        $limit: 5, // Limit the result to top 5 investors
+      },
+    ]);
+
+    console.log(topInvestors); // Log the result for debugging
+
+    res.status(200).json({
+      status: 'success',
+      data: topInvestors,
+    });
+  } catch (error) {
+    console.error(error); // Log the error for better debugging
+    res.status(500).json({
+      status: 'failed',
+      message: `Error fetching top investors: ${error.message}`,
+    });
+  }
+};
 
 module.exports = {
   createTransaction,
@@ -135,4 +185,5 @@ module.exports = {
   getTransactionById,
   updateTransaction,
   deleteTransaction,
+  TopInvestors
 };

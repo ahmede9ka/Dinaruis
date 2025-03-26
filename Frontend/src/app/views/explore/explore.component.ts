@@ -3,8 +3,26 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { TransactionService } from '../../services/transaction.service';
-import { Campaign } from '../../model/class/Campaign';
 import { CampagneService } from '../../services/campagne.service';
+import { Router } from '@angular/router';
+
+interface Campaign{
+  _id:string;
+  title: string;
+  description: string;
+  amountGoal: number;
+  image: string;
+  images: string[];
+  startDate: Date;
+  endDate: Date;
+  localisation: string;
+  type: string;
+  code_postal: string;
+  user: string;
+  progress?: number; // Added this
+  isFavorite?: boolean; // Added this
+  raisedAmount:number;
+} 
 
 @Component({
   selector: 'app-explore',
@@ -31,7 +49,8 @@ export class ExploreComponent implements OnInit {
   isModalOpen = false;
 
   constructor(private transactionservice: TransactionService,
-              private campaignservice:CampagneService
+              private campaignservice:CampagneService,
+              private router:Router
   ) {}
 
   ngOnInit(): void {
@@ -141,7 +160,7 @@ export class ExploreComponent implements OnInit {
   }
 
   investInCampaign(id: any) {
-    console.log(`Investing in campaign ID: ${id}`);
+    this.router.navigate([`/investor/explore/${id}`])
     // Add investment logic here
   }
 }

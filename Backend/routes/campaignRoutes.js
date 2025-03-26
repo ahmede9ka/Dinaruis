@@ -6,7 +6,8 @@ const {
   deleteCampaign,
   updateCampaign,
   getCampaignsByEntrepreneur,
-  GetTotalContributors
+  GetTotalContributors,
+  getCampaignById
 } = require("../controllers/compaignController");
 const { protect } = require("../controllers/authController");
 // create user is just for testing
@@ -14,6 +15,7 @@ const { protect } = require("../controllers/authController");
 
 router.post("/create", protect, createCampaign);
 router.get("/", protect, getCampaign);
+router.get("/getcampaign/:id",protect,getCampaignById);
 router.get("/unique/contributors/:id",protect,GetTotalContributors)
 router.get("/:id",protect,getCampaignsByEntrepreneur)
 router.put("/:id", protect, updateCampaign);

@@ -45,7 +45,7 @@ export const routes: Routes = [
     component: StartCampagneStep4Component, // Route for role selection
   },
   {
-    path: 'f',
+    path: 'investor/explore/:id',
     component: CampagneComponent, // Route for role selection
   },
   

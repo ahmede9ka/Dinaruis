@@ -63,7 +63,7 @@
         </div>
         <div class="text-xs font-semibold mt-3 text-gray-700 dark:text-gray-400">Deadline: {{ campaign.endDate }}</div>
         <button 
-          
+          (click)="investInCampaign(campaign._id)"
           class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
           Invest
         </button>

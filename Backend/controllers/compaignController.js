@@ -45,6 +45,21 @@ const getCampaign = async (req, res, next) => {
     });
   }
 };
+const getCampaignById = async (req, res, next) => {
+  try {
+    const campaign = await Campaign.findById(req.params.id);
+    
+    res.status(200).json({
+      status: "success",
+      data: campaign,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: `Error fetching campaigns: ${error.message}`,
+    });
+  }
+};
 const getCampaignsByEntrepreneur = async (req, res, next) => {
   try {
     const { id } = req.params; // Correctly extract user ID from params
@@ -168,6 +183,7 @@ const deleteCampaign = async (req, res, next) => {
 
 module.exports = {
   createCampaign,
+  getCampaignById,
   getCampaign,
   updateCampaign, // ✅ Added update function
   deleteCampaign,

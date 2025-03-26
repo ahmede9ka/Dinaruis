@@ -6,6 +6,7 @@ const {
   getTransactionById,
   updateTransaction,
   deleteTransaction,
+  TopInvestors
 } = require("../controllers/transactionController");
 const { protect } = require("../controllers/authController"); // Assuming you have an auth middleware
 
@@ -24,4 +25,5 @@ router.put("/:id", protect, updateTransaction);
 // Route to delete a transaction by ID
 router.delete("/:id", protect, deleteTransaction);
 
+router.get("/top/investors",protect,TopInvestors)
 module.exports = router;

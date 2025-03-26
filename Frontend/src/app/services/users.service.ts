@@ -24,4 +24,11 @@ export class UsersService {
   deleteUser(id:any): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+  Donate(data:any,token:any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.post<any>(`${this.apiUrl}/donate`,data,{headers});
+  }
 }

@@ -3,6 +3,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import 'flowbite';
 import { CampagneService } from '../../services/campagne.service';
+import { EntrepreneurService } from '../../services/entrepreneur.service';
 
 
 interface Campaign {
@@ -34,10 +35,7 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
 
   totalCollected: number = 12500; // Example: Total collected amount
   totalCampaigns = { active: 3, completed: 7, pending: 2 };
-  activeCampaigns = [
-    { name: 'Project A', progress: 75, daysLeft: 10 },
-    { name: 'Project B', progress: 50, daysLeft: 5 }
-  ];
+  
   totalContributors: number = 320;
   newContributors: number = 20;
 
@@ -49,7 +47,18 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
   nbcampaings:number=0;
   totaldonations:number=0;
   totalDonators:number=0;
-  constructor(private campaignservice:CampagneService) {}
+  EntrepreneurDonation:number=0;
+  EntrepreneurDonationMonth:number=0;
+  EntrepreneurDonationToday:number=0;
+  activeCampaigns:number=0;
+  completedCampaigns:number=0;
+  pendingCampaigns:number=0;
+  TotalUniqueInvestors:number=0;
+  months:any;
+  monthsAmount:any;
+  constructor(private campaignservice:CampagneService,
+              private entrepreneurService:EntrepreneurService
+  ) {}
 
   ngOnInit() {
     const userData = localStorage.getItem('user');
@@ -59,6 +68,26 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
       console.log(this.user.firstName);
       this.fetchCampaignsOfEntrepreneur();
       this.getTotalDonators();
+      this.entrepreneurService.getTotalDonations(this.user._id,this.token).subscribe((data:any)=>{
+        this.EntrepreneurDonation = data.totalDonations;
+        this.EntrepreneurDonationMonth = data.totalDonationsThisMonth;
+        this.EntrepreneurDonationToday = data.totalDonationsToday;
+      })
+      this.entrepreneurService.getCampaignStatusCount(this.user._id,this.token).subscribe((data:any)=>{
+        this.activeCampaigns = data.activeCampaigns;
+        this.completedCampaigns = data.completedCampaigns;
+        this.pendingCampaigns = data.pendingCampaigns;
+      })
+      this.entrepreneurService.getUniqueInvestorsByEntrepreneur(this.user._id,this.token).subscribe((data:any)=>{
+        this.TotalUniqueInvestors = data.totalUniqueInvestors;
+      })
+      this.entrepreneurService.getMonthlyCollectedAmount(this.user._id,this.token).subscribe((data:any)=>{
+        this.months = data.monthlyDonations.map((item:any)=>item.month);
+        this.monthsAmount = data.monthlyDonations.map((item:any)=>item.totalAmount);
+        console.log(this.months);
+        console.log(this.monthsAmount);
+        this.initializeCharts();
+      })
     }
   }
   fetchCampaignsOfEntrepreneur(){
@@ -101,10 +130,10 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
       new Chart(lineChartCanvas, {
         type: 'line',
         data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          labels: this.months,
           datasets: [{
             label: 'Funds Raised ($)',
-            data: [1000, 3000, 5000, 7000, 10000, 12500],
+            data: this.monthsAmount,
             borderColor: '#4CAF50',
             backgroundColor: 'rgba(76, 175, 80, 0.2)',
             fill: true,

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component,AfterViewInit, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import 'flowbite';
+import { InvestorService } from '../../services/investor.service';
 @Component({
   selector: 'app-dashboard-investiseur',
   standalone:true,
@@ -16,15 +17,38 @@ export class DashboardInvestiseurComponent implements OnInit {
   selectedTimeRange: string = 'Mois';  // Default time range for chart
   timeRanges: string[] = ['Jour', 'Semaine', 'Mois'];  // Time range options
   dropdownOpen: boolean = false;  // Dropdown state
-
+  token:any;
+  user:any;
+  months:any;
+  monthsAmount:any;
+  totalInvestment:any;
+  advice:string="";
   // Charts data (mock data for demonstration)
   evolutionData: any = [100000, 150000, 250000, 400000, 500000];  // Investment over time
   repartitionData: any = [40, 30, 15, 15];  // Investment distribution by sectors
   investissementsTypeData: any = [40, 30, 20, 10];  // Investment by type (loans, donations, etc.)
   comparaisonData: any = [100000, 150000, 250000, 450000, 500000];  // Comparison with previous investments
-
+  constructor(private investorService:InvestorService){}
   ngOnInit() {
-    this.createCharts();
+    const userData = localStorage.getItem('user');
+    this.token = localStorage.getItem('token');
+    if (userData) {
+      this.user = JSON.parse(userData);
+      this.investorService.getMonthlyInvestment(this.user._id,this.token).subscribe((data:any)=>{
+        this.months = data.investmentByMonth.map((item:any)=>item.month);
+        this.monthsAmount = data.investmentByMonth.map((item:any)=>item.totalAmount);
+        console.log(this.months);
+        console.log(this.monthsAmount)
+        this.createCharts();
+      })
+      this.investorService.getTotalInvestment(this.user._id,this.token).subscribe((data:any)=>{
+        this.totalInvestment  = data.totalInvestment;
+      })
+      this.investorService.getAdvice(this.token).subscribe((data:any)=>{
+        this.advice  = data.advice;
+      })
+    }
+    
   }
 
   // Toggle dropdown for time range selection
@@ -46,10 +70,10 @@ export class DashboardInvestiseurComponent implements OnInit {
     new Chart('evolutionChart', {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],  // Time periods (can adjust based on time range)
+        labels: this.months,  // Time periods (can adjust based on time range)
         datasets: [{
           label: 'Investissement total',
-          data: this.evolutionData,
+          data: this.monthsAmount,
           borderColor: '#4CAF50',
           backgroundColor: 'rgba(76, 175, 80, 0.2)',
           borderWidth: 2,

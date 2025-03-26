@@ -40,4 +40,32 @@ export class InvestorService {
       });
       return this.http.get<any>(`${this.apiUrl}/getInvestors`, { headers });
     }
+    getTotalInvestment(id:any,token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/getTotalInvestment/${id}`, { headers });
+    }
+    getSupportedProjectCount(id:any,token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/getSupportedProjectsCount/${id}`, { headers });
+    }
+    getAdvice(token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/getAdvice`, { headers });
+    }
+    getMonthlyInvestment(id:any,token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`${this.apiUrl}/getMonthlyInvestment/${id}`, { headers });
+    }
 }

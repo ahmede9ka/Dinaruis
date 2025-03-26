@@ -1,7 +1,7 @@
 <div class="max-w-7xl mx-auto p-6 font-sans">
     <!-- Campaign Title -->
     <h1 class="text-4xl font-bold text-gray-900 mb-6">
-        {{ campaign.campaignTitle }}
+        {{ campaign.title }}
     </h1>
 
     <div class="grid md:grid-cols-3 gap-6">
@@ -9,14 +9,14 @@
         <div class="md:col-span-2">
             <!-- Campaign Image -->
             <div class="rounded-lg overflow-hidden mb-6">
-                <img [src]="campaign.campaignImage" alt="Campaign image" class="w-full h-auto object-cover">
+                <img [src]="campaign.image" alt="Campaign image" class="w-full h-auto object-cover">
             </div>
 
-            <!-- Organizer Info -->
+            <!-- Organizer Info (Modify as needed) -->
             <div class="flex items-center gap-3 mb-4">
-                <img [src]="campaign.campaignCreatorAvatar" alt="Organizer" class="w-12 h-12 rounded-full">
+                <img src="default-avatar.png" alt="Organizer" class="w-12 h-12 rounded-full">
                 <p class="text-gray-700">
-                    {{ campaign.organizerName }} is organizing this fundraising appeal on behalf of {{ campaign.beneficiaryName }}.
+                    Organizer information here (Modify if applicable)
                 </p>
             </div>
 
@@ -30,19 +30,19 @@
 
             <!-- Campaign Story -->
             <div class="text-gray-700 space-y-4">
-                <p>{{ campaign.campaignDescription }}</p>
+                <p>{{ campaign.description }}</p>
             </div>
 
             <!-- Carousel of Images -->
             <div class="relative mb-6">
                 <div class="flex overflow-hidden">
-                    <div *ngFor="let image of campaign.campaignImages" class="flex-shrink-0 w-full">
-                        <img [src]="image" alt="Campaign Image" class="w-full object-cover h-72">
+                    <div *ngFor="let img of campaign.images" class="flex-shrink-0 w-full">
+                        <img [src]="img" alt="Campaign Image" class="w-full object-cover h-72">
                     </div>
                 </div>
                 <!-- Carousel Controls -->
-                <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full" >&#10094;</button>
-                <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full" >&#10095;</button>
+                <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full">&#10094;</button>
+                <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full">&#10095;</button>
             </div>
 
         </div>
@@ -52,64 +52,72 @@
             <div class="bg-white rounded-lg border border-gray-200 p-6 sticky top-4 shadow-md">
                 <!-- Progress Stats -->
                 <div class="mb-6">
-                    <h2 class="text-3xl font-bold text-gray-800">{{ formatCurrency(campaign.amountRaised) }} raised</h2>
+                    <h2 class="text-3xl font-bold text-gray-800">{{ campaign.raisedAmount }} DT raised</h2>
                     <p class="text-gray-500">
-                        {{ formatCurrency(campaign.targetAmount) }} target · {{ campaign.totalDonations }} donations
+                        {{ campaign.amountGoal }} DT target
                     </p>
                     <div class="mt-4">
-                        <flowbite-progress [progress]="campaign.progress" [color]="'blue'" [size]="'lg'" />
+                        <flowbite-progress [progress]="(campaign.raisedAmount / campaign.amountGoal) * 100" [color]="'blue'" [size]="'lg'" />
                     </div>
                     <div class="flex justify-end mt-1">
-                        <span class="text-blue-600 font-medium">{{ campaign.progress }}%</span>
+                        <span class="text-blue-600 font-medium">{{ (campaign.raisedAmount / campaign.amountGoal) * 100 | number: '1.0-0' }}%</span>
                     </div>
                 </div>
 
-                <!-- Donation Amount Buttons (Horizontal) -->
+                <!-- Donation Amount Buttons -->
                 <div class="flex gap-3 mb-6">
-                    <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                    <button type="button" 
+                        class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full"
+                        (click)="selectAmount(1)">
                         1 DT
                     </button>
-                    <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                    <button type="button" 
+                        class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full"
+                        (click)="selectAmount(50)">
                         50 DT
                     </button>
-                    <button type="button" class="py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium w-full">
-                        100 DT <span class="ml-2 text-sm bg-yellow-200 px-2 py-1 rounded-full text-yellow-800">Common</span>
+                    <button type="button" 
+                        class="py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium w-full"
+                        (click)="selectAmount(100)">
+                        100 DT
                     </button>
-                    <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
-                        1000 DT <span class="ml-2 text-sm bg-green-200 px-2 py-1 rounded-full text-green-800">Recommended</span>
+                    <button type="button" 
+                        class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full"
+                        (click)="selectAmount(1000)">
+                        1000 DT
                     </button>
                 </div>
+                
+                <p>Selected Amount: {{ selectedAmount }} DT</p>
+                
 
                 <!-- Action Buttons -->
                 <div class="space-y-3 mb-6">
                     <button type="button" class="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium">
                         Share
                     </button>
-                    <button type="button" class="w-full py-3 bg-green-500 hover:bg-green-600 transition text-white rounded-lg font-medium">
+                    <button (click)="donate()" type="button" class="w-full py-3 bg-green-500 hover:bg-green-600 transition text-white rounded-lg font-medium">
                         Donate Now
                     </button>
                 </div>
-                <!-- Funding Options (Horizontal) -->
-<div class="border-2 border-gray-300 rounded-lg p-4 mb-6">
-    <!-- Text above the buttons -->
-    <div class="text-center text-gray-700 font-medium mb-4">
-        Interested in other funding options?
-    </div>
 
-    <!-- Buttons -->
-    <div class="flex gap-3">
-        <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
-            Equity
-        </button>
-        <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
-            Reward
-        </button>
-        <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
-            Loan-Based
-        </button>
-    </div>
-</div>
-
+                <!-- Funding Options -->
+                <div class="border-2 border-gray-300 rounded-lg p-4 mb-6">
+                    <div class="text-center text-gray-700 font-medium mb-4">
+                        Interested in other funding options?
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                            Equity
+                        </button>
+                        <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                            Reward
+                        </button>
+                        <button type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                            Loan-Based
+                        </button>
+                    </div>
+                </div>
 
                 <!-- Recent Donations -->
                 <div class="pt-4 border-t border-gray-200">
@@ -118,21 +126,8 @@
                             <i class="fas fa-hand-holding-heart"></i>
                         </div>
                         <p class="font-medium">
-                            {{ campaign.recentDonorsCount }} people have just made a donation
+                            Recent donations (Modify if applicable)
                         </p>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-3" *ngFor="let donation of campaign.recentDonations">
-                            <img [src]="donation.avatar" [alt]="donation.name" class="w-8 h-8 rounded-full">
-                            <div>
-                                <p class="font-medium">{{ donation.name }}</p>
-                                <div class="flex items-center gap-2 text-gray-500">
-                                    <span class="font-medium">{{ formatCurrency(donation.amount) }}</span>
-                                    <span>·</span>
-                                    <a href="#" class="text-sm hover:underline">{{ donation.type }}</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- View More Buttons -->
