@@ -3,6 +3,7 @@ const Campaign = require("../models/campaignModel");
 const User = require("../models/userModel");
 const Donation = require("../models/donationModel");
 const AppError = require("../utils/appError");
+const mongoose = require("mongoose");
 
 const processDonation = async (req, res, next) => {
   try {
