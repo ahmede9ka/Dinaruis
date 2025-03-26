@@ -87,6 +87,15 @@ const webhookChekout = async (req, res, next) => {
 
       await donation.save();
       console.log("✅ Donation saved successfully");
+
+      // Update raisedAmount in campaign
+      campaign.raisedAmount += donationAmount;
+      await campaign.save();
+      console.log(
+        "✅ Campaign updated: Raised Amount =",
+        campaign.raisedAmount
+      );
+
       return res.status(200).json({ received: true });
     } catch (error) {
       console.error("❌ Error saving donation:", error.message);
