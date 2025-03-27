@@ -49,7 +49,7 @@ const campaignSchema = new Schema({
     type: String,
     enum: [
       "animals",
-      "business",
+      "buisness",
       "community",
       "competitions",
       "education",
@@ -86,9 +86,10 @@ const campaignSchema = new Schema({
     type:Number,
     default:0
   },
-  isFavorite :{
-    type:Boolean,
-    default:false
+  isFavorite: {
+    type: [Schema.Types.ObjectId],
+    ref: "User",
+    default: [],
   }
 });
 

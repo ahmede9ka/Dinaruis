@@ -50,4 +50,32 @@ export class CampagneService {
     });
     return this.http.get<any>(`${this.apiUrl}/campaigns/getcampaign/${id}`,{headers});
   }
+  updateCampaign(id:any,data:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.put<any>(`${this.apiUrl}/campaigns/${id}`,data,{headers});
+  }
+  deleteCampaign(id:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.delete<any>(`${this.apiUrl}/campaigns/${id}`,{headers});
+  }
+  AddFavorite(campaign_id:any,investor_id:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/campaigns/addFavorite/${campaign_id}/${investor_id}`,{headers});
+  }
+  getFavoriteByInvestorId(investor_id:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/campaigns/getFavorite/${investor_id}`,{headers});
+  }
 }

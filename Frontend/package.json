@@ -26,6 +26,7 @@
     "flowbite": "^3.1.2",
     "gsap": "^3.12.7",
     "jwt-decode": "^4.0.0",
+    "lucide": "^0.484.0",
     "lucide-angular": "^0.484.0",
     "ng-apexcharts": "^1.15.0",
     "rxjs": "~7.8.0",

@@ -86,13 +86,13 @@
                       <lucide-icon [name]="icons.Edit" class="w-5 h-5"></lucide-icon> Edit
                     </button>
                  
-                    <button class="p-2 text-green-500 rounded hover:bg-green-600">
+                    <button class="p-2 text-green-500 rounded hover:bg-green-600" (click)="activate(element._id)">
                       <lucide-icon [name]="icons.CheckSquare" class="w-5 h-5"></lucide-icon> Activate
                     </button>
                   
                   
                   
-                    <button class="p-2 text-red-500 rounded hover:bg-red-600">
+                    <button class="p-2 text-red-500 rounded hover:bg-red-600" (click)="delete(element._id)">
                       <lucide-icon [name]="icons.Trash" class="w-5 h-5"></lucide-icon> Delete
                     </button>
                   </td>

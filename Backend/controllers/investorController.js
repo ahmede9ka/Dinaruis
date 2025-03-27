@@ -38,8 +38,7 @@ const getInvestmentById = async (req, res, next) => {
     }
 
     // Fetch donations where user ID matches
-    const donations = await Donation.find({ user: id }).populate("campaign", "title description");
-
+    const donations = await Transaction.find({ user: id }).populate('campaign', 'title');;
     res.status(200).json({
       status: "success",
       data: donations,

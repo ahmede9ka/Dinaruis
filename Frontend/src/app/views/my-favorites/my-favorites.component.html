@@ -19,16 +19,10 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   <!-- Loop through campaigns array -->
   <div *ngFor="let campaign of paginatedCampaigns()" class="max-w-sm rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800 relative">
-    <img [src]="campaign.imageUrl" alt="Campaign Image" class="w-full h-52 object-cover rounded-t-2xl">
+    <img [src]="campaign.image" alt="Campaign Image" class="w-full h-52 object-cover rounded-t-2xl">
     
     <!-- Favorite Icon -->
-    <button (click)="toggleFavorite(campaign)" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-        class="w-6 h-6 cursor-pointer" [ngClass]="campaign.isFavorite ? 'text-red-500' : 'text-gray-500 hover:text-red-500'">
-        <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M12 4.248c-3.148-2.63-8.316-1.856-10.08 2.078-1.221 2.866-.435 5.978 1.685 8.267C5.813 17.572 9.084 20 12 22c2.916-2 6.187-4.428 8.395-7.407 2.12-2.29 2.906-5.401 1.685-8.267C20.316 2.392 15.148 1.618 12 4.248z" />
-      </svg>
-    </button>
+    
     <!-- Type Badge -->
   <div class="absolute top-4 left-4  text-white px-4 py-1 rounded-full text-sm" [ngClass]="getTypeClass(campaign.type)">
     {{ campaign.type }}
@@ -56,7 +50,7 @@
       </div>
       
       <!-- CTA Button -->
-      <button (click)="investInCampaign(campaign.id)" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all">Invest Now</button>
+      <button (click)="investInCampaign(campaign._id)" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all">Invest Now</button>
     </div>
   </div>
 </div>

@@ -84,7 +84,71 @@ const getCampaignsByEntrepreneur = async (req, res, next) => {
     });
   }
 };
+const AddFavorite = async (req, res) => {
+  try {
+    const { campaign_id, investor_id } = req.params;
 
+    // Find the campaign by ID
+    const campaign = await Campaign.findById(campaign_id);
+
+    if (!campaign) {
+      return res.status(404).json({
+        status: "error",
+        message: "Campaign not found",
+      });
+    }
+
+    // Ensure isFavorite is an array before using 'includes'
+    if (!Array.isArray(campaign.isFavorite)) {
+      campaign.isFavorite = [];
+    }
+
+    // Add investor_id to isFavorite array (avoiding duplicates)
+    if (!campaign.isFavorite.includes(investor_id)) {
+      campaign.isFavorite.push(investor_id);
+      await campaign.save();
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Investor added to favorites",
+      data: campaign,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: `Error adding to favorites: ${error.message}`,
+    });
+  }
+};
+
+const getFavoriteCampaigns = async (req, res) => {
+  try {
+    const { investor_id } = req.params;
+
+    // Find all campaigns where the investor_id exists in the isFavorite array
+    const favoriteCampaigns = await Campaign.find({ isFavorite: { $in: [investor_id] } })
+      .populate("user", "name email") // Populate campaign owner's details (optional)
+      .populate("isFavorite", "name email"); // Populate favorited users (optional)
+
+    if (!favoriteCampaigns.length) {
+      return res.status(404).json({
+        status: "error",
+        message: "No favorite campaigns found for this investor",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: favoriteCampaigns,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: `Error fetching favorite campaigns: ${error.message}`,
+    });
+  }
+};
 
 
 // Update a campaign
@@ -96,8 +160,8 @@ const updateCampaign = async (req, res, next) => {
       return next(new AppError("No Campaign found with that ID", 404));
     }
 
-    // Only the campaign creator can update it
-    if (campaign.user.toString() !== req.user.id) {
+    // Allow modification if the user is the campaign creator or an admin
+    if (campaign.user.toString() !== req.user.id && req.user.role !== "ADMIN") {
       return next(new AppError("You are not authorized to update this campaign", 403));
     }
 
@@ -163,8 +227,8 @@ const deleteCampaign = async (req, res, next) => {
     }
 
     // Only the campaign creator can delete it
-    if (campaign.user.toString() !== req.user.id) {
-      return next(new AppError("You are not authorized to delete this campaign", 403));
+    if (campaign.user.toString() !== req.user.id && req.user.role !== "ADMIN") {
+      return next(new AppError("You are not authorized to update this campaign", 403));
     }
 
     await campaign.deleteOne();
@@ -188,5 +252,7 @@ module.exports = {
   updateCampaign, // ✅ Added update function
   deleteCampaign,
   getCampaignsByEntrepreneur,
-  GetTotalContributors
+  GetTotalContributors,
+  AddFavorite,
+  getFavoriteCampaigns
 };

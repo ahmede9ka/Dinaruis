@@ -14,9 +14,9 @@ const createTransaction = async (req, res, next) => {
     }
 
     // Create the transaction
-    const newTransaction = await Transaction.create({
-      user,
-      campaign,
+    const transaction = new Transaction({
+      user: mongoose.Types.ObjectId(user),
+      campaign: mongoose.Types.ObjectId(campaign),
       type,
     });
 

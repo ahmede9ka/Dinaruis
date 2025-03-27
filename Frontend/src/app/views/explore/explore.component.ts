@@ -61,9 +61,9 @@ export class ExploreComponent implements OnInit {
 
     if (userData) {
       try {
-        const user = JSON.parse(userData);
-        if (user?._id) {
-          this.fetchCampaigns(user._id);
+        this.user = JSON.parse(userData);
+        if (this.user?._id) {
+          this.fetchCampaigns(this.user._id);
         } else {
           console.error('User ID is missing in localStorage data');
         }
@@ -163,4 +163,12 @@ export class ExploreComponent implements OnInit {
     this.router.navigate([`/investor/explore/${id}`])
     // Add investment logic here
   }
+  AddFavorite(campaign_id:any){
+    console.log(campaign_id)
+    console.log(this.user._id);
+    this.campaignservice.AddFavorite(campaign_id,this.user._id,this.token).subscribe((data:any)=>{
+      console.log(data);
+    })
+  }
+  
 }

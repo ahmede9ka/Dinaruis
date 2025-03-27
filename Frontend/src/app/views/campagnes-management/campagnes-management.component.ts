@@ -22,16 +22,18 @@ export class CampagnesManagementComponent implements OnInit {
   // Pagination properties
   currentPage: number = 1;
   itemsPerPage: number = 3;
-
+  user:any;
   constructor(private campagneService: CampagneService) {}
 
   ngOnInit() {
+    const userData = localStorage.getItem('user');
     this.token = localStorage.getItem('token');
-    if (this.token) {
-      this.fetchCampagnes(); // Fetch campaigns on initialization
-    } else {
-      console.error('No token found in localStorage');
+    
+    if (userData) {
+      this.user = JSON.parse(userData);
+      this.fetchCampagnes();
     }
+    
   }
 
   fetchCampagnes() {
@@ -75,5 +77,15 @@ export class CampagnesManagementComponent implements OnInit {
       this.currentPage++;
       this.updatePaginatedElements(); // Update elements when page changes
     }
+  }
+  activate(id:any){
+    this.campagneService.updateCampaign(id,{"status":"Active"},this.token).subscribe((data:any)=>{
+      console.log(data);
+    })
+  }
+  delete(id:any){
+    this.campagneService.deleteCampaign(id,this.token).subscribe((data:any)=>{
+      console.log(data);
+    })
   }
 }
