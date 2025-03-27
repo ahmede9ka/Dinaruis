@@ -1,28 +1,36 @@
 <div
-  class="max-w-sm p-6 bg-white border dark:bg-gray-800  border-gray-200 rounded-lg transition-transform transform hover:scale-105 cursor-pointer "
+  class="max-w-sm p-6 bg-white border dark:bg-white border-gray-200 rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
   [ngClass]="{
-    'selected-card': isSelected,
-    'shadow-lg dark:shadow-white': isSelected,
-    'shadow-sm': !isSelected 
+    'selected-card shadow-lg': isSelected,
+    'shadow-sm': !isSelected
   }"
+  [ngStyle]="isSelected ? {'box-shadow': '0px 4px 15px #4CAF50'} : {}"
 >
   <svg
     class="w-20 h-20 mb-3 justify-self-center"
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
-    
     viewBox="0 0 20 20"
   >
     <path
       [attr.d]="iconPath"
-      [ngClass]="{'text-white': isSelected, 'text-gray-500': !isSelected, 'selected-card': isSelected,'shadow-lg dark:shadow-white': isSelected,}"
+      [ngClass]="{
+        'text-[#4CAF50]': isSelected,
+        'text-[#4CAF20]': !isSelected
+      }"
     />
   </svg>
-  <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">
+  <h5
+    class="mb-2 text-2xl font-semibold tracking-tight text-center"
+    [ngClass]="{
+      'text-[#4CAF50]': isSelected,
+      'text-[#4CAF20]': !isSelected
+    }"
+  >
     {{ title }}
   </h5>
-  <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+  <p class="mb-3 font-normal text-[#4CAF50] dark:text-gray-400">
     {{ description }}
   </p>
 </div>

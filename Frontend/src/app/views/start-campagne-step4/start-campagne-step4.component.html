@@ -1,10 +1,24 @@
 <!-- Import Flowbite Tailwind CSS for styling -->
 <div class="fundraising-container flex flex-col md:flex-row h-screen w-screen p-6 gap-6">
+
     <!-- Sidebar Section -->
-    <div class="sidebar bg-blue-900 p-6 rounded-lg md:w-1/3 flex flex-col justify-center text-white">
-      <h1 class="text-2xl font-bold">Tell Your Story</h1>
-      <p class="mt-2">A compelling title and story will help people connect with your cause.</p>
-    </div>
+    <div class="relative p-6 rounded-lg md:w-1/3 flex flex-col justify-center text-white items-center" 
+    style="background: linear-gradient(40deg, #4CAF50,#4CAF50, #FAF1E6);">
+   
+   <!-- Up Left Button -->
+   <button onclick="window.location.href='/entrepreneur/start-campagne/step3'" class="absolute top-4 left-4 p-2 bg-white text-gray-800 rounded-full shadow-md hover:bg-gray-200 transition">
+       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+       </svg>
+   </button>
+
+   <!-- Logo -->
+   <img src="logo.png" alt="Logo" class="w-20 h-20 mb-4">
+
+   <!-- Title & Text -->
+   <h1 class="text-2xl font-bold text-center">Tell Your Story</h1>
+   <p class="mt-2 text-center">A compelling title and story will help people connect with your cause.</p>
+</div>
 
     <!-- Main Content -->
     <div class="main-content bg-white p-6 shadow-lg rounded-lg md:w-2/3 flex flex-col justify-center border border-gray-200">
@@ -52,10 +66,27 @@
 
         <!-- Continue Button -->
         <div class="form-actions flex justify-end">
-            <button type="submit" class="bg-blue-900 text-white px-6 py-3 rounded-full shadow-md transition-all duration-300 ease-in-out hover:bg-blue-800 hover:shadow-lg hover:scale-105">
-                Review
+            <button (click)="Review()" type="submit" class="btn-continue bg-[#4CAF50] text-white px-6 py-3 rounded-full shadow-md transition-all duration-300 ease-in-out hover:bg-[#4CDF50] hover:shadow-lg hover:scale-105">
+              Review
             </button>
-        </div>
+          </div>
+          <!-- Modal -->
+<div *ngIf="isModalOpen" class="modal fixed inset-0 flex items-center justify-center bg-[#FAF1E6] bg-opacity-50 z-50">
+    <div class="modal-content bg-white p-6 rounded-lg shadow-lg w-1/3">
+      <div class="modal-header flex justify-center mb-4">
+        <img src="logo.png" alt="Success Image" class="w-24 h-24 mb-4">
+      </div>
+      <div class="modal-body text-center mb-6">
+        <h2 class="text-xl font-semibold">Campaign Created Successfully!</h2>
+        <p class="text-gray-600 mt-1">Wait For The Review...</p>
+      </div>
+      <div class="modal-footer flex justify-center">
+        <button (click)="goToRoot()" class="btn-perfect bg-[#4CAF50] text-white px-6 py-2 rounded-full shadow-md transition-all duration-300 ease-in-out hover:bg-[#4CDF50] hover:shadow-lg">
+          Perfect
+        </button>
+      </div>
+    </div>
+  </div>
   
       </form>
     </div>

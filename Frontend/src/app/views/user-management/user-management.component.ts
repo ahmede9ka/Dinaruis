@@ -1,40 +1,61 @@
 import { Component, AfterViewInit, Renderer2, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { CommonModule } from '@angular/common';
+import { Eye, Edit, Slash, LucideAngularModule } from 'lucide-angular';
 
 declare const simpleDatatables: any;
 
 @Component({
   selector: 'app-user-management',
-  standalone:true,
+  standalone: true,
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
-  imports:[CommonModule]
+  imports: [CommonModule,LucideAngularModule]
 })
-export class UserManagementComponent implements AfterViewInit,OnInit {
+export class UserManagementComponent implements AfterViewInit, OnInit {
   private dataTable: any;
-  token:any;
-  users:any;
-  constructor(private renderer: Renderer2,private userservice:UsersService) {}
-  ngOnInit(){
+  icons = { Eye, Edit, Slash };
+  token: any;
+  users: any[] = [];
+  currentPage: number = 1; // Initialize currentPage
+  itemsPerPage: number = 6; // Set items per page
+
+  constructor(private renderer: Renderer2, private userservice: UsersService) {}
+
+  ngOnInit() {
     this.token = localStorage.getItem("token");
-    this.userservice.getAllUsers(this.token).subscribe((data:any)=>{
-      console.log(data);
-      this.users = data.data;
-    })
+    this.fetchUsers(); // Fetch the users when component initializes
   }
+  isModalOpen = false;
+
+    openModal() {
+        this.isModalOpen = true;
+    }
+
+    closeModal() {
+        this.isModalOpen = false;
+    }
+
   ngAfterViewInit(): void {
     const tableElement = document.getElementById("search-table");
     if (tableElement && typeof simpleDatatables.DataTable !== 'undefined') {
       this.dataTable = new simpleDatatables.DataTable("#search-table", {
         searchable: true,
         sortable: true,
-        perPage: 5
+        perPage: this.itemsPerPage
       });
 
       this.setupSearch();
       this.setupFilter();
     }
+  }
+
+  // Fetch all users
+  fetchUsers() {
+    this.userservice.getAllUsers(this.token).subscribe((data: any) => {
+      console.log(data);
+      this.users = data.data;
+    });
   }
 
   // Setup search functionality
@@ -61,6 +82,32 @@ export class UserManagementComponent implements AfterViewInit,OnInit {
           }
         });
       });
+    }
+  }
+
+  // Calculate total pages for pagination
+  get totalPages(): number {
+    return Math.ceil(this.users.length / this.itemsPerPage);
+  }
+
+  // Paginated users data
+  paginatedUsers(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.users.slice(startIndex, endIndex);
+  }
+
+  // Navigate to the previous page
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  // Navigate to the next page
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
     }
   }
 }

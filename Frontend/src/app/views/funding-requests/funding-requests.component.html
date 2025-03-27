@@ -1,77 +1,59 @@
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <th scope="col" class="px-6 py-3">
-            Request Title
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Amount Requested
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Date of Request
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Status
-          </th>
-          <th scope="col" class="px-6 py-3">
-            Action
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            Expansion Project
-          </td>
-          <td class="px-6 py-4">
-            $50,000
-          </td>
-          <td class="px-6 py-4">
-            Jan 20, 2025
-          </td>
-          <td class="px-6 py-4">
-            Pending
-          </td>
-          <td class="px-6 py-4">
-            <button class="text-blue-500 hover:text-blue-700">View Details</button>
-          </td>
-        </tr>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            New Product Development
-          </td>
-          <td class="px-6 py-4">
-            $30,000
-          </td>
-          <td class="px-6 py-4">
-            Dec 15, 2024
-          </td>
-          <td class="px-6 py-4">
-            Approved
-          </td>
-          <td class="px-6 py-4">
-            <button class="text-blue-500 hover:text-blue-700">View Details</button>
-          </td>
-        </tr>
-        <tr class="bg-white dark:bg-gray-800">
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            Marketing Campaign
-          </td>
-          <td class="px-6 py-4">
-            $20,000
-          </td>
-          <td class="px-6 py-4">
-            Feb 5, 2025
-          </td>
-          <td class="px-6 py-4">
-            Rejected
-          </td>
-          <td class="px-6 py-4">
-            <button class="text-blue-500 hover:text-blue-700">View Details</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="relative overflow-x-auto p-7">
+  <h1 class="text-[#0D1F2D] dark:text-[#0D1F2D] text-3xl font-bold mb-4">
+    Welcome Entrepreneur👋
+  </h1>
+
+  <table class="w-full text-sm text-left rtl:text-right text-[#0D1F2D] dark:text-[#0D1F2D]">
+    <thead class="text-xs text-[#0D1F2D] uppercase bg-white dark:bg-white dark:text-[#0D1F2D]">
+      <tr>
+        <th scope="col" class="px-6 py-3">
+          Request Title
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Amount Requested
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Date of Request
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Status
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Action
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let transaction of paginatedFunds()" class="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200">
+        <td class="px-6 py-4">
+          {{ transaction.title }}
+        </td>
+        <td class="px-6 py-4">
+          {{ transaction.amount  }}
+        </td>
+        <td class="px-6 py-4">
+          {{ transaction.date  }}
+        </td>
+        <td class="px-6 py-4">
+          {{ transaction.status }}
+        </td>
+        <td class="px-6 py-4">
+          <button class="text-blue-500 hover:text-blue-700" >View Details</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-center p-3 space-x-4 bg-white dark:bg-white">
+    <button (click)="prevPage()" [disabled]="currentPage === 1"
+            class="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
+      Prev
+    </button>
+    <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+            class="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
+      Next
+    </button>
   </div>
-  
+</div>

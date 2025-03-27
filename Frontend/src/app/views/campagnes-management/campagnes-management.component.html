@@ -1,6 +1,7 @@
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<div class="relative overflow-x-auto m-5 mt-20  shadow-xl rounded-lg">
+    <h1 class="text-3xl font-bold text-[#0D1F2D] dark:text-[#0D1F2D] mb-6">Welcome Admin👋</h1>
+    <table class="w-full text-sm text-left rtl:text-right text-[#0D1F2D] dark:text-[#0D1F2D]">
+        <thead class="text-xs text-[#0D1F2D] uppercase bg-white dark:bg-white dark:text-[#0D1F2D]">
             <tr>
                 <th scope="col" class="px-6 py-3">
                     Campaign ID
@@ -42,50 +43,76 @@
         </thead>
         <tbody>
             <!-- Example Campaign 1 -->
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" *ngFor="let element of elements">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr class="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200" *ngFor="let element of paginatedElements()">
+                <th scope="row" class="px-6 py-3 ">
                     C123456
                 </th>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.title}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.description}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.type}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.amountGoal}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.raisedAmount}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.startDate}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.endDate}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.status}}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     150
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-3">
                     {{element.user.firstName}}
                 </td>
-                <td class="px-6 py-4">
-                    <button class="px-4 py-2 text-sm text-white bg-blue-500 rounded">View</button>
-                    <button class="px-4 py-2 text-sm text-white bg-yellow-500 rounded">Edit</button>
-                    <button class="px-4 py-2 text-sm text-white bg-green-500 rounded">Activate</button>
-                    <button class="px-4 py-2 text-sm text-white bg-red-500 rounded">Archive</button>
-                    <button class="px-4 py-2 text-sm text-white bg-red-500 rounded">Delete</button>
-                </td>
+                <td class="px-3 py-3 flex space-x-3">
+                    <button class="p-2 text-blue-500 rounded hover:bg-blue-600">
+                      <lucide-icon [name]="icons.Eye" class="w-5 h-5"></lucide-icon> View
+                    </button>
+                
+                    <button class="p-2 text-yellow-500 rounded hover:bg-yellow-600">
+                      <lucide-icon [name]="icons.Edit" class="w-5 h-5"></lucide-icon> Edit
+                    </button>
+                 
+                    <button class="p-2 text-green-500 rounded hover:bg-green-600">
+                      <lucide-icon [name]="icons.CheckSquare" class="w-5 h-5"></lucide-icon> Activate
+                    </button>
+                  
+                  
+                  
+                    <button class="p-2 text-red-500 rounded hover:bg-red-600">
+                      <lucide-icon [name]="icons.Trash" class="w-5 h-5"></lucide-icon> Delete
+                    </button>
+                  </td>
+                  
+                  
             </tr>
 
             
         </tbody>
     </table>
+    <!-- Pagination Controls -->
+    <div class="flex justify-center p-3 space-x-3 bg-white dark:bg-white w-full">
+        <button (click)="prevPage()" [disabled]="currentPage === 1"
+            class="px-3 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
+            Prev
+        </button>
+        <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+            class="px-3 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
+            Next
+        </button>
+    </div>
 </div>

@@ -26,13 +26,29 @@ export class StartCampagneComponent implements OnInit {
   selectedCategory: string | null = null;
   
   countries = [
-    { code: 'CH', name: 'Switzerland' },
-    { code: 'US', name: 'United States' },
-    { code: 'UK', name: 'United Kingdom' },
-    { code: 'DE', name: 'Germany' },
-    { code: 'FR', name: 'France' },
-    // Add more countries as needed
-  ];
+    { code: 'TN-TUN', name: 'Tunis' },
+    { code: 'TN-SFA', name: 'Sfax' },
+    { code: 'TN-SUS', name: 'Sousse' },
+    { code: 'TN-KAI', name: 'Kairouan' },
+    { code: 'TN-BIZ', name: 'Bizerte' },
+    { code: 'TN-GAB', name: 'Gabès' },
+    { code: 'TN-ARI', name: 'Ariana' },
+    { code: 'TN-GAF', name: 'Gafsa' },
+    { code: 'TN-MON', name: 'Monastir' },
+    { code: 'TN-NAB', name: 'Nabeul' },
+    { code: 'TN-MED', name: 'Medenine' },
+    { code: 'TN-BEJ', name: 'Beja' },
+    { code: 'TN-JEN', name: 'Jendouba' },
+    { code: 'TN-KAS', name: 'Kasserine' },
+    { code: 'TN-KEB', name: 'Kebili' },
+    { code: 'TN-MAN', name: 'Manouba' },
+    { code: 'TN-MAH', name: 'Mahdia' },
+    { code: 'TN-SID', name: 'Siliana' },
+    { code: 'TN-TOZ', name: 'Tozeur' },
+    { code: 'TN-TAT', name: 'Tataouine' },
+    { code: 'TN-ZAG', name: 'Zaghouan' }
+];
+
   
   categories: Category[] = [
     { id: 'animals', name: 'Animals' },
@@ -60,7 +76,7 @@ export class StartCampagneComponent implements OnInit {
 
   constructor(private fb: FormBuilder,private router: Router) {
     this.fundraisingForm = this.fb.group({
-      country: ['Switzerland', Validators.required],
+      country: ['Tunis', Validators.required],
       postcode: ['', [Validators.required, Validators.pattern(/^\d{4,5}$/)]],
       category: ['community', Validators.required]
     });
@@ -84,6 +100,7 @@ export class StartCampagneComponent implements OnInit {
     console.log('Form submitted:', this.fundraisingForm.value);
     this.showCountryDropdown = false;
     console.log(country);
+    this.showCountryDropdown = !this.showCountryDropdown;
   }
 
   selectCategory(categoryId: string): void {

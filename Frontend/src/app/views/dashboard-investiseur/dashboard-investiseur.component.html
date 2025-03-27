@@ -1,48 +1,46 @@
-<div class="bg-gray-100 dark:bg-gray-900 p-6">
-  <!-- 1. Vue Générale (KPIs Clés) -->
-  <h1 class="text-3xl font-bold text-gray-700 dark:text-white">Investisseur Dashboard</h1>
+<div class="bg-[#FAF1E6] dark:bg-[#FAF1E6]  p-6">
+  <!-- Title -->
+  <h1 class="text-3xl font-bold text-[#0D1F2D] dark:text-[#0D1F2D] mb-4">Welcome Investor👋</h1>
   
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-    <!-- Total Investi -->
-    <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
-      <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Total Investi</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">${{ totalInvestment }}</p>
+  <!-- 1. Vue Générale (KPIs Clés) -->
+  <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
+    <!-- KPI Cards -->
+    <div class=" sm:col-span-1 flex flex-col gap-4">
+      <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-white dark:bg-white p-4 shadow-md">
+        <h2 class="text-xl font-semibold text-[#0D1F2D] dark:text-[#0D1F2D]">Total Investi</h2>
+        <p class="text-3xl font-bold text-[#4CAF50] dark:text-[#4CAF50]">${{ totalInvestment }}</p>
+      </div>
+      <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-white dark:bg-white p-4 shadow-md">
+        <h2 class="text-xl font-semibold text-[#0D1F2D] dark:text-[#0D1F2D]">Projets Soutenus</h2>
+        <p class="text-3xl font-bold text-[#4CAF50] dark:text-[#4CAF50]">{{ supportedProjects }}</p>
+      </div>
     </div>
-    <!-- Nombre de Projets Soutenus -->
-    <div class="flex flex-col items-center justify-center h-24 rounded-lg bg-gray-50 dark:bg-gray-800 p-4 shadow-md">
-      <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Projets Soutenus</h2>
-      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ supportedProjects }}</p>
+    
+    <!-- Répartition des Investissements -->
+    <div class="sm:col-span-1 h-60 bg-white dark:bg-white p-4 rounded-lg shadow-md">
+      <canvas id="repartitionChart"></canvas>
     </div>
   </div>
 
   <!-- 2. Graphiques & Statistiques -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-    <!-- Évolution des Investissements -->
-    <div class="h-60 w-full mb-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
-      <canvas id="evolutionChart"></canvas>
-    </div>
-    <!-- Répartition des Investissements -->
-    <div class="h-60 w-full mb-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
-      <canvas id="repartitionChart"></canvas>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-    <!-- Investissements par Type -->
-    <div class="h-60 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+    <div class="h-60 bg-white dark:bg-white p-4 rounded-lg shadow-md">
       <canvas id="investissementsTypeChart"></canvas>
     </div>
-    <!-- Comparaison Investissements Précédents -->
-    <div class="h-60 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow-md">
+    <div class="h-60 bg-white dark:bg-white p-4 rounded-lg shadow-md">
       <canvas id="comparaisonChart"></canvas>
     </div>
   </div>
 
   <!-- 3. Actions Rapides & Suggestions -->
-  <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Conseils Personnalisés</h2>
-    <p class="text-gray-900 dark:text-white">
-      {{advice}}
-    </p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="p-4 bg-white dark:bg-white rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-[#0D1F2D] dark:text-[#0D1F2D]">Conseils Personnalisés</h2>
+      <p class="text-[#4CAF50] dark:text-[#4CAF50]">{{ advice }}</p>
+      <iframe src='https://my.spline.design/3ddollerandpointcoinsremix-7742c1bf36eb98e2572502482ba4cabe/' frameborder='0' ></iframe>
+    </div>
+    <div class="h-60 bg-white dark:bg-white p-4 rounded-lg shadow-md">
+      <canvas id="evolutionChart"></canvas>
+    </div>
   </div>
 </div>

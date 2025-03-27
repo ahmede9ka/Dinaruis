@@ -123,7 +123,7 @@ export class DashboardInvestiseurComponent implements OnInit {
         datasets: [{
           label: 'Investissements par type',
           data: this.investissementsTypeData,
-          backgroundColor: '#1F2937',
+          backgroundColor:'rgba(76, 175, 80, 0.2)',
           borderColor: '#4CAF50',
           borderWidth: 1
         }]

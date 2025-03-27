@@ -38,7 +38,7 @@ export class StartCampagneStep4Component {
     this.token = localStorage.getItem("token");
     this.campaign = new Campaign();
   }
-
+  isModalOpen = false;
   // Form Submit
   onSubmit() {
     if (this.fundraisingForm.valid) {
@@ -65,5 +65,14 @@ export class StartCampagneStep4Component {
     } else {
       console.log('Form is invalid');
     }
+  }
+  Review() {
+    // Show the modal when Review button is clicked
+    this.isModalOpen = true;
+  }
+
+  goToRoot() {
+    // Navigate to root (home page)
+    this.router.navigate(['/']);
   }
 }

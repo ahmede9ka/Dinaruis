@@ -98,8 +98,8 @@ export class DashboardAdminComponent implements OnInit {
         datasets: [{
           label: 'Fonds collectés',
           data: this.donationsByMonth,
-          borderColor: '#FF5733',
-          backgroundColor: 'rgba(255, 87, 51, 0.2)',
+          borderColor: '#4CAF50',
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
           borderWidth: 2,
           fill: true
         }]
@@ -146,8 +146,8 @@ export class DashboardAdminComponent implements OnInit {
         datasets: [{
           label: 'Status count',
           data: this.countstatus, // Static data (can be updated dynamically)
-          backgroundColor: '#FF5733',
-          borderColor: '#1F2937',
+          backgroundColor: 'rgba(76, 175, 80, 0.5)',
+          borderColor: '#4CAF50',
           borderWidth: 1
         }]
       },
@@ -162,12 +162,21 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   // Function to generate a random color
-  getRandomColor(): string {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+  getRandomColor() {
+    const blueOrGreen = Math.random() < 0.5 ? 'green' : 'blue';
+    
+    if (blueOrGreen === 'green') {
+      // Generate a shade of green
+      const r = Math.floor(Math.random() * 56);  // Keep red low (0-55)
+      const g = Math.floor(Math.random() * 156) + 100;  // Green dominant (100-255)
+      const b = Math.floor(Math.random() * 56);  // Keep blue low (0-55)
+      return `rgb(${r}, ${g}, ${b})`;
+    } else {
+      // Generate a shade of blue
+      const r = Math.floor(Math.random() * 56);  // Keep red low (0-55)
+      const g = Math.floor(Math.random() * 56);  // Keep green low (0-55)
+      const b = Math.floor(Math.random() * 156) + 100;  // Blue dominant (100-255)
+      return `rgb(${r}, ${g}, ${b})`;
     }
-    return color;
   }
 }
