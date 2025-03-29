@@ -205,7 +205,7 @@ const getAllInvestors = async (req, res, next) => {
     ]);
 
     // Find all users with role 'INVESTOR'
-    const investors = await User.find({ role: "INVESTOR" });
+    const investors = await User.find();
 
     // Map totalDonated & campaigns count to each investor
     const investorsWithDonations = investors.map((investor) => {
