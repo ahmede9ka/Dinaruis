@@ -264,10 +264,69 @@ const getCampaignsByCategory = async (req, res, next) => {
     });
   }
 };
+//TOP5
+
+const getTopInvestors = async (req, res, next) => {
+  try {
+    const topInvestors = await Donation.aggregate([
+      {
+        $group: {
+          _id: "$user", // Group by user ID (Investor)
+          totalDonations: { $sum: 1 }, // Count number of donations
+          totalDonatedAmount: { $sum: "$amount" }, // Sum of all donation amounts
+        },
+      },
+      {
+        $sort: { totalDonatedAmount: -1, totalDonations: -1 } // Sort first by amount, then by count
+      },
+      {
+        $limit: 5 // Get top 5 investors
+      },
+      {
+        $lookup: {
+          from: "users", // Match with Users collection
+          localField: "_id",
+          foreignField: "_id",
+          as: "investorDetails"
+        }
+      },
+      {
+        $unwind: {
+          path: "$investorDetails",
+          preserveNullAndEmptyArrays: true // Ensure even if no user details are found, it still returns data
+        }
+      },
+      {
+        $project: {
+          _id: 0, 
+          investorId: "$_id",
+          name: "$investorDetails.name",
+          email: "$investorDetails.email",
+          totalDonations: 1,
+          totalDonatedAmount: 1
+        }
+      }
+    ]);
+
+    console.log("Top Investors:", topInvestors); // Debugging
+
+    res.status(200).json({
+      status: "success",
+      data: topInvestors
+    });
+  } catch (error) {
+    console.error("Error fetching top investors:", error);
+    res.status(500).json({
+      status: "error",
+      message: "An error occurred while fetching the top investors.",
+      error: error.message
+    });
+  }
+};
 module.exports = {
   getDonations,
   getCampaignStatusCounts,
   getUserRoleCounts,
   getDonationsByMonth,
-  getCampaignsByCategory,
+  getCampaignsByCategory,getTopInvestors,
 };
