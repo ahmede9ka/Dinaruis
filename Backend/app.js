@@ -5,6 +5,8 @@ const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const cron = require("node-cron");
+const Campaign = require("./models/campaignModel"); // Import your Campaign model
 
 const userRouter = require("./routes/userRoutes");
 const investorRouter = require("./routes/investorRoutes");
@@ -55,6 +57,32 @@ app.post("/api/v1/sendmail", sendMail);
 // ✅ Handle Unknown Routes
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+const updateExpiredCampaigns = async () => {
+  try {
+    const now = new Date();
+
+    const result = await Campaign.updateMany(
+      { endDate: { $lt: now }, status: { $ne: "Completed" } }, // Find expired campaigns
+      { $set: { status: "Completed" } } // Update status
+    );
+
+    //console.log(`✅ Updated ${result.modifiedCount} expired campaigns.`);
+  } catch (error) {
+    console.error("❌ Error updating campaigns:", error.message);
+  }
+};
+// 🏁 Run the function immediately on startup
+(async () => {
+  //console.log("🚀 Checking expired campaigns on startup...");
+  await updateExpiredCampaigns();
+})();
+
+// 🔄 Schedule the task to run every day at midnight
+cron.schedule("0 0 * * *", () => {
+  console.log("🔄 Running scheduled campaign expiration check...");
+  updateExpiredCampaigns();
 });
 
 // ✅ Global Error Handling Middleware

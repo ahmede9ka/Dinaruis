@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const Campaign = require("../models/campaignModel");
-const Transaction = require("../models/transactionModel")
+const Transaction = require("../models/transactionModel");
 // Create a new campaign
 const createCampaign = async (req, res, next) => {
   try {
@@ -33,7 +33,7 @@ const createCampaign = async (req, res, next) => {
 const getCampaign = async (req, res, next) => {
   try {
     const campaigns = await Campaign.find().populate("user", "firstName email");
-    
+
     res.status(200).json({
       status: "success",
       data: campaigns,
@@ -45,10 +45,30 @@ const getCampaign = async (req, res, next) => {
     });
   }
 };
+
+const getActiveCampaigns = async (req, res, next) => {
+  try {
+    const activeCampaigns = await Campaign.find({ status: "Active" }).populate(
+      "user",
+      "firstName email"
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: activeCampaigns,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: `Error fetching active campaigns: ${error.message}`,
+    });
+  }
+};
+
 const getCampaignById = async (req, res, next) => {
   try {
     const campaign = await Campaign.findById(req.params.id);
-    
+
     res.status(200).json({
       status: "success",
       data: campaign,
@@ -127,7 +147,9 @@ const getFavoriteCampaigns = async (req, res) => {
     const { investor_id } = req.params;
 
     // Find all campaigns where the investor_id exists in the isFavorite array
-    const favoriteCampaigns = await Campaign.find({ isFavorite: { $in: [investor_id] } })
+    const favoriteCampaigns = await Campaign.find({
+      isFavorite: { $in: [investor_id] },
+    })
       .populate("user", "name email") // Populate campaign owner's details (optional)
       .populate("isFavorite", "name email"); // Populate favorited users (optional)
 
@@ -150,7 +172,6 @@ const getFavoriteCampaigns = async (req, res) => {
   }
 };
 
-
 // Update a campaign
 const updateCampaign = async (req, res, next) => {
   try {
@@ -162,7 +183,9 @@ const updateCampaign = async (req, res, next) => {
 
     // Allow modification if the user is the campaign creator or an admin
     if (campaign.user.toString() !== req.user.id && req.user.role !== "ADMIN") {
-      return next(new AppError("You are not authorized to update this campaign", 403));
+      return next(
+        new AppError("You are not authorized to update this campaign", 403)
+      );
     }
 
     // Update campaign fields
@@ -194,14 +217,12 @@ const GetTotalContributors = async (req, res, next) => {
     // Use a Set to store unique user IDs across all donations for all campaigns
     const uniqueContributors = new Set();
 
-    
     const donations = await Transaction.find({ campaign: campaign._id });
 
-      // Add the user ID from each donation to the Set
-      donations.forEach(donation => {
-        uniqueContributors.add(donation.user.toString()); // Assuming user is a reference to a user ID
-      });
-    
+    // Add the user ID from each donation to the Set
+    donations.forEach((donation) => {
+      uniqueContributors.add(donation.user.toString()); // Assuming user is a reference to a user ID
+    });
 
     // The size of the Set will give the number of unique contributors
     res.status(200).json({
@@ -228,7 +249,9 @@ const deleteCampaign = async (req, res, next) => {
 
     // Only the campaign creator can delete it
     if (campaign.user.toString() !== req.user.id && req.user.role !== "ADMIN") {
-      return next(new AppError("You are not authorized to update this campaign", 403));
+      return next(
+        new AppError("You are not authorized to update this campaign", 403)
+      );
     }
 
     await campaign.deleteOne();
@@ -254,5 +277,6 @@ module.exports = {
   getCampaignsByEntrepreneur,
   GetTotalContributors,
   AddFavorite,
-  getFavoriteCampaigns
+  getFavoriteCampaigns,
+  getActiveCampaigns,
 };
