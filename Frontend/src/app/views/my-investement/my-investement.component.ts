@@ -4,15 +4,20 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-my-investement',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './my-investement.component.html',
   styleUrl: './my-investement.component.css'
 })
-export class MyInvestementComponent implements OnInit{
-  token:any;
-  investments:any;
-  constructor(private investorservice:InvestorService){}
+export class MyInvestementComponent implements OnInit {
+  token: string | null = null;
+  investments: any[] = [];
+  currentPage: number = 1;
+  totalPages: number = 1;
+  itemsPerPage: number = 5;
+
+  constructor(private investorService: InvestorService) {}
+
   ngOnInit(): void {
     const userData = localStorage.getItem('user');
     this.token = localStorage.getItem('token');
@@ -32,10 +37,46 @@ export class MyInvestementComponent implements OnInit{
       console.error('No user data found in localStorage');
     }
   }
-  fetchInvestmentsById(id:any){
-    this.investorservice.getInvestmentById(id,this.token).subscribe((data:any)=>{
-      this.investments = data.data;
-      console.log(data);
-    })
+
+  fetchInvestmentsById(id: string): void {
+    if (!this.token) {
+      console.error('Token is missing.');
+      return;
+    }
+
+    this.investorService.getInvestmentById(id, this.token).subscribe(
+      (response: any) => {
+        if (response && response.data) {
+          this.investments = response.data;
+          this.totalPages = Math.ceil(this.investments.length / this.itemsPerPage);
+        } else {
+          console.error('Invalid response structure:', response);
+        }
+      },
+      (error) => {
+        console.error('Error fetching investments:', error);
+      }
+    );
+  }
+
+  paginatedInvestments(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.investments.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  trackByInvestment(index: number, investment: any): string {
+    return investment._id; // Assuming each investment has a unique _id
   }
 }

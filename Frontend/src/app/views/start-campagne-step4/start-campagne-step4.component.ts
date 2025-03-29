@@ -60,16 +60,14 @@ export class StartCampagneStep4Component {
       console.log('Campaign Object:', this.campaign);
       this.campaignservice.createCampaign(this.campaign,this.token).subscribe((data:any)=>{
         console.log(data);
+        this.isModalOpen = true;
       })
       // Proceed to next step (e.g., send campaign data to backend)
     } else {
       console.log('Form is invalid');
     }
   }
-  Review() {
-    // Show the modal when Review button is clicked
-    this.isModalOpen = true;
-  }
+  
 
   goToRoot() {
     // Navigate to root (home page)

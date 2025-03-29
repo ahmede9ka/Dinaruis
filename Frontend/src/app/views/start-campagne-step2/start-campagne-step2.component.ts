@@ -63,7 +63,7 @@ export class StartCampagneStep2Component {
         state: { formData: this.fundraisingForm.value }
       });
     } else {
-      console.log('Form is invalid');
+      console.log('Form is invalid',this.fundraisingForm.value);
     }
   }
   nextStep() {

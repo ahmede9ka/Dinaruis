@@ -1,6 +1,7 @@
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<div class="relative overflow-x-auto m-5 mt-20 shadow-xl rounded-lg">
+  <h1 class="text-3xl font-bold text-[#0D1F2D] dark:text-[#0D1F2D] mb-6">Welcome Investor 🚀 </h1>
+    <table class="w-full text-sm text-left rtl:text-right text-[#0D1F2D] dark:text-[#0D1F2D]">
+      <thead class="text-xs text-gray-700 uppercase bg-white  dark:bg-white dark:text-[#0D1F2D]">
         <tr>
           <th scope="col" class="px-6 py-3">
             Campaign Name
@@ -20,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let investment of investments" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+        <tr *ngFor="let investment of paginatedInvestments()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
           <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{investment.campaign.title}}
           </td>
@@ -40,5 +41,17 @@
         
       </tbody>
     </table>
+    <!-- Pagination Controls -->
+    <div class="flex justify-center p-3 space-x-4 bg-white dark:bg-white">
+      <button (click)="prevPage()" [disabled]="currentPage === 1"
+          class="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
+          Prev
+      </button>
+      <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+          class="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
+          Next
+      </button>
+  </div>
   </div>
   

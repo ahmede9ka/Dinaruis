@@ -1,12 +1,14 @@
-<div class="flex flex-col md:flex-row mb-4 items-center md:space-x-4">
-  <h1 class="text-gray-700 text-3xl font-bold">Welcome Investor 👋</h1>
+<div class="flex flex-col md:flex-row mb-4 items-center md:space-x-4 p-7">
+  <h1 class="text-[#0D1F2D] dark:text-[#0D1F2D] text-3xl font-bold">
+    Welcome Investor 🚀
+</h1>
 
   <!-- Search Bar -->
   <input 
     type="text" 
     [(ngModel)]="searchQuery" 
-    placeholder="Search..." 
-    class="px-4 py-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+    placeholder="Search by campaign name..." 
+    class="w-full px-4 py-2 border border-[#4CAF50] rounded-lg dark:bg-white dark:border-[#4CAF50] "
   />
 
   <!-- Filter Button -->
@@ -20,16 +22,16 @@
 </div>
 
 <!-- Campaigns Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-7 pt-0">
   <div *ngFor="let campaign of paginatedCampaigns()" 
-       class="max-w-sm rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800 relative">
+       class="max-w-sm rounded-2xl overflow-hidden shadow-lg bg-white border border-white dark:bg-white dark:border-gray-800 relative">
 
     <!-- Campaign Image -->
-    <img [src]="campaign.image" alt="{{ campaign.title }}" class="w-full h-52 object-cover rounded-t-2xl">
+    <img [src]="campaign.image" alt="{{ campaign.title }}" class="text-[#4CAF50] w-full h-52 object-cover rounded-t-2xl">
 
     <!-- Favorite Icon -->
     <button 
-      (click)="AddFavorite(campaign._id)" 
+      (click)="toggleFavorite(campaign)" 
       class="absolute top-4 right-4 text-gray-500 hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400"
       aria-label="Toggle Favorite"
     >
@@ -46,7 +48,7 @@
     </div>
 
     <div class="p-6">
-      <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ campaign.title }}</h2>
+      <h2 class="text-xl font-semibold text-[#4CAF50] dark:text-[#4CAF50]">{{ campaign.title }}</h2>
       <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ campaign.description }}</p>
     </div>
 
@@ -55,16 +57,16 @@
       <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">Progress: {{ campaign.progress }}%</div>
       <div class="relative pt-1">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 py-1 px-2 rounded-lg">{{ campaign.raisedAmount }} Donated</span>
-          <span class="text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 py-1 px-2 rounded-lg">Goal: {{ campaign.amountGoal }}</span>
+          <span class="text-xs font-semibold bg-[#4CAF50] text-white dark:bg-[#4CAF50] dark:text-white py-1 px-2 rounded-lg">{{ campaign.raisedAmount }} Donated</span>
+          <span class="text-xs font-semibold bg-[#4CAF50] text-white dark:bg-[#4CAF50] dark:text-white py-1 px-2 rounded-lg">Goal: {{ campaign.amountGoal }}</span>
         </div>
-        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
+        <div class="w-full bg-[#FAF1E6] dark:bg-[#FAF1E6] rounded-full h-2.5 overflow-hidden">
           <div class="bg-blue-600 dark:bg-blue-400 h-2.5 rounded-full transition-all duration-500" [style.width.%]="campaign.progress"></div>
         </div>
         <div class="text-xs font-semibold mt-3 text-gray-700 dark:text-gray-400">Deadline: {{ campaign.endDate }}</div>
         <button 
           (click)="investInCampaign(campaign._id)"
-          class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
+          class="mt-3 px-4 py-2 bg-green-600 text-white w-full  rounded-lg hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
           Invest
         </button>
       </div>
@@ -77,16 +79,14 @@
   <button 
     (click)="prevPage()" 
     [disabled]="currentPage === 1" 
-    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-  >
+    class="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
     Prev
   </button>
   <span class="text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
   <button 
     (click)="nextPage()" 
     [disabled]="currentPage === totalPages" 
-    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-  >
+    class="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#4CAF50] disabled:opacity-50">
     Next
   </button>
 </div>

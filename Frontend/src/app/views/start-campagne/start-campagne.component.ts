@@ -124,7 +124,5 @@ export class StartCampagneComponent implements OnInit {
       });
     }
   }
-  nextStep() {
-    
-  }
+  
 }
