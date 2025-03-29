@@ -35,6 +35,8 @@ router.post("/login", login);
 router.put("/:id", protect, updateUser);
 router.delete("/:id", protect, deleteUser);
 
+
+
 // ✅ Google OAuth Routes
 router.get("/auth/google", (req, res, next) => {
   const role = req.query.role; // Default to "INVESTOR"

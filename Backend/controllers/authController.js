@@ -72,9 +72,10 @@ const login = async (req, res, next) => {
             60 *
             1000
       ),
-      httpOnly: true,
+      httpOnly: true,//Empêche JavaScript d’accéder au cookie (protège contre les attaques XSS).
       secure: process.env.NODE_ENV === "production", // Secure cookies for HTTPS only
       sameSite: "None", // Allow cross-site cookies
+      //Si ton frontend et backend sont sur des domaines différents, le navigateur bloquera les cookies sans sameSite: "None".
     });
 
     res.status(200).json({

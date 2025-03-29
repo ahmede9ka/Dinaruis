@@ -2,7 +2,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel"); // Import User model
-require("dotenv");
+require("dotenv").config(); ;
 passport.use(
   new GoogleStrategy(
     {

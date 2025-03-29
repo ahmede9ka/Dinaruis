@@ -213,10 +213,54 @@ const getMonthlyCollectedAmount = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const getTopInvestors = async (req, res) => {
+  try {
+    const entrepreneurId = req.params.id;
+
+    // 1) Get all campaigns for this entrepreneur
+    const campaigns = await Campaign.find({ user: entrepreneurId });
+    if (campaigns.length === 0) {
+      return res.status(404).json({ message: "No campaigns found for this entrepreneur" });
+    }
+
+    // 2) Get all donations related to these campaigns
+    const campaignIds = campaigns.map(campaign => campaign._id);
+    const donations = await Donation.find({ campaign: { $in: campaignIds } });
+
+    // 3) Group donations by investor (user)
+    const donationsByInvestor = donations.reduce((acc, donation) => {
+      if (acc[donation.user]) {
+        acc[donation.user] += donation.amount;
+      } else {
+        acc[donation.user] = donation.amount;
+      }
+      return acc;
+    }, {});
+
+    // 4) Sort the investors by total donation amount in descending order
+    const sortedInvestors = Object.entries(donationsByInvestor)
+      .sort((a, b) => b[1] - a[1]) // Sort by donation amount in descending order
+      .slice(0, 5); // Get the top 5 investors
+
+    // 5) Retrieve full information about the top investors
+    const topInvestors = await User.find({ '_id': { $in: sortedInvestors.map(investor => investor[0]) } });
+
+    // 6) Send the top 5 investors with their rank and total donation amount
+    res.status(200).json({
+      topInvestors: sortedInvestors.map((investor, index) => ({
+        rank: index + 1,
+        investor: topInvestors.find(user => user._id.toString() === investor[0].toString()), // Map investor info
+        totalAmount: investor[1],
+      })),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getTotalDonationsByEntrepreneur,
   getCampaignStatusCount,
   getUniqueInvestorsByEntrepreneur,
   invest,
-  getMonthlyCollectedAmount,
+  getMonthlyCollectedAmount,getTopInvestors,
 };

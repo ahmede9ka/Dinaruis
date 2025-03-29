@@ -7,6 +7,7 @@ const {
   getUniqueInvestorsByEntrepreneur,
   invest,
   getMonthlyCollectedAmount,
+  getTopInvestors, 
 } = require("../controllers/entrepreneurController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
@@ -27,6 +28,12 @@ router.get(
   "/getMonthlyCollectedAmount/:id",
   protect,
   getMonthlyCollectedAmount
+);
+//top 5 investors
+router.get(
+  "/getTopInvestors/:id", // Define the endpoint to get top investors
+  protect,
+  getTopInvestors // Use the function we created earlier
 );
 
 module.exports = router;
