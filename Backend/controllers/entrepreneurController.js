@@ -220,11 +220,13 @@ const getTopInvestors = async (req, res) => {
     // 1) Get all campaigns for this entrepreneur
     const campaigns = await Campaign.find({ user: entrepreneurId });
     if (campaigns.length === 0) {
-      return res.status(404).json({ message: "No campaigns found for this entrepreneur" });
+      return res
+        .status(404)
+        .json({ message: "No campaigns found for this entrepreneur" });
     }
 
     // 2) Get all donations related to these campaigns
-    const campaignIds = campaigns.map(campaign => campaign._id);
+    const campaignIds = campaigns.map((campaign) => campaign._id);
     const donations = await Donation.find({ campaign: { $in: campaignIds } });
 
     // 3) Group donations by investor (user)
@@ -243,13 +245,17 @@ const getTopInvestors = async (req, res) => {
       .slice(0, 5); // Get the top 5 investors
 
     // 5) Retrieve full information about the top investors
-    const topInvestors = await User.find({ '_id': { $in: sortedInvestors.map(investor => investor[0]) } });
+    const topInvestors = await User.find({
+      _id: { $in: sortedInvestors.map((investor) => investor[0]) },
+    });
 
     // 6) Send the top 5 investors with their rank and total donation amount
     res.status(200).json({
       topInvestors: sortedInvestors.map((investor, index) => ({
         rank: index + 1,
-        investor: topInvestors.find(user => user._id.toString() === investor[0].toString()), // Map investor info
+        investor: topInvestors.find(
+          (user) => user._id.toString() === investor[0].toString()
+        ), // Map investor info
         totalAmount: investor[1],
       })),
     });
@@ -257,10 +263,143 @@ const getTopInvestors = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const getInvestmentTypeCount = async (req, res) => {
+  try {
+    const entrepreneurId = req.params.id;
+
+    // 1) Find all campaigns created by this entrepreneur
+    const campaigns = await Campaign.find({ user: entrepreneurId }).select(
+      "_id"
+    );
+
+    if (campaigns.length === 0) {
+      return res.status(404).json({
+        message: "No campaigns found for this entrepreneur",
+      });
+    }
+
+    // Extract campaign IDs
+    const campaignIds = campaigns.map((campaign) => campaign._id);
+
+    // 2) Aggregate transactions to count each type
+    const transactions = await Transaction.aggregate([
+      {
+        $match: { campaign: { $in: campaignIds } }, // Only transactions for these campaigns
+      },
+      {
+        $group: {
+          _id: "$type", // Group by transaction type
+          count: { $sum: 1 }, // Count transactions of each type
+        },
+      },
+    ]);
+
+    // 3) Format the result to include all transaction types (set missing types to 0)
+    const investmentTypes = [
+      "donation",
+      "equity-based investment",
+      "loan-based investment",
+      "rewards-based investment",
+    ];
+
+    const investmentCounts = investmentTypes.reduce((acc, type) => {
+      const transaction = transactions.find((t) => t._id === type);
+      acc[type] = transaction ? transaction.count : 0;
+      return acc;
+    }, {});
+
+    // 4) Return response
+    res.status(200).json({
+      //entrepreneurId,
+      investmentCounts,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const getCampaignTypesWithTransactionCounts = async (req, res) => {
+  try {
+    const entrepreneurId = req.params.id;
+
+    // 1) Find all campaigns created by this entrepreneur
+    const campaigns = await Campaign.find({ user: entrepreneurId }).select(
+      "_id type"
+    );
+
+    if (campaigns.length === 0) {
+      return res.status(404).json({
+        message: "No campaigns found for this entrepreneur",
+      });
+    }
+
+    // Create a map of campaign ID -> campaign type
+    const campaignMap = new Map();
+    campaigns.forEach((campaign) =>
+      campaignMap.set(campaign._id.toString(), campaign.type)
+    );
+
+    // Convert campaign IDs to ObjectId properly
+    const campaignIds = Array.from(campaignMap.keys()).map(
+      (id) => new mongoose.Types.ObjectId(id)
+    );
+
+    // 2) Aggregate transactions to count how many times each campaign type has been funded
+    const transactionCounts = await Transaction.aggregate([
+      {
+        $match: { campaign: { $in: campaignIds } }, // Match transactions linked to the entrepreneur's campaigns
+      },
+      {
+        $group: {
+          _id: "$campaign", // Group by campaign
+          count: { $sum: 1 }, // Count transactions per campaign
+        },
+      },
+    ]);
+
+    if (transactionCounts.length === 0) {
+      return res.status(200).json({
+        entrepreneurId,
+        campaignTypes: [],
+        message: "No transactions found for this entrepreneur's campaigns",
+      });
+    }
+
+    // 3) Aggregate counts by campaign type
+    const campaignTypeCounts = new Map();
+    transactionCounts.forEach(({ _id, count }) => {
+      const campaignType = campaignMap.get(_id.toString());
+      if (campaignTypeCounts.has(campaignType)) {
+        campaignTypeCounts.set(
+          campaignType,
+          campaignTypeCounts.get(campaignType) + count
+        );
+      } else {
+        campaignTypeCounts.set(campaignType, count);
+      }
+    });
+
+    // 4) Format response
+    const result = Array.from(campaignTypeCounts).map(([type, count]) => ({
+      type,
+      count,
+    }));
+
+    res.status(200).json({
+      //entrepreneurId,
+      campaignTypes: result,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getTotalDonationsByEntrepreneur,
   getCampaignStatusCount,
   getUniqueInvestorsByEntrepreneur,
   invest,
-  getMonthlyCollectedAmount,getTopInvestors,
+  getMonthlyCollectedAmount,
+  getTopInvestors,
+  getInvestmentTypeCount,
+  getCampaignTypesWithTransactionCounts,
 };
