@@ -263,6 +263,44 @@ const getTopInvestors = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+<<<<<<< HEAD
+//nbr of compaigns of each type ("cancled"excluded)
+const getCampaignsCountByCategory = async (req, res) => {
+  try {
+    const entrepreneurId = req.params.id;
+
+    // 1) Find all campaigns by this entrepreneur excluding those with "Cancelled" status
+    const campaigns = await Campaign.find({
+      user: entrepreneurId,
+      status: { $ne: "Cancelled" }, // Exclude "Cancelled" status campaigns
+    });
+
+    if (campaigns.length === 0) {
+      return res.status(404).json({ message: "No active campaigns found for this entrepreneur" });
+    }
+
+    // 2) Group campaigns by category (type) and count them
+    const campaignsCountByCategory = campaigns.reduce((acc, campaign) => {
+      // Get campaign type (category)
+      const type = campaign.type;
+
+      // Increment the count for this category (type)
+      if (acc[type]) {
+        acc[type] += 1;
+      } else {
+        acc[type] = 1;
+      }
+
+      return acc;
+    }, {});
+
+    // 3) Return the count of campaigns by category
+    res.status(200).json({
+      campaignsCountByCategory,
+    });
+  } catch (error) {
+    console.error("Error fetching campaigns count by category:", error);
+=======
 const getInvestmentTypeCount = async (req, res) => {
   try {
     const entrepreneurId = req.params.id;
@@ -389,6 +427,7 @@ const getCampaignTypesWithTransactionCounts = async (req, res) => {
       campaignTypes: result,
     });
   } catch (error) {
+>>>>>>> be93979c286807a23488e8ddd2d72941ac0bba79
     res.status(500).json({ message: error.message });
   }
 };
@@ -398,8 +437,13 @@ module.exports = {
   getCampaignStatusCount,
   getUniqueInvestorsByEntrepreneur,
   invest,
+<<<<<<< HEAD
+  getMonthlyCollectedAmount,getTopInvestors,
+  getCampaignsCountByCategory,
+=======
   getMonthlyCollectedAmount,
   getTopInvestors,
   getInvestmentTypeCount,
   getCampaignTypesWithTransactionCounts,
+>>>>>>> be93979c286807a23488e8ddd2d72941ac0bba79
 };

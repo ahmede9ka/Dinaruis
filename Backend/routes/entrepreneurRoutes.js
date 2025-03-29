@@ -7,9 +7,13 @@ const {
   getUniqueInvestorsByEntrepreneur,
   invest,
   getMonthlyCollectedAmount,
+<<<<<<< HEAD
+  getTopInvestors, getCampaignsCountByCategory,
+=======
   getTopInvestors,
   getInvestmentTypeCount,
   getCampaignTypesWithTransactionCounts,
+>>>>>>> be93979c286807a23488e8ddd2d72941ac0bba79
 } = require("../controllers/entrepreneurController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
@@ -45,6 +49,12 @@ router.get(
   "/getTopInvestors/:id", // Define the endpoint to get top investors
   protect,
   getTopInvestors // Use the function we created earlier
+);
+//
+router.get(
+  "/getCampaignsCountByCategory/:id", // Define the endpoint to get top investors
+  protect,
+  getCampaignsCountByCategory// Use the function we created earlier
 );
 
 module.exports = router;
