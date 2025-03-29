@@ -14,21 +14,29 @@ export class StartCampagneStep2Component {
   fundraisingForm: FormGroup;
   recommendedTarget: number | null = null;
   formData: any;
-  constructor(private fb: FormBuilder,private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router) {
+    // Fetch the form data from the navigation state
     const navigation = this.router.getCurrentNavigation();
+    console.log(navigation);
     this.formData = navigation?.extras.state?.['formData'] || {}; 
     console.log('Received data:', this.formData);
+
+    // Initialize the form with default values
     this.fundraisingForm = this.fb.group({
       country: ['', Validators.required],
       postcode: ['', [Validators.required, Validators.pattern('^[0-9]{4,6}$')]],
       selectedCategory: [null, Validators.required],
       targetAmount: ['', [Validators.required, Validators.min(1)]]
     });
-    
-    this.fundraisingForm.patchValue({ selectedCategory: this.formData.category });
-    this.fundraisingForm.patchValue({country:this.formData.country});
-    this.fundraisingForm.patchValue({postcode:this.formData.postcode});
 
+    // Set the form values based on the received data
+    if (this.formData) {
+      this.fundraisingForm.patchValue({
+        country: this.formData.country,
+        postcode: this.formData.postcode,
+        selectedCategory: this.formData.category
+      });
+    }
   }
   // Update recommended target amount dynamically
   updateRecommendedAmount() {

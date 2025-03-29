@@ -109,20 +109,15 @@ export class StartCampagneComponent implements OnInit {
     console.log('Form submitted:', this.fundraisingForm.value);
     console.log(this.selectedCategory);
   }
-
-  onSubmit(): void {
-    if (this.fundraisingForm.valid) {
-      console.log('Form submitted:', this.fundraisingForm.value);
+  onSubmit() {
+      console.log('Form Data:', this.fundraisingForm.value);
       this.router.navigate(['/entrepreneur/start-campagne/step2'], {
         state: { formData: this.fundraisingForm.value }
       });
-      // Handle form submission
-    } else {
-      // Mark all fields as touched to trigger validation
-      Object.keys(this.fundraisingForm.controls).forEach(key => {
-        this.fundraisingForm.get(key)?.markAsTouched();
-      });
-    }
   }
   
+  
+  nextStep() {
+    this.router.navigate(['/entrepreneur/start-campagne/step2']); 
+  }
 }
