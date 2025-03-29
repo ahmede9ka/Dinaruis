@@ -200,13 +200,26 @@ const getCampaignsByCategory = async (req, res, next) => {
   try {
     // Define all possible campaign categories
     const allCategories = [
-      "SOCIAL",
-      "BUSINESS",
-      "ARTISTIC",
-      "TECHNOLOGY",
-      "MEDICAL",
-      "EDUCATIONAL",
-      "ENVIRONMENTAL",
+      "animals",
+      "buisness",
+      "community",
+      "competitions",
+      "education",
+      "emergencies",
+      "environment",
+      "events",
+      "faith",
+      "family",
+      "funerals",
+      "medical",
+      "monthly-bills",
+      "newlyweds",
+      "other",
+      "sports",
+      "travel",
+      "ukraine",
+      "volunteer",
+      "wishes",
       "OTHER",
     ];
 

@@ -2,7 +2,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel"); // Import User model
-require("dotenv").config(); ;
+require("dotenv");
 passport.use(
   new GoogleStrategy(
     {
@@ -14,7 +14,7 @@ passport.use(
     async (request, accessToken, refreshToken, profile, done) => {
       try {
         const email = profile.emails[0].value; // Extract email safely
-        const { role } = JSON.parse(request.query.state || '{}');
+        const { role } = JSON.parse(request.query.state || "{}");
         console.log(role);
         let user = await User.findOne({ email });
 
