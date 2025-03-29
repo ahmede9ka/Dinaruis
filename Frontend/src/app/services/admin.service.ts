@@ -47,4 +47,12 @@ export class AdminService {
 
     return this.http.get<any>(`http://localhost:8000/api/v1/admin/getCampaignsByCategory`, { headers });
   }
+  getTopInvestors(id:any,token:any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<any>(`http://localhost:8000/api/v1/entrepreneur/getTopInvestors/${id}`, { headers });
+  }
 }

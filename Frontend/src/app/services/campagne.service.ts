@@ -19,6 +19,14 @@ export class CampagneService {
 
     return this.http.get<any>(`${this.apiUrl}/campaigns`, { headers });
   }
+  getActiveCampaigns(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<any>(`${this.apiUrl}/campaigns/active-campaigns`, { headers });
+  }
   getDonationByCampaign(campaign:any):Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/donation/getDonationByCampaign/${campaign}`);
   }

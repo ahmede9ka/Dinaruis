@@ -35,7 +35,9 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
   private doughnutChart2: Chart | null = null;
   private barChart: Chart | null = null;
 
-  constructor(private campaignservice: CampagneService, private entrepreneurService: EntrepreneurService) {}
+  constructor(private campaignservice: CampagneService, 
+            private entrepreneurService: EntrepreneurService,
+            ) {}
 
   ngOnInit() {
     const userData = localStorage.getItem('user');

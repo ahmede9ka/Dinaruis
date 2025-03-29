@@ -29,64 +29,76 @@ export class DashboardAdminComponent implements OnInit {
   pending:any;
   nbInvestors:any;
   nbTransactions:any;
+  user:any;
   constructor(private adminService: AdminService,
      private campagneService: CampagneService,
     private investorService:InvestorService,
     private transactionService:TransactionService) {}
 
   ngOnInit() {
-    this.token = localStorage.getItem("token");
-
-    this.adminService.TotalNumberOfUsers(this.token).subscribe((data: any) => {
-      this.users = data.data;
-      this.numberOfUsers = this.users["INVESTOR"] + this.users["ENTREPRENEUR"] + this.users["ADMIN"];
-    });
-
-    this.adminService.AllDonations(this.token).subscribe((data: any) => {
-      this.totalAmount = data.data.totalAmount;
-      this.totalAmountThisMonth = data.data.totalAmountThisMonth;
-      this.totalAmountToday = data.data.totalAmountToday;
-    });
-
-    this.campagneService.getCampaigns(this.token).subscribe((data: any) => {
-      this.nbcampaigns = data.data.length;
-    });
-
-    this.adminService.getDonationsByMonth(this.token).subscribe((data: any) => {
-      this.donationsByMonth = data.data;
-      this.createFondsCollectesChart();
-    });
-
-    this.adminService.getCampaignsByCategory(this.token).subscribe((data: any) => {
-      this.category = data.data.map((item: any) => item.category);
-      this.datacategory = data.data.map((item: any) => item.amount);
-      this.createRepartitionCampagnesChart();
-    });
-    this.adminService.TotalNumberOfCampaignsByStatus(this.token).subscribe((data: any) => {
-      if (!data || !data.data || !data.data.statusCounts) return; // Ensure data exists
+    const userData = localStorage.getItem('user');
+    this.token = localStorage.getItem('token');
     
-      this.status = data.data.statusCounts.map((item: any) => item.status);
-      this.countstatus = data.data.statusCounts.map((item: any) => item.count);
-    
-      console.log(this.status);
-    
-      for (let i = 0; i < this.status.length; i++) {  // Fixed `length` typo
-        console.log(this.status[i]);
-        if (this.status[i] === "Pending") {
-          this.pending = this.countstatus[i];
-          break;
+    if (userData) {
+      this.user = JSON.parse(userData);
+      this.adminService.TotalNumberOfUsers(this.token).subscribe((data: any) => {
+        this.users = data.data;
+        this.numberOfUsers = this.users["INVESTOR"] + this.users["ENTREPRENEUR"] + this.users["ADMIN"];
+      });
+  
+      this.adminService.AllDonations(this.token).subscribe((data: any) => {
+        this.totalAmount = data.data.totalAmount;
+        this.totalAmountThisMonth = data.data.totalAmountThisMonth;
+        this.totalAmountToday = data.data.totalAmountToday;
+      });
+  
+      this.campagneService.getCampaigns(this.token).subscribe((data: any) => {
+        this.nbcampaigns = data.data.length;
+      });
+  
+      this.adminService.getDonationsByMonth(this.token).subscribe((data: any) => {
+        this.donationsByMonth = data.data;
+        this.createFondsCollectesChart();
+      });
+  
+      this.adminService.getCampaignsByCategory(this.token).subscribe((data: any) => {
+        console.log(data);
+        this.category = data.data.map((item: any) => item.category);
+        this.datacategory = data.data.map((item: any) => item.count);
+        console.log(this.category);
+        console.log(this.datacategory)
+        this.createRepartitionCampagnesChart();
+      });
+      this.adminService.TotalNumberOfCampaignsByStatus(this.token).subscribe((data: any) => {
+        if (!data || !data.data || !data.data.statusCounts) return; // Ensure data exists
+      
+        this.status = data.data.statusCounts.map((item: any) => item.status);
+        this.countstatus = data.data.statusCounts.map((item: any) => item.count);
+      
+        console.log(this.status);
+      
+        for (let i = 0; i < this.status.length; i++) {  // Fixed `length` typo
+          console.log(this.status[i]);
+          if (this.status[i] === "Pending") {
+            this.pending = this.countstatus[i];
+            break;
+          }
         }
-      }
+      
+        this.createCampagneValidationChart();
+      });
+      this.investorService.getAllInvestors(this.token).subscribe((data:any)=>{
+        this.nbInvestors = data.data.length;
+      })
+      this.transactionService.getAllTransactions(this.token).subscribe((data:any)=>{
+        this.nbTransactions = data.data.length;
+      })
+      //console.log(this.pending);
+      this.adminService.getTopInvestors(this.user._id,this.token).subscribe((data:any)=>{
+        console.log(data);
+      })
+    }
     
-      this.createCampagneValidationChart();
-    });
-    this.investorService.getAllInvestors(this.token).subscribe((data:any)=>{
-      this.nbInvestors = data.data.length;
-    })
-    this.transactionService.getAllTransactions(this.token).subscribe((data:any)=>{
-      this.nbTransactions = data.data.length;
-    })
-    //console.log(this.pending);
   }
 
   // Function to create Fonds Collectés Chart (Line Chart)
