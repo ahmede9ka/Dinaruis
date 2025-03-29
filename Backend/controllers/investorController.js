@@ -34,11 +34,16 @@ const getInvestmentById = async (req, res, next) => {
 
     // Validate if id is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ status: "failed", message: "Invalid ID format" });
+      return res
+        .status(400)
+        .json({ status: "failed", message: "Invalid ID format" });
     }
 
     // Fetch donations where user ID matches
-    const donations = await Transaction.find({ user: id }).populate('campaign', 'title');;
+    const donations = await Transaction.find({ user: id }).populate(
+      "campaign",
+      "title"
+    );
     res.status(200).json({
       status: "success",
       data: donations,
@@ -163,7 +168,7 @@ const invest = async (req, res, next) => {
     });
   }
 };
-const getAllInvestors = async (req, res, next) => {
+/*const getAllInvestors = async (req, res, next) => {
   try {
     // Find all users with role 'INVESTOR'
     const investors = await User.find({ role: "INVESTOR" });
@@ -171,6 +176,52 @@ const getAllInvestors = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: investors, // Return the 'investors' data here
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: `Error fetching investors: ${error.message}`,
+    });
+  }
+};*/
+const getAllInvestors = async (req, res, next) => {
+  try {
+    // Aggregate total amount donated & count distinct campaigns across all transactions
+    const transactions = await Transaction.aggregate([
+      {
+        $group: {
+          _id: "$user", // Group by user (investor)
+          totalDonated: { $sum: "$amount" }, // Sum total amount donated (across all transaction types)
+          uniqueCampaigns: { $addToSet: "$campaign" }, // Collect unique campaign IDs
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          totalDonated: 1,
+          campaignsInvested: { $size: "$uniqueCampaigns" }, // Count distinct campaigns
+        },
+      },
+    ]);
+
+    // Find all users with role 'INVESTOR'
+    const investors = await User.find({ role: "INVESTOR" });
+
+    // Map totalDonated & campaigns count to each investor
+    const investorsWithDonations = investors.map((investor) => {
+      const transaction = transactions.find(
+        (t) => t._id?.toString() === investor._id.toString()
+      );
+      return {
+        ...investor.toObject(), // Convert Mongoose object to plain object
+        totalDonated: transaction ? transaction.totalDonated : 0, // Attach total donated amount
+        campaignsInvested: transaction ? transaction.campaignsInvested : 0, // Attach unique campaign count
+      };
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: investorsWithDonations, // Return investors with donation stats
     });
   } catch (error) {
     res.status(400).json({
