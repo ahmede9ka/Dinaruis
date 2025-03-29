@@ -29,7 +29,8 @@ export class FundingRequestsComponent implements OnInit {
     if (userData && this.token) {
       this.user = JSON.parse(userData);
       this.transactionService.getTransactionEnt(this.user._id, this.token).subscribe((data: any) => {
-        this.transactions = data.data;
+        this.transactions = data;
+        console.log(this.transactions)
       });
     }
   }

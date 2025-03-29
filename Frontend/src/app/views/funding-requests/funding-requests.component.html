@@ -7,7 +7,7 @@
     <thead class="text-xs text-[#0D1F2D] uppercase bg-white dark:bg-white dark:text-[#0D1F2D]">
       <tr>
         <th scope="col" class="px-6 py-3">
-          Request Title
+          Campaign Title
         </th>
         <th scope="col" class="px-6 py-3">
           Amount Requested
@@ -24,9 +24,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let transaction of paginatedFunds()" class="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200">
+      <tr *ngFor="let transaction of transactions" class="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200">
         <td class="px-6 py-4">
-          {{ transaction.title }}
+          {{ transaction.campaign.title }}
         </td>
         <td class="px-6 py-4">
           {{ transaction.amount  }}

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Transaction = require("../models/transactionModel");
 const Campaign = require("../models/campaignModel");
 const AppError = require("../utils/appError");
@@ -13,22 +14,21 @@ const createTransaction = async (req, res, next) => {
       return next(new AppError("Campaign not found", 404));
     }
 
-    // Create the transaction
+    // Create and save the transaction
     const transaction = new Transaction({
-      user: mongoose.Types.ObjectId(user),
-      campaign: mongoose.Types.ObjectId(campaign),
+      user: new mongoose.Types.ObjectId(user),
+      campaign: new mongoose.Types.ObjectId(campaign),
       type,
     });
 
+    await transaction.save(); // Ensure it is saved
+
     res.status(201).json({
       status: "success",
-      data: newTransaction,
+      data: transaction,
     });
   } catch (error) {
-    res.status(400).json({
-      status: "failed",
-      message: `Error creating transaction: ${error.message}`,
-    });
+    next(new AppError(`Error creating transaction: ${error.message}`, 400));
   }
 };
 
@@ -45,10 +45,7 @@ const getAllTransactions = async (req, res, next) => {
       data: transactions,
     });
   } catch (error) {
-    res.status(500).json({
-      status: "failed",
-      message: `Error fetching transactions: ${error.message}`,
-    });
+    next(new AppError(`Error fetching transactions: ${error.message}`, 500));
   }
 };
 
@@ -69,10 +66,7 @@ const getTransactionById = async (req, res, next) => {
       data: transaction,
     });
   } catch (error) {
-    res.status(500).json({
-      status: "failed",
-      message: `Error fetching transaction: ${error.message}`,
-    });
+    next(new AppError(`Error fetching transaction: ${error.message}`, 500));
   }
 };
 
@@ -82,7 +76,6 @@ const updateTransaction = async (req, res, next) => {
     const { id } = req.params;
     const { user, campaign, type } = req.body;
 
-    // Find the transaction by ID and update
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       id,
       { user, campaign, type },
@@ -100,56 +93,35 @@ const updateTransaction = async (req, res, next) => {
       data: updatedTransaction,
     });
   } catch (error) {
-    res.status(400).json({
-      status: "failed",
-      message: `Error updating transaction: ${error.message}`,
-    });
+    next(new AppError(`Error updating transaction: ${error.message}`, 400));
   }
 };
+
+// Get Transactions for an Entrepreneur
 const getTransactionForEnt = async (req, res, next) => {
   try {
-    const userId = req.params.userId;
+    const { id } = req.params; // ID of the entrepreneur (campaign creator)
 
-    // Aggregate to join transactions with campaigns and filter by userId
-    const transactions = await Transaction.aggregate([
-      {
-        $lookup: {
-          from: "campaigns", // Collection name in MongoDB
-          localField: "campaign",
-          foreignField: "_id",
-          as: "campaignDetails",
-        },
-      },
-      {
-        $unwind: "$campaignDetails",
-      },
-      {
-        $match: {
-          "campaignDetails.user": new mongoose.Types.ObjectId(userId),
-        },
-      },
-      {
-        $project: {
-          _id: 1, // Include transaction ID
-          amount: 1, // Include transaction amount (example field)
-          date: 1, // Include transaction date (example field)
-          "campaignDetails.title": 1, // Include campaign title
-        },
-      },
-    ]);
+    // Find all campaigns created by the entrepreneur
+    const campaigns = await Campaign.find({ user: id }).select("_id");
 
-    res.status(200).json({
-      status: "success",
-      data: transactions,
-    });
+    if (!campaigns.length) {
+      return res.status(404).json({ message: "No campaigns found for this entrepreneur" });
+    }
+
+    const campaignIds = campaigns.map(campaign => campaign._id); // Extract campaign IDs
+    console.log(campaignIds);
+    // Fetch transactions for these campaigns
+    const transactions = await Transaction.find({ campaign: { $in: campaignIds } })
+      .populate("user", "firstName lastName email") // Populate Investor details
+      .populate("campaign", "title amountGoal raisedAmount"); // Populate Campaign details
+
+    res.status(200).json(transactions);
   } catch (error) {
-    res.status(500).json({
-      status: "failed",
-      message: `Error fetching transactions: ${error.message}`,
-    });
+    console.error("Error fetching transactions:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 // Delete Transaction
 const deleteTransaction = async (req, res, next) => {
   try {
@@ -165,60 +137,47 @@ const deleteTransaction = async (req, res, next) => {
       data: null,
     });
   } catch (error) {
-    res.status(400).json({
-      status: "failed",
-      message: `Error deleting transaction: ${error.message}`,
-    });
+    next(new AppError(`Error deleting transaction: ${error.message}`, 400));
   }
 };
+
+// Get Top Investors
 const TopInvestors = async (req, res, next) => {
   try {
     const topInvestors = await Transaction.aggregate([
       {
         $group: {
-          _id: '$user', // Group by user (assuming 'user' is the reference to the User model)
-          totalAmount: { $sum: '$amount' }, // Sum up the transaction amounts
+          _id: "$user",
+          totalAmount: { $sum: "$amount" },
         },
       },
       {
         $lookup: {
-          from: 'users', // Correct collection name for the 'users' collection
-          localField: '_id', // 'user' in Transaction should match '_id' in User collection
-          foreignField: '_id', // Match against the '_id' field in the 'users' collection
-          as: 'userDetails', // The name of the new field to hold matched user data
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDetails",
         },
       },
-      {
-        $unwind: '$userDetails', // Unwind the userDetails array to get individual user data
-      },
+      { $unwind: "$userDetails" },
       {
         $project: {
-          _id: 0, // Exclude the internal _id field from the result
-          totalAmount: 1, // Include the totalAmount field
-          'userDetails.firstname': 1, // Include the firstname from the userDetails
-          'userDetails.lastname': 1, // Include the lastname from the userDetails
+          _id: 0,
+          totalAmount: 1,
+          "userDetails.firstName": 1,
+          "userDetails.lastName": 1,
         },
       },
-      {
-        $sort: { totalAmount: -1 }, // Sort by totalAmount in descending order
-      },
-      {
-        $limit: 5, // Limit the result to top 5 investors
-      },
+      { $sort: { totalAmount: -1 } },
+      { $limit: 5 },
     ]);
 
-    console.log(topInvestors); // Log the result for debugging
-
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: topInvestors,
     });
   } catch (error) {
-    console.error(error); // Log the error for better debugging
-    res.status(500).json({
-      status: 'failed',
-      message: `Error fetching top investors: ${error.message}`,
-    });
+    next(new AppError(`Error fetching top investors: ${error.message}`, 500));
   }
 };
 
@@ -229,5 +188,5 @@ module.exports = {
   updateTransaction,
   deleteTransaction,
   TopInvestors,
-  getTransactionForEnt
+  getTransactionForEnt,
 };
