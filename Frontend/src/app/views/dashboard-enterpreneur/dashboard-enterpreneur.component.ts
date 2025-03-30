@@ -28,7 +28,9 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
   TotalUniqueInvestors: number = 0;
   months: any[] = [];
   monthsAmount: any[] = [];
-
+  investments:any;
+  investmentKeys:any;
+  investmentValues:any;
   // Store chart instances
   private lineChart: Chart | null = null;
   private doughnutChart: Chart | null = null;
@@ -68,6 +70,16 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
         this.months = data.monthlyDonations.map((item: any) => item.month);
         this.monthsAmount = data.monthlyDonations.map((item: any) => item.totalAmount);
         this.initializeCharts();
+      });
+      this.entrepreneurService.getInvestmentTypeCount(this.user._id, this.token).subscribe((data: any) => {
+        this.investments = data.investmentCounts;
+      
+        // Get the keys and values as separate arrays
+        this.investmentKeys = Object.keys(this.investments);  // This will give you an array of keys
+        this.investmentValues = Object.values(this.investments);  // This will give you an array of values
+      
+        console.log(this.investmentKeys);   // Output: ['donation', 'equity-based investment', 'loan-based investment', 'rewards-based investment']
+        console.log(this.investmentValues); // Output: [2, 0, 0, 0]
       });
     }
   }
@@ -144,9 +156,9 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
     this.doughnutChart2 = new Chart(canvas, {
       type: 'doughnut',
       data: {
-        labels: ['Environment', 'Education', 'Business'],
+        labels: this.investmentKeys,
         datasets: [{
-          data: [3, 7, 2], // Replace with dynamic values if available
+          data: this.investmentValues, // Replace with dynamic values if available
           backgroundColor: ['#4CAF50', '#FFD700', '#1F2937']
         }]
       }

@@ -24,6 +24,13 @@ export class DashboardInvestiseurComponent implements OnInit {
   totalInvestment:any;
   advice:string="";
   supportedProjects:number=0;
+  investmentTypes = [ "donation",
+    "equity-based investment",
+    "loan-based investment",
+    "rewards-based investment",]
+  investmentTypescount=[0,0,0,0]
+  keys:any;
+  values:any;
   // Charts data (mock data for demonstration)
   evolutionData: any = [100000, 150000, 250000, 400000, 500000];  // Investment over time
   repartitionData: any = [40, 30, 15, 15];  // Investment distribution by sectors
@@ -51,7 +58,19 @@ export class DashboardInvestiseurComponent implements OnInit {
       this.investorService.getSupportedProjectCount(this.user._id,this.token).subscribe((data:any)=>{
         this.supportedProjects = data.supportedProjectsCount;
       })
-    
+      this.investorService.getInvestmentTypeCountForInvestor(this.user._id,this.token).subscribe((data:any)=>{
+        const dt = data.investmentTypeCounts
+        this.investmentTypescount[0]+=dt["donation"];
+        this.investmentTypescount[1]+=dt["equity-based investment"]
+        this.investmentTypescount[2]+=dt["loan-based investment"];
+        this.investmentTypescount[3]+=dt["rewards-based investment"];
+      })
+      this.investorService.countCampaignTypesInvestorInvestedIn(this.user._id, this.token).subscribe((data: any) => {
+        this.keys = Object.keys(data.campaignTypeInvestments);
+        this.values = Object.values(data.campaignTypeInvestments);
+        console.log(this.keys);
+        console.log(this.values);
+      });
     }
     
   }
@@ -102,10 +121,10 @@ export class DashboardInvestiseurComponent implements OnInit {
     new Chart('repartitionChart', {
       type: 'doughnut',
       data: {
-        labels: ['Projets favori', 'Projets sectoriels', 'Autres'],
+        labels: this.investmentTypes,
         datasets: [{
           label: 'Répartition des investissements',
-          data: this.repartitionData,
+          data: this.investmentTypescount,
           backgroundColor: ['#FFD700', '#4CAF50', '#1F2937'],
           borderWidth: 1
         }]
@@ -119,10 +138,10 @@ export class DashboardInvestiseurComponent implements OnInit {
     new Chart('investissementsTypeChart', {
       type: 'bar',
       data: {
-        labels: ['Prêts', 'Dons', 'Participation au capital', 'Autres'],
+        labels: this.keys,
         datasets: [{
           label: 'Investissements par type',
-          data: this.investissementsTypeData,
+          data: this.values,
           backgroundColor:'rgba(76, 175, 80, 0.2)',
           borderColor: '#4CAF50',
           borderWidth: 1

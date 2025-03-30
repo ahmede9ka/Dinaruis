@@ -35,7 +35,7 @@ export class CampagneService {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
-    return this.http.get<any>(`${this.apiUrl}/campaigns/${id}`,{headers});
+    return this.http.get<any>(`${this.apiUrl}/campaigns/getCampaignsByEntrepreneur/${id}`,{headers});
   }
   createCampaign(data:any,token:any):Observable<any> {
     const headers = new HttpHeaders({
@@ -85,5 +85,12 @@ export class CampagneService {
       'Content-Type': 'application/json',
     });
     return this.http.get<any>(`${this.apiUrl}/campaigns/getFavorite/${investor_id}`,{headers});
+  }
+  sendMail(data:any,token:any):Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.post<any>(`http://localhost:8000/api/v1/sendmail`,data,{headers});
   }
 }

@@ -16,19 +16,28 @@ const {
   deleteCampaign,
   updateCampaign,
   getCampaignById,
+  getCampaign,
+  getActiveCampaigns,
+  getFavoriteCampaigns,
+  AddFavorite,
+  getCampaignsByEntrepreneur
 } = require("../controllers/compaignController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
-
+router.get("/active-campaigns",protect,getActiveCampaigns);
+router.get("/getFavorite/:investor_id",protect,getFavoriteCampaigns);
+router.get("/addFavorite/:campaign_id/:investor_id",protect,AddFavorite)
 router.get(
   "/getTotalDonationsByEntrepreneur/:id",
   protect,
   getTotalDonationsByEntrepreneur
 );
+router.get("/getCampaignsByEntrepreneur/:id",protect,getCampaignsByEntrepreneur)
+router.get("/",protect,getCampaign)
 router.post("/create", protect, createCampaign);
 router.delete("/:id", protect, deleteCampaign);
 router.put("/:id", protect, updateCampaign);
-router.get("/:id", protect, getCampaignById);
+router.get("/getcampaign/:id", protect, getCampaignById);
 
 router.get("/getCampaignStatusCount/:id", protect, getCampaignStatusCount);
 

@@ -37,4 +37,26 @@ export class EntrepreneurService {
     });
     return this.http.get<any>(`${this.apiUrl}/getMonthlyCollectedAmount/${id}`, { headers });
   }
+  getInvestmentTypeCount(id:any,token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/getInvestmentTypeCount/${id}`, { headers });
+  }
+  getCampaignTypesWithTransactionCounts(id:any,token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/getCampaignTypesWithTransactionCounts/${id}`, { headers });
+  }
+  getCampaignsCountByCategory(id:any,token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(`${this.apiUrl}/getCampaignsCountByCategory/${id}`, { headers });
+  }
+
 }

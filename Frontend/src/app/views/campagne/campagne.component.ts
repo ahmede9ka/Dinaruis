@@ -37,6 +37,7 @@ export class CampagneComponent implements OnInit {
   token:any;
   selectedAmount:number=0;
   data:any;
+  user:any;
   constructor(private route: ActivatedRoute,
             private campaignService:CampagneService,
             private investorService:InvestorService,
@@ -44,15 +45,21 @@ export class CampagneComponent implements OnInit {
             private router:Router) {}
 
   ngOnInit(): void {
-    this.token = localStorage.getItem("token");
-    this.route.paramMap.subscribe(params => {
-      this.campaignId = params.get('id');
-      console.log("aaa");
-      console.log('Campaign ID:', this.campaignId);
-    });
-    this.campaignService.getCampaignById(this.campaignId,this.token).subscribe((data:any)=>{
-      this.campaign = data.data;
-    })
+    const userData = localStorage.getItem('user');
+    this.token = localStorage.getItem('token');
+    
+    if (userData) {
+      this.user = JSON.parse(userData);
+      this.route.paramMap.subscribe(params => {
+        this.campaignId = params.get('id');
+        console.log("aaa");
+        console.log('Campaign ID:', this.campaignId);
+      });
+      this.campaignService.getCampaignById(this.campaignId,this.token).subscribe((data:any)=>{
+        this.campaign = data.data;
+      })
+    }
+    
     
   }
   selectAmount(amount:number){
@@ -82,5 +89,34 @@ export class CampagneComponent implements OnInit {
       }
     });
   }
-  
+  Equity(){
+    const data = {
+        "campaign_id":this.campaignId,
+        "investmentType":"equity-based investment",
+        "investor_id":this.user._id,
+    }
+    this.campaignService.sendMail(data,this.token).subscribe((data:any)=>{
+      console.log(data);
+    })
+  }
+  Loan(){
+    const data = {
+      "campaign_id":this.campaignId,
+      "investmentType":"loan-based investment",
+      "investor_id":this.user._id,
+  }
+  this.campaignService.sendMail(data,this.token).subscribe((data:any)=>{
+    console.log(data);
+  })
+  }
+  Reward(){
+    const data = {
+      "campaign_id":this.campaignId,
+      "investmentType":"rewards-based investment",
+      "investor_id":this.user._id,
+  }
+  this.campaignService.sendMail(data,this.token).subscribe((data:any)=>{
+    console.log(data);
+  })
+  }
 }

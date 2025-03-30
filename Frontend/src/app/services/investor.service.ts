@@ -68,4 +68,18 @@ export class InvestorService {
       });
       return this.http.get<any>(`${this.apiUrl}/getMonthlyInvestment/${id}`, { headers });
     }
+    getInvestmentTypeCountForInvestor(id:any,token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`http://localhost:8000/api/v1/investor/getInvestmentTypeCountForInvestor/${id}`, { headers });
+    }
+    countCampaignTypesInvestorInvestedIn(id:any,token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+      return this.http.get<any>(`http://localhost:8000/api/v1/investor/countCampaignTypesInvestorInvestedIn/${id}`, { headers });
+    }
 }
