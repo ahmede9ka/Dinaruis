@@ -40,6 +40,10 @@ const userSchema = new Schema({
     type: String,
     //required: [true, "A user must have a phone number"],
   },
+  image: {
+    type: String,
+    required: [true, "A User must have an image"],
+  },
   role: {
     type: String,
     enum: ["ADMIN", "ENTREPRENEUR", "INVESTOR"],
