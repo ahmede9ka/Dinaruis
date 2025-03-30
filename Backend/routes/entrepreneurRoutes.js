@@ -10,6 +10,7 @@ const {
   getTopInvestors,
   getInvestmentTypeCount,
   getCampaignTypesWithTransactionCounts,
+  getCampaignsCountByCategory,
 } = require("../controllers/entrepreneurController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
@@ -22,6 +23,11 @@ router.get(
 router.get("/getCampaignStatusCount/:id", protect, getCampaignStatusCount);
 
 router.get("/getInvestmentTypeCount/:id", protect, getInvestmentTypeCount);
+router.get(
+  "/getCampaignsCountByCategory/:id",
+  protect,
+  getCampaignsCountByCategory
+);
 
 router.get(
   "/getCampaignTypesWithTransactionCounts/:id",

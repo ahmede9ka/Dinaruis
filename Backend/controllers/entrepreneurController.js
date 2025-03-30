@@ -393,6 +393,38 @@ const getCampaignTypesWithTransactionCounts = async (req, res) => {
   }
 };
 
+const getCampaignsCountByCategory = async (req, res) => {
+  try {
+    const entrepreneurId = req.params.id;
+
+    // 1) Find all campaigns by this entrepreneur excluding those with "Cancelled" status
+    const campaigns = await Campaign.find({
+      user: entrepreneurId,
+      status: { $ne: "Cancelled" }, // Exclude "Cancelled" status campaigns
+    });
+
+    if (campaigns.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No active campaigns found for this entrepreneur" });
+    }
+
+    // 2) Group campaigns by category (type) and count them
+    const campaignsCountByCategory = campaigns.reduce((acc, campaign) => {
+      const type = campaign.type;
+      acc[type] = (acc[type] || 0) + 1; // Increment count for category
+      return acc;
+    }, {});
+
+    // 3) Return the count of campaigns by category
+    res.status(200).json({
+      campaignsCountByCategory,
+    });
+  } catch (error) {
+    console.error("Error fetching campaigns count by category:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getTotalDonationsByEntrepreneur,
   getCampaignStatusCount,
@@ -402,4 +434,5 @@ module.exports = {
   getTopInvestors,
   getInvestmentTypeCount,
   getCampaignTypesWithTransactionCounts,
+  getCampaignsCountByCategory,
 };
