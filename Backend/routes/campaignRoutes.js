@@ -11,7 +11,11 @@ const {
   getInvestmentTypeCount,
   getCampaignTypesWithTransactionCounts,
 } = require("../controllers/entrepreneurController");
-const { createCampaign } = require("../controllers/compaignController");
+const {
+  createCampaign,
+  deleteCampaign,
+  updateCampaign,
+} = require("../controllers/compaignController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
 
@@ -21,6 +25,8 @@ router.get(
   getTotalDonationsByEntrepreneur
 );
 router.post("/create", protect, createCampaign);
+router.delete("/:id", protect, deleteCampaign);
+router.put("/:id", protect, updateCampaign);
 
 router.get("/getCampaignStatusCount/:id", protect, getCampaignStatusCount);
 
