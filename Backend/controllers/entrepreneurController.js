@@ -161,7 +161,7 @@ const invest = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: "failed",
-      message: Error creating donation : ${error.message},
+      message: `Error creating donation : ${error.message}`,
     });
   }
 };
@@ -187,8 +187,8 @@ const getMonthlyCollectedAmount = async (req, res) => {
     const donations = await Donation.find({
       campaign: { $in: campaignIds },
       date: {
-        $gte: new Date(${currentYear}-01-01T00:00:00.000Z), // Start of year
-        $lt: new Date(${currentYear + 1}-01-01T00:00:00.000Z), // End of year
+        $gte: new Date(`${currentYear}-01-01T00:00:00.000Z`), // Start of year
+        $lt: new Date(`${currentYear + 1}-01-01T00:00:00.000Z`), // End of year
       },
     });
 
