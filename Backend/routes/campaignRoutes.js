@@ -15,6 +15,7 @@ const {
   createCampaign,
   deleteCampaign,
   updateCampaign,
+  getCampaignById,
 } = require("../controllers/compaignController");
 // create user is just for testing
 //router.post("/create", protect, createUser);
@@ -27,6 +28,7 @@ router.get(
 router.post("/create", protect, createCampaign);
 router.delete("/:id", protect, deleteCampaign);
 router.put("/:id", protect, updateCampaign);
+router.get("/:id", protect, getCampaignById);
 
 router.get("/getCampaignStatusCount/:id", protect, getCampaignStatusCount);
 
