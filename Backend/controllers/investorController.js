@@ -247,6 +247,81 @@ const getAdvice = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+const getInvestmentTypeCountForInvestor = async (req, res) => {
+  try {
+    const investorId = req.params.id;
+
+    // 1) Aggregate transactions made by this specific investor
+    const transactionCounts = await Transaction.aggregate([
+      {
+        $match: { user: new mongoose.Types.ObjectId(investorId) }, // Filter by investor ID
+      },
+      {
+        $group: {
+          _id: "$type", // Group by transaction type
+          count: { $sum: 1 }, // Count occurrences
+        },
+      },
+    ]);
+
+    // 2) Format response
+    const investmentTypeCounts = transactionCounts.reduce((acc, item) => {
+      acc[item._id] = item.count;
+      return acc;
+    }, {});
+
+    res.status(200).json({
+      //investorId,
+      investmentTypeCounts,
+    });
+  } catch (error) {
+    console.error("Error fetching investment type count for investor:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const countCampaignTypesInvestorInvestedIn = async (req, res) => {
+  try {
+    const investorId = req.params.id;
+
+    // 1) Find all transactions by this investor
+    const transactions = await Transaction.find({ user: investorId }).populate(
+      "campaign"
+    );
+
+    if (transactions.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No investments found for this investor" });
+    }
+
+    // 2) Extract campaign types from transactions and count unique campaigns per type
+    const campaignTypeCounts = transactions.reduce((acc, transaction) => {
+      const campaignType = transaction.campaign.type;
+
+      // Ensure each campaign is counted only once per type
+      if (!acc[campaignType]) {
+        acc[campaignType] = new Set();
+      }
+      acc[campaignType].add(transaction.campaign._id);
+
+      return acc;
+    }, {});
+
+    // Convert sets to counts
+    const result = Object.fromEntries(
+      Object.entries(campaignTypeCounts).map(([type, campaigns]) => [
+        type,
+        campaigns.size,
+      ])
+    );
+
+    res.status(200).json({ campaignTypeInvestments: result });
+  } catch (error) {
+    console.error("Error fetching campaign types investor invested in:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   getInvestment,
@@ -257,4 +332,6 @@ module.exports = {
   getTotalInvestment,
   getAllInvestors,
   getAdvice,
+  getInvestmentTypeCountForInvestor,
+  countCampaignTypesInvestorInvestedIn,
 };
