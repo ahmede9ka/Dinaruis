@@ -3,15 +3,11 @@
     <table class="w-full text-sm text-left rtl:text-right text-[#0D1F2D] dark:text-[#0D1F2D]">
         <thead class="text-xs text-[#0D1F2D] uppercase bg-white dark:bg-white dark:text-[#0D1F2D]">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    Campaign ID
-                </th>
+               
                 <th scope="col" class="px-6 py-3">
                     Campaign Name
                 </th>
-                <th scope="col" class="px-6 py-3">
-                    Description
-                </th>
+               
                 <th scope="col" class="px-6 py-3">
                     Category
                 </th>
@@ -44,17 +40,16 @@
         <tbody>
             <!-- Example Campaign 1 -->
             <tr class="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200" *ngFor="let element of paginatedElements()">
-                <th scope="row" class="px-6 py-3 ">
-                    C123456
-                </th>
+                
                 <td class="px-6 py-3">
                     {{element.title}}
                 </td>
+                
                 <td class="px-6 py-3">
-                    {{element.description}}
-                </td>
-                <td class="px-6 py-3">
-                    {{element.type}}
+                    <span class="px-3 py-1 font-bold rounded-full border"
+                    [ngClass]="getTypeClass(element.type)">
+                {{ element.type }}
+              </span>
                 </td>
                 <td class="px-6 py-3">
                     {{element.amountGoal}}
@@ -63,13 +58,16 @@
                     {{element.raisedAmount}}
                 </td>
                 <td class="px-6 py-3">
-                    {{element.startDate}}
+                    {{element.startDate | date:'MMM d, yyyy' }}
                 </td>
                 <td class="px-6 py-3">
-                    {{element.endDate}}
+                    {{element.endDate | date:'MMM d, yyyy' }}
                 </td>
                 <td class="px-6 py-3">
-                    {{element.status}}
+                    <span class="px-3 py-1 text-white font-bold rounded-full"
+                    [ngClass]="getStatusClass(element.status)">
+                        {{ element.status }}
+                    </span>
                 </td>
                 <td class="px-6 py-3">
                     150
@@ -78,24 +76,24 @@
                     {{element.user.firstName}}
                 </td>
                 <td class="px-3 py-3 flex space-x-3">
-                    <button class="p-2 text-blue-500 rounded hover:bg-blue-600">
+                    <!-- View Button (Shown if status is NOT Pending) -->
+                    <button *ngIf="element.status !== 'Pending'" class="p-2 text-blue-500 rounded hover:bg-blue-200">
                       <lucide-icon [name]="icons.Eye" class="w-5 h-5"></lucide-icon> View
                     </button>
                 
-                    <button class="p-2 text-yellow-500 rounded hover:bg-yellow-600">
-                      <lucide-icon [name]="icons.Edit" class="w-5 h-5"></lucide-icon> Edit
-                    </button>
-                 
-                    <button class="p-2 text-green-500 rounded hover:bg-green-600" (click)="activate(element._id)">
+                    <!-- Activate Button (Only for Pending Status) -->
+                    <button *ngIf="element.status === 'Pending'" class="p-2 text-green-500 rounded hover:bg-green-200" 
+                            (click)="activate(element._id)">
                       <lucide-icon [name]="icons.CheckSquare" class="w-5 h-5"></lucide-icon> Activate
                     </button>
                   
-                  
-                  
-                    <button class="p-2 text-red-500 rounded hover:bg-red-600" (click)="delete(element._id)">
+                    <!-- Delete Button (Always Visible) -->
+                    <button class="p-2 text-red-500 rounded hover:bg-red-200" (click)="delete(element._id)">
                       <lucide-icon [name]="icons.Trash" class="w-5 h-5"></lucide-icon> Delete
                     </button>
+
                   </td>
+                  
                   
                   
             </tr>
@@ -115,4 +113,23 @@
             Next
         </button>
     </div>
+
+      
+      <!-- Toast container (Flowbite Toast) -->
+      <div id="toast" class="hidden fixed top-0 right-0 z-50 p-4 w-full max-w-xs mt-16">
+        <div id="toast-success" class="flex items-center w-full max-w-xs p-4 bg-green-500 text-white rounded-lg shadow-lg">
+          <span class="mr-4">✅</span>
+          <span>Campagne activated!</span>
+          <button id="close-toast" class="ml-auto text-white" (click)="closeToast()">X</button>
+        </div>
+      </div>
+      <!-- Toast container (Flowbite Toast) -->
+      <div id="toast2" class="hidden fixed top-0 right-0 z-50 p-4 w-full max-w-xs mt-16">
+        <div id="toast-success" class="flex items-center w-full max-w-xs p-4 bg-red-500 text-white rounded-lg shadow-lg">
+          <span class="mr-4">❌</span>
+          <span>Campagne Deleted!</span>
+          <button id="close-toast" class="ml-auto text-white" (click)="closeToast()">X</button>
+        </div>
+      </div>
+      
 </div>

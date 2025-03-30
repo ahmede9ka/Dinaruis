@@ -1,6 +1,6 @@
 <div class="max-w-7xl mx-auto p-6 font-sans">
     <!-- Campaign Title -->
-    <h1 class="text-4xl font-bold text-gray-900 mb-6">
+    <h1 class="text-4xl font-bold text-[#0D1F2D] mb-6">
         {{ campaign.title }}
     </h1>
 
@@ -9,19 +9,19 @@
         <div class="md:col-span-2">
             <!-- Campaign Image -->
             <div class="rounded-lg overflow-hidden mb-6">
-                <img [src]="campaign.image" alt="Campaign image" class="w-full h-auto object-cover">
+                <img [src]="campaign.image" alt="Campaign image" class="w-full h-[300px] object-cover">
             </div>
 
             <!-- Organizer Info (Modify as needed) -->
             <div class="flex items-center gap-3 mb-4">
-                <img src="default-avatar.png" alt="Organizer" class="w-12 h-12 rounded-full">
-                <p class="text-gray-700">
-                    Organizer information here (Modify if applicable)
+                <img src={{user.image}} alt="Organizer" class="w-12 h-12 rounded-full">
+                <p class="text-[#0D1F2D]">
+                    {{user.firstName}} {{user.lastName}}
                 </p>
             </div>
 
             <!-- Donation Protected Badge -->
-            <div class="border-t border-b border-gray-200 py-3 my-4">
+            <div class="border-t border-b border-[#FDFAF6] py-3 my-4">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm">
                     <i class="fas fa-shield-alt"></i>
                     Donation protected
@@ -29,9 +29,10 @@
             </div>
 
             <!-- Campaign Story -->
-            <div class="text-gray-700 space-y-4">
+            <div class="text-[#0D1F2D] space-y-4">
                 <p>{{ campaign.description }}</p>
             </div>
+        
 
             <!-- Carousel of Images -->
             <div class="relative mb-6">
@@ -41,18 +42,18 @@
                     </div>
                 </div>
                 <!-- Carousel Controls -->
-                <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full">&#10094;</button>
-                <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full">&#10095;</button>
+                <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-[#0D1F2D] text-white p-2 rounded-full">&#10094;</button>
+                <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-[#0D1F2D] text-white p-2 rounded-full">&#10095;</button>
             </div>
 
         </div>
 
         <!-- Donation Sidebar -->
         <div class="md:col-span-1">
-            <div class="bg-white rounded-lg border border-gray-200 p-6 sticky top-4 shadow-md">
+            <div class="bg-white rounded-lg border border-[#FDFAF6] p-6 sticky top-4 shadow-md">
                 <!-- Progress Stats -->
                 <div class="mb-6">
-                    <h2 class="text-3xl font-bold text-gray-800">{{ campaign.raisedAmount }} DT raised</h2>
+                    <h2 class="text-3xl font-bold text-[#4CAF50]">{{ campaign.raisedAmount }} DT raised</h2>
                     <p class="text-gray-500">
                         {{ campaign.amountGoal }} DT target
                     </p>
@@ -60,86 +61,71 @@
                         <flowbite-progress [progress]="(campaign.raisedAmount / campaign.amountGoal) * 100" [color]="'blue'" [size]="'lg'" />
                     </div>
                     <div class="flex justify-end mt-1">
-                        <span class="text-blue-600 font-medium">{{ (campaign.raisedAmount / campaign.amountGoal) * 100 | number: '1.0-0' }}%</span>
+                        <span class="text-[#4CAF50] font-medium">{{ (campaign.raisedAmount / campaign.amountGoal) * 100 | number: '1.0-0' }}%</span>
                     </div>
                 </div>
 
                 <!-- Donation Amount Buttons -->
                 <div class="flex gap-3 mb-6">
                     <button type="button" 
-                        class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6]00 transition rounded-lg text-gray-800 font-medium w-full"
+                        [ngClass]="{'bg-[#4CAF50] text-white': selectedAmount === 1, 'bg-[#FDFAF6] text-gray-800 hover:bg-[#FAF1E6]': selectedAmount !== 1}"
                         (click)="selectAmount(1)">
                         1 DT
                     </button>
                     <button type="button" 
-                        class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6]00 transition rounded-lg text-gray-800 font-medium w-full"
+                        [ngClass]="{'bg-[#4CAF50] text-white': selectedAmount === 50, 'bg-[#FDFAF6] text-gray-800 hover:bg-[#FAF1E6]': selectedAmount !== 50}"
                         (click)="selectAmount(50)">
                         50 DT
                     </button>
                     <button type="button" 
-                        class="py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium w-full"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6]00 transition rounded-lg text-gray-800 font-medium w-full"
+                        [ngClass]="{'bg-[#4CAF50] text-white': selectedAmount === 100, 'bg-[#FDFAF6] text-gray-800 hover:bg-[#FAF1E6]': selectedAmount !== 100}"
                         (click)="selectAmount(100)">
-                        100 DT
+                        100 DT (Most)
                     </button>
                     <button type="button" 
-                        class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6]00 transition rounded-lg text-gray-800 font-medium w-full"
+                        [ngClass]="{'bg-[#4CAF50] text-white': selectedAmount === 1000, 'bg-[#FDFAF6] text-gray-800 hover:bg-[#FAF1E6]': selectedAmount !== 1000}"
                         (click)="selectAmount(1000)">
                         1000 DT
                     </button>
                 </div>
                 
-                <p>Selected Amount: {{ selectedAmount }} DT</p>
+                
                 
 
                 <!-- Action Buttons -->
                 <div class="space-y-3 mb-6">
-                    <button type="button" class="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium">
-                        Share
-                    </button>
-                    <button (click)="donate()" type="button" class="w-full py-3 bg-green-500 hover:bg-green-600 transition text-white rounded-lg font-medium">
+                   
+                    <button (click)="donate()" type="button" class="w-full py-3 bg-[#4CAF50] hover:bg-green-600 transition text-white rounded-lg font-medium">
                         Donate Now
                     </button>
                 </div>
 
                 <!-- Funding Options -->
-                <div class="border-2 border-gray-300 rounded-lg p-4 mb-6">
-                    <div class="text-center text-gray-700 font-medium mb-4">
+                <div class="border-2 border-[#FAF1E6]00 rounded-lg p-4 mb-6">
+                    <div class="text-center text-[#0D1F2D] font-medium mb-4">
                         Interested in other funding options?
                     </div>
                     <div class="flex gap-3">
-                        <button (click)="Equity()" type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                        <button (click)="Equity()" type="button" class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
                             Equity
                         </button>
-                        <button (click)="Reward()" type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                        <button (click)="Reward()" type="button" class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
                             Reward
                         </button>
-                        <button (click)="Loan()" type="button" class="py-3 bg-gray-200 hover:bg-gray-300 transition rounded-lg text-gray-800 font-medium w-full">
+                        <button (click)="Loan()" type="button" class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
                             Loan-Based
                         </button>
                     </div>
                 </div>
+                <button type="button" class="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium">
+                    Share
+                </button>
 
-                <!-- Recent Donations -->
-                <div class="pt-4 border-t border-gray-200">
-                    <div class="flex items-center gap-3 mb-4 text-blue-700">
-                        <div class="bg-blue-100 p-2 rounded-full">
-                            <i class="fas fa-hand-holding-heart"></i>
-                        </div>
-                        <p class="font-medium">
-                            Recent donations (Modify if applicable)
-                        </p>
-                    </div>
-
-                    <!-- View More Buttons -->
-                    <div class="grid grid-cols-2 gap-3 mt-6">
-                        <button type="button" class="py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                            See all
-                        </button>
-                        <button type="button" class="py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                            See top
-                        </button>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

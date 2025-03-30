@@ -21,8 +21,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let investment of paginatedInvestments()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <tr *ngFor="let investment of paginatedInvestments()" class="bg-white border-b dark:bg-white dark:border-gray-700 border-gray-200">
+          <td class="px-6 py-4 font-medium ">
             {{investment.campaign.title}}
           </td>
           <td class="px-6 py-4">
@@ -32,8 +32,12 @@
             {{investment.date}}
           </td>
           <td class="px-6 py-4">
-            {{investment.type}}
+            <span class="px-2 py-1 text-white font-bold rounded-full"
+                  [ngClass]="getInvestmentClass(investment.type)">
+              {{ investment.type }}
+            </span>
           </td>
+
           <td class="px-6 py-4">
             <button class="text-blue-500 hover:text-blue-700">View Details</button>
           </td>

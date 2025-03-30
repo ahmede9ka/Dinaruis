@@ -1,2 +1,91 @@
-<p>Your payment is failed</p>
+<div class="card border-0 shadow-lg">
+    <!-- Card Header -->
+    <div class="bg-red-50 dark:bg-red-900/20 rounded-t-lg text-center py-8">
+      <div class="flex justify-center mb-4">
+        <!-- X Circle Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-red-700 dark:text-red-400">Payment Failed</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">
+        We were unable to process your payment.
+      </p>
+    </div>
+  
+    <!-- Card Content -->
+    <div class="p-6">
+      <div class="space-y-6">
+        <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Error Code</span>
+            <span class="font-medium">{{ errorCode }}</span>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <!-- Credit Card Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            <div>
+              <p class="text-sm text-gray-500">Amount</p>
+              <p class="font-semibold">{{ amount }}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <!-- Calendar Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <div>
+              <p class="text-sm text-gray-500">Date</p>
+              <p class="font-semibold">{{ date }}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <!-- Alert Triangle Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              <p class="text-sm text-gray-500">Reason</p>
+              <p class="font-semibold text-red-600 dark:text-red-400">{{ reason }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <hr class="border-gray-200 dark:border-gray-700">
+        
+        <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+          <p class="text-sm text-center text-red-700 dark:text-red-400">
+            Please try again with a different payment method or contact your bank for assistance.
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Card Footer -->
+    <div class="p-6 pt-2 flex flex-col sm:flex-row gap-3">
+      <button type="button" class="w-full sm:w-auto text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+        <!-- Arrow Left Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Cart
+      </button>
+      <button type="button" class="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        <!-- Refresh Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Try Again
+      </button>
+    </div>
+  </div>
+  
+  
 <button (click)="goto()">return to landing</button>

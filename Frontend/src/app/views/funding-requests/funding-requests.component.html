@@ -10,13 +10,16 @@
           Campaign Title
         </th>
         <th scope="col" class="px-6 py-3">
-          Amount Requested
+          Amount Donated
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Investor
         </th>
         <th scope="col" class="px-6 py-3">
           Date of Request
         </th>
         <th scope="col" class="px-6 py-3">
-          Status
+          Type
         </th>
         <th scope="col" class="px-6 py-3">
           Action
@@ -32,10 +35,14 @@
           {{ transaction.amount  }}
         </td>
         <td class="px-6 py-4">
-          {{ transaction.date  }}
+          {{ transaction.user.firstName }} {{ transaction.user.lastName }}
         </td>
         <td class="px-6 py-4">
-          {{ transaction.status }}
+          {{ transaction.date  }}
+        </td>
+        
+        <td class="px-6 py-4">
+          {{ transaction.type }}
         </td>
         <td class="px-6 py-4">
           <button class="text-blue-500 hover:text-blue-700" >View Details</button>

@@ -63,6 +63,16 @@ export class MyInvestementComponent implements OnInit {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     return this.investments.slice(startIndex, startIndex + this.itemsPerPage);
   }
+  getInvestmentClass(type: string): string {
+    const typeColors: { [key: string]: string } = {
+      'donation': 'bg-green-500',
+      'equity-based investment': 'bg-blue-500',
+      'reward-based investment': 'bg-yellow-500',
+      'loan-based investment': 'bg-red-500'
+    };
+    return typeColors[type] || 'bg-gray-500'; // Default color if type is unknown
+  }
+  
 
   prevPage(): void {
     if (this.currentPage > 1) {

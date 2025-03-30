@@ -34,19 +34,20 @@
     
     <div class="p-6">
       <h2 class="text-xl font-semibold text-[#4CAF50] dark:text-[#4CAF50]">{{ campaign.title }}</h2>
+      <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ campaign.description }}</p>
       <button (click)="viewCampaignDetails(campaign._id)" class="text-[#0D1F2D] hover:text-[#0D1F2D] dark:text-[#0D1F2D] dark:hover:text-[#0D1F2D] text-sm font-medium mt-3">Read More</button>
     </div>
 
     <!-- Progress Bar Section -->
     <div class="px-6 pb-6">
-      <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">Progress: {{ campaign.progress }}%</div>
+      <div class="text-sm text-[#4CAF50] dark:text-[#4CAF50] mb-3">Progress: {{ (campaign.raisedAmount/campaign.amountGoal)*100  }}%</div>
       <div class="relative pt-1">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold bg-[#4CAF50] text-white dark:bg-[#4CAF50] dark:text-white py-1 px-2 rounded-lg">{{ campaign.raisedAmount }} Donated</span>
           <span class="text-xs font-semibold bg-[#4CAF50] text-white dark:bg-[#4CAF50] dark:text-white py-1 px-2 rounded-lg">Goal: {{ campaign.amountGoal }}</span>
         </div>
         <div class="w-full bg-[#FAF1E6] dark:bg-[#FAF1E6] rounded-full h-2.5 overflow-hidden">
-          <div class="bg-blue-600 dark:bg-blue-400 h-2.5 rounded-full transition-all duration-500" [style.width.%]="campaign.progress"></div>
+          <div class="bg-[#4CAF50] dark:bg-[#4CAF50] h-2.5 rounded-full transition-all duration-500" [style.width.%]="(campaign.raisedAmount/campaign.amountGoal)*100"></div>
         </div>
         <div class="text-xs font-semibold mt-3 text-gray-700 dark:text-gray-400">Deadline: {{ campaign.endDate }}</div>
       </div>

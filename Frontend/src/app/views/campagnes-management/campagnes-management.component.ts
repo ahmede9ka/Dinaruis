@@ -35,7 +35,37 @@ export class CampagnesManagementComponent implements OnInit {
     }
     
   }
+  getStatusClass(status: string): string {
+    const statusColors: { [key: string]: string } = {
+      'Completed': 'bg-green-500',
+      'Active': 'bg-blue-500',
+      'Rejected': 'bg-red-500',
+      'Pending': 'bg-yellow-500 text-gray-900'
+    };
+    return statusColors[status] || 'bg-gray-500'; // Default if status is unknown
+  }
+  getTypeClass(type: string): string {
+    const typeBorders: { [key: string]: string } = {
+      'buisness': 'border-blue-500 text-blue-500',
+      'competitions': 'border-green-500 text-green-500',
+      'Personal': 'border-yellow-500 text-yellow-500',
+      'Corporate': 'border-red-500 text-red-500'
+    };
+    return typeBorders[type] || 'border-gray-500 text-gray-500'; // Default style
+  }
+  showToast(): void {
+    
+  }
 
+  closeToast(): void {
+    const toast = document.getElementById('toast');
+    if (toast) {
+      toast.classList.add('hidden');
+      toast.classList.remove('flex');
+    }
+  }
+
+  
   fetchCampagnes() {
     if (this.token) {
       this.campagneService.getCampaigns(this.token).subscribe(
@@ -82,10 +112,38 @@ export class CampagnesManagementComponent implements OnInit {
     this.campagneService.updateCampaign(id,{"status":"Active"},this.token).subscribe((data:any)=>{
       console.log(data);
     })
+    const toast = document.getElementById('toast');
+    const toastSuccess = document.getElementById('toast-success');
+    
+    if (toast && toastSuccess) {
+      // Show the toast
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      
+      // Automatically hide the toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3000);
+    }
   }
   delete(id:any){
     this.campagneService.deleteCampaign(id,this.token).subscribe((data:any)=>{
       console.log(data);
     })
+    const toast = document.getElementById('toast2');
+    const toastSuccess = document.getElementById('toast-success');
+    
+    if (toast && toastSuccess) {
+      // Show the toast
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      
+      // Automatically hide the toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3000);
+    }
   }
 }

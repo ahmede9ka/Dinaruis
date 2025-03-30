@@ -54,14 +54,14 @@
 
     <!-- Progress Bar Section -->
     <div class="px-6 pb-6">
-      <div class="text-sm text-gray-600 dark:text-gray-400 mb-3">Progress: {{ campaign.progress }}%</div>
+      <div class="text-sm text-[#4CAF50] dark:text-[#4CAF50] mb-3">Progress: {{ (campaign.raisedAmount/campaign.amountGoal)*100 }}%</div>
       <div class="relative pt-1">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold bg-[#4CAF50] text-white dark:bg-[#4CAF50] dark:text-white py-1 px-2 rounded-lg">{{ campaign.raisedAmount }} Donated</span>
           <span class="text-xs font-semibold bg-[#4CAF50] text-white dark:bg-[#4CAF50] dark:text-white py-1 px-2 rounded-lg">Goal: {{ campaign.amountGoal }}</span>
         </div>
         <div class="w-full bg-[#FAF1E6] dark:bg-[#FAF1E6] rounded-full h-2.5 overflow-hidden">
-          <div class="bg-blue-600 dark:bg-blue-400 h-2.5 rounded-full transition-all duration-500" [style.width.%]="campaign.progress"></div>
+          <div class="bg-[#4CAF50] dark:bg-[#4CAF50] h-2.5 rounded-full transition-all duration-500" [style.width.%]="(campaign.raisedAmount/campaign.amountGoal)*100"></div>
         </div>
         <div class="text-xs font-semibold mt-3 text-gray-700 dark:text-gray-400">Deadline: {{ campaign.endDate }}</div>
         <button 
@@ -92,7 +92,7 @@
 </div>
 
 <!-- Filter Modal -->
-<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black bg-opacity-30">
+<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-opacity-30">
   <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-96">
     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select a Filter</h3>
 
