@@ -1,36 +1,29 @@
-# Step 1: Build Angular app
-FROM node:20.11.1 as build
+# Step 1: Build the Angular App
+FROM node:20.11.1 AS build
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker caching
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy the rest of the application
+# Copy all files and build the project
 COPY . .
-
-# Install Angular CLI (optional, needed only for local development)
-RUN npm install -g @angular/cli@19.0.1
-
-# Build Angular for production
 RUN npm run build --configuration=production
 
-# Step 2: Serve with Nginx
-FROM nginx:alpine
+# Step 2: Use Nginx to Serve the Angular App
+FROM nginx:latest
 
-# Copy built Angular app to Nginx directory
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
-
-# Copy custom Nginx configuration
+# Copy the custom Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy the built Angular app from the previous step
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+
+
 
 
 # Expose port 80
 EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
 

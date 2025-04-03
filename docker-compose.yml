@@ -1,43 +1,40 @@
-version: '3.8'
-
 services:
-  backend:
-    build: ./backend
-    ports:
-      - "5000:5000"
-    environment:
-      MONGO_URI: mongodb+srv://fouratmarouen4:anOQguy0LMLRubvr@dinaruisdb.u82qc.mongodb.net/dinaruisDB?retryWrites=true&w=majority&appName=DinaruisDB
-    restart: unless-stopped
-    depends_on:
-      - mongo
-
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "4200:4200"
+      - "4200:80"
     depends_on:
-      - backend
-    restart: unless-stopped
+      - backend # Ensure backend is up before frontend starts
+    networks:
+      - app-network
 
-  mongo:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb+srv://fouratmarouen4:anOQguy0LMLRubvr@dinaruisdb.u82qc.mongodb.net/dinaruisDB?
+    networks:
+      - app-network
+
+  mongodb:
     image: mongo:latest
-    restart: unless-stopped
+    restart: always
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - mongodb_data:/data/db
+    networks:
+      - app-network
 
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - frontend
-      - backend
-   
+networks:
+  app-network:
 
 volumes:
-  mongo_data:
+  mongodb_data:

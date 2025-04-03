@@ -55,15 +55,15 @@ const getInvestmentById = async (req, res, next) => {
 
 const getTotalInvestment = async (req, res) => {
   try {
-    const { id: investorId } = req.params;
+    const { id } = req.params;
 
     // Validate investorId format
-    if (!mongoose.Types.ObjectId.isValid(investorId)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid investor ID format" });
     }
 
     // Find all donations made by this investor
-    const donations = await Transaction.find({ user: investorId });
+    const donations = await Transaction.find({ user: id });
 
     // Calculate total amount donated (handle case where donations might be empty)
     const totalInvestment = donations.reduce(

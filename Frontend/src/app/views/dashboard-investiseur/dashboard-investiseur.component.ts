@@ -50,7 +50,9 @@ export class DashboardInvestiseurComponent implements OnInit {
         this.createCharts();
       })
       this.investorService.getTotalInvestment(this.user._id,this.token).subscribe((data:any)=>{
+        console.log(data);
         this.totalInvestment  = data.totalInvestment;
+        console.log(this.totalInvestment)
       })
       this.investorService.getAdvice(this.token).subscribe((data:any)=>{
         this.advice  = data.advice;

@@ -28,7 +28,7 @@ app.post(
 
 app.use(
   cors({
-    origin: "http://localhost:4200", // Change to your frontend domain
+    origin: ["http://localhost:4200", "http://localhost:8080"], // Add both frontend domains here
     credentials: true, // Allow cookies
   })
 );
