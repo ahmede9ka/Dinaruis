@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { TransactionService } from '../../services/transaction.service';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule,Eye } from 'lucide-angular';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-transactions-management',
   standalone: true,
-  imports: [CommonModule,LucideAngularModule],
+  imports: [CommonModule,LucideAngularModule,FormsModule],
   templateUrl: './transactions-management.component.html',
   styleUrl: './transactions-management.component.css'
 })
@@ -15,6 +16,18 @@ export class TransactionsManagementComponent implements OnInit {
   transactions: any[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 6; // Change as needed
+  activeModal: string | null = null;
+    selectedTransaction: any = null;
+
+    openModal(modalId: string, transaction: any) {
+        this.activeModal = modalId;
+        this.selectedTransaction = transaction;
+    }
+
+    closeModal() {
+        this.activeModal = null;
+        this.selectedTransaction = null;
+    }
 
   constructor(private transactionservice: TransactionService) {}
 

@@ -2,6 +2,7 @@ import { Component, AfterViewInit, Renderer2, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { CommonModule } from '@angular/common';
 import { Eye, Edit, Slash, LucideAngularModule } from 'lucide-angular';
+import { FormsModule } from '@angular/forms';
 
 declare const simpleDatatables: any;
 
@@ -10,7 +11,7 @@ declare const simpleDatatables: any;
   standalone: true,
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
-  imports: [CommonModule,LucideAngularModule]
+  imports: [CommonModule,LucideAngularModule,FormsModule]
 })
 export class UserManagementComponent implements AfterViewInit, OnInit {
   private dataTable: any;
@@ -19,9 +20,17 @@ export class UserManagementComponent implements AfterViewInit, OnInit {
   users: any[] = [];
   currentPage: number = 1; // Initialize currentPage
   itemsPerPage: number = 6; // Set items per page
-
+  activeModal: string | null = null;
   constructor(private renderer: Renderer2, private userservice: UsersService) {}
+  
 
+  openModal2(modalId: string) {
+      this.activeModal = modalId;
+  }
+
+  closeModal2() {
+      this.activeModal = null;
+  }
   ngOnInit() {
     this.token = localStorage.getItem("token");
     this.fetchUsers(); // Fetch the users when component initializes
@@ -84,6 +93,7 @@ export class UserManagementComponent implements AfterViewInit, OnInit {
       });
     }
   }
+  
 
   // Calculate total pages for pagination
   get totalPages(): number {

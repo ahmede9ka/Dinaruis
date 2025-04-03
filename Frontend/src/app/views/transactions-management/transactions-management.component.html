@@ -35,13 +35,24 @@
                     </span>
                 </td>
                 <td class="px-4 py-4">
-                    <button class="p-2 text-green-500 rounded hover:bg-green-600">
+                    <button class="p-2 text-green-500 rounded hover:bg-green-60 " (click)="openModal('transactionModal', transaction)" >
                         <lucide-icon [name]="icons.Eye" class="w-5 h-5"></lucide-icon>
                     </button>
                 </td>
-                
-                
             </tr>
+            <!-- Transaction View Modal -->
+            <div id="transactionModal" *ngIf="activeModal === 'transactionModal'" class="fixed inset-0 flex items-center justify-center bg-transparantg-opacity-50">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+                    <h2 class="text-xl font-bold mb-4">Transaction Details</h2>
+                    <p class="text-lg font-semibold">Transaction ID: TXN123456</p>
+                    <p class="text-gray-600">User: <span class="font-medium">{{ selectedTransaction?.user.firstName }}</span></p>
+                    <p class="text-gray-600">Type: <span class="font-medium">{{ selectedTransaction?.type }}</span></p>
+                    <p class="text-gray-600">Amount: <span class="font-medium">{{ selectedTransaction?.amount }} {{ selectedTransaction?.currency }}</span></p>
+                    <p class="text-gray-600">Date: <span class="font-medium">{{ selectedTransaction?.date }}</span></p>
+                    <p class="text-gray-600">Status: <span class="font-medium text-green-500">{{ selectedTransaction?.status }}</span></p>
+                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded" (click)="closeModal()">Close</button>
+                </div>
+            </div>
         </tbody>
     </table>
 
