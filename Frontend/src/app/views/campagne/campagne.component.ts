@@ -5,8 +5,8 @@ import { CampagneService } from '../../services/campagne.service';
 import { InvestorService } from '../../services/investor.service';
 import { UsersService } from '../../services/users.service';
 
-interface Campaign{
-  _id:string;
+interface Campaign {
+  _id: string;
   title: string;
   description: string;
   amountGoal: number;
@@ -18,10 +18,10 @@ interface Campaign{
   type: string;
   code_postal: string;
   user: string;
-  progress?: number; // Added this
-  isFavorite?: boolean; // Added this
-  raisedAmount:number;
-} 
+  progress?: number;
+  isFavorite?: boolean;
+  raisedAmount: number;
+}
 
 @Component({
   selector: 'app-campagne',
@@ -33,90 +33,121 @@ interface Campaign{
 })
 export class CampagneComponent implements OnInit {
   campaignId: string | null = null;
-  campaign!:Campaign;
-  token:any;
-  selectedAmount:number=0;
-  data:any;
-  user:any;
-  constructor(private route: ActivatedRoute,
-            private campaignService:CampagneService,
-            private investorService:InvestorService,
-            private userService:UsersService,
-            private router:Router) {}
+  campaign!: Campaign;
+  token: string | null = null;
+  selectedAmount: number = 0;
+  data: any;
+  user: any;
+
+  showConfirmModal = false;
+  showSuccessModal = false;
+  selectedOption: string = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private campaignService: CampagneService,
+    private investorService: InvestorService,
+    private userService: UsersService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    const userData = localStorage.getItem('user');
     this.token = localStorage.getItem('token');
-    
+    const userData = localStorage.getItem('user');
+
     if (userData) {
       this.user = JSON.parse(userData);
+
       this.route.paramMap.subscribe(params => {
         this.campaignId = params.get('id');
-        console.log("aaa");
-        console.log('Campaign ID:', this.campaignId);
+
+        if (this.campaignId && this.token) {
+          this.campaignService.getCampaignById(this.campaignId, this.token).subscribe({
+            next: (res: any) => {
+              this.campaign = res.data;
+            },
+            error: (err) => {
+              console.error('Failed to fetch campaign data:', err);
+            }
+          });
+        }
       });
-      this.campaignService.getCampaignById(this.campaignId,this.token).subscribe((data:any)=>{
-        this.campaign = data.data;
-      })
     }
-    
-    
   }
-  selectAmount(amount:number){
+
+  selectAmount(amount: number): void {
     this.selectedAmount = amount;
     this.data = {
-      "amount":this.selectedAmount,
-      "campaign_id":this.campaignId
-    }
+      amount: this.selectedAmount,
+      campaign_id: this.campaignId
+    };
   }
+
   donate(): void {
     if (!this.selectedAmount) {
-      console.warn("Please select an amount before donating.");
+      console.warn('Please select an amount before donating.');
       return;
     }
-  
+
     this.userService.Donate(this.data, this.token).subscribe({
       next: (response: any) => {
         if (response.url) {
-          // Redirect to Stripe Checkout
           window.location.href = response.url;
         } else {
-          console.warn("Donation response does not contain a valid Stripe URL.");
+          console.warn('Donation response does not contain a valid Stripe URL.');
         }
       },
       error: (error) => {
-        console.error("Error processing donation:", error);
+        console.error('Error processing donation:', error);
       }
     });
   }
-  Equity(){
-    const data = {
-        "campaign_id":this.campaignId,
-        "investmentType":"equity-based investment",
-        "investor_id":this.user._id,
+
+  openConfirmation(option: string): void {
+    this.selectedOption = option;
+    this.showConfirmModal = true;
+  }
+
+  confirmInterest(): void {
+    if (!this.user || !this.token || !this.campaignId) return;
+
+    let investmentType = '';
+
+    switch (this.selectedOption) {
+      case 'Equity':
+        investmentType = 'equity-based investment';
+        break;
+      case 'Reward':
+        investmentType = 'rewards-based investment';
+        break;
+      case 'Loan-Based':
+        investmentType = 'loan-based investment';
+        break;
+      default:
+        return;
     }
-    this.campaignService.sendMail(data,this.token).subscribe((data:any)=>{
-      console.log(data);
-    })
-  }
-  Loan(){
+
     const data = {
-      "campaign_id":this.campaignId,
-      "investmentType":"loan-based investment",
-      "investor_id":this.user._id,
+      campaign_id: this.campaignId,
+      investmentType,
+      investor_id: this.user._id
+    };
+
+    this.campaignService.sendMail(data, this.token).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.showConfirmModal = false;
+        this.showSuccessModal = true;
+      },
+      error: (error) => {
+        console.error('Error sending interest:', error);
+        this.showConfirmModal = false;
+      }
+    });
   }
-  this.campaignService.sendMail(data,this.token).subscribe((data:any)=>{
-    console.log(data);
-  })
-  }
-  Reward(){
-    const data = {
-      "campaign_id":this.campaignId,
-      "investmentType":"rewards-based investment",
-      "investor_id":this.user._id,
-  }
-  this.campaignService.sendMail(data,this.token).subscribe((data:any)=>{
-    console.log(data);
-  })
+
+  closeModal(): void {
+    this.showConfirmModal = false;
+    this.showSuccessModal = false;
   }
 }

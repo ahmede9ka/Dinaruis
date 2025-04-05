@@ -105,22 +105,45 @@
                 </div>
 
                 <!-- Funding Options -->
-                <div class="border-2 border-[#FAF1E6]00 rounded-lg p-4 mb-6">
+                <div class="border-2 border-[#FAF1E600] rounded-lg p-4 mb-6">
                     <div class="text-center text-[#0D1F2D] font-medium mb-4">
-                        Interested in other funding options?
+                    Interested in other funding options?
                     </div>
                     <div class="flex gap-3">
-                        <button (click)="Equity()" type="button" class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
-                            Equity
-                        </button>
-                        <button (click)="Reward()" type="button" class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
-                            Reward
-                        </button>
-                        <button (click)="Loan()" type="button" class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
-                            Loan-Based
-                        </button>
+                    <button (click)="openConfirmation('Equity')" type="button"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
+                        Equity
+                    </button>
+                    <button (click)="openConfirmation('Reward')" type="button"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
+                        Reward
+                    </button>
+                    <button (click)="openConfirmation('Loan-Based')" type="button"
+                        class="py-3 bg-[#FDFAF6] hover:bg-[#FAF1E6] transition rounded-lg text-gray-800 font-medium w-full">
+                        Loan-Based
+                    </button>
                     </div>
                 </div>
+                
+                <!-- Confirmation Modal -->
+                <div *ngIf="showConfirmModal" class="fixed inset-0 bg-transparent bg-opacity-30 flex justify-center items-center z-50">
+                    <div class="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center">
+                    <p class="text-[#0D1F2D] text-lg font-medium mb-4">Are you really interested in {{ selectedOption }}?</p>
+                    <div class="flex justify-center gap-4">
+                        <button (click)="confirmInterest()" class="bg-[#FAF1E6] text-[#0D1F2D] px-4 py-2 rounded-lg hover:bg-[#F2E9DA] transition">Yes</button>
+                        <button (click)="closeModal()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">Cancel</button>
+                    </div>
+                    </div>
+                </div>
+                
+                <!-- Success Modal -->
+                <div *ngIf="showSuccessModal" class="fixed inset-0 bg-transparent bg-opacity-30 flex justify-center items-center z-50">
+                    <div class="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center">
+                    <p class="text-[#0D1F2D] text-lg font-medium mb-2">Successfully Sent!</p>
+                    <button (click)="closeModal()" class="mt-4 bg-[#FDFAF6] hover:bg-[#FAF1E6] text-gray-800 px-4 py-2 rounded-lg transition">Close</button>
+                    </div>
+                </div>
+                
                 <button type="button" class="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg text-white font-medium">
                     Share
                 </button>
