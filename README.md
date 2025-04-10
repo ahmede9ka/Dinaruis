@@ -57,23 +57,33 @@ Dinaruis is a modern crowdfunding platform that empowers creators, entrepreneurs
 ```bash
 git clone https://github.com/yourusername/dinaruis.git
 cd dinaruis
+```
 2.Install dependencies for both frontend and backend:
+
 # Frontend dependencies
+```bash
 cd Frontend
 npm install
+```
 
 # Backend dependencies
+```bash
 cd ../Backend
 npm install
+```
 3.Create a .env file in the Backend directory with the following variables:
+```bash
 PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 PAYMENT_API_KEY=your_payment_api_key
+```
 Development Setup
 Running the Backend
+```bash
 cd Backend
 npm run start:dev
+```
 The backend server will run on http://localhost:5000
 Deployment
 Backend Deployment
