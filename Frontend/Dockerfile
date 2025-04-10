@@ -26,4 +26,4 @@ COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
-
+#docker-compose up --build -d

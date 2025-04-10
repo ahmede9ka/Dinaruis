@@ -60,17 +60,17 @@
                <!-- Action Buttons -->
                 <td class="px-6 py-4 flex space-x-4">
                     <!-- View Button -->
-                    <button class="p-2 text-blue-500 hover:bg-blue-100 rounded" (click)="openModal2('viewModal')">
+                    <button class="p-2 text-blue-500 hover:bg-blue-100 rounded" (click)="openModal2('viewModal',user)">
                         <lucide-icon [name]="icons.Eye" class="w-5 h-5"></lucide-icon>
                     </button>
 
                     <!-- Edit Button -->
-                    <button class="p-2 text-yellow-500 hover:bg-yellow-100 rounded" (click)="openModal2('editModal')">
+                    <button class="p-2 text-yellow-500 hover:bg-yellow-100 rounded" (click)="openModal2('editModal',user)">
                         <lucide-icon [name]="icons.Edit" class="w-5 h-5"></lucide-icon>
                     </button>
 
                     <!-- Restrict Button -->
-                    <button class="p-2 text-red-500 hover:bg-red-100 rounded" (click)="openModal2('confirmModal')">
+                    <button class="p-2 text-red-500 hover:bg-red-100 rounded" (click)="openModal2('confirmModal',user)">
                         <lucide-icon [name]="icons.Slash" class="w-5 h-5"></lucide-icon>
                     </button>
                 </td>
@@ -79,11 +79,11 @@
                 <div id="viewModal" *ngIf="activeModal === 'viewModal'" class="fixed inset-0 flex items-center justify-center bg-transparnat bg-opacity-50">
                     <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
                         <h2 class="text-xl font-bold mb-4">User Details</h2>
-                        <img [src]="user?.photoUrl" alt="User Photo" class="w-24 h-24 rounded-full mx-auto mb-4">
-                        <p class="text-lg font-semibold">{{ user?.name }}</p>
-                        <p class="text-gray-600">Role: <span class="font-medium">{{ user?.role }}</span></p>
-                        <p class="text-gray-600">Email: <span class="font-medium">{{ user?.email }}</span></p>
-                        <p class="text-gray-600">Total Transactions: <span class="font-medium">{{ user?.transactions }}</span></p>
+                        <img [src]="'data:image/png;base64,' + selectedUser.image" alt="User Photo" class="w-24 h-24 rounded-full mx-auto mb-4">
+                        <p class="text-lg font-semibold">{{ selectedUser?.firstName }} {{ selectedUser?.lastName }}</p>
+                        <p class="text-gray-600">Role: <span class="font-medium">{{ selectedUser?.role }}</span></p>
+                        <p class="text-gray-600">Email: <span class="font-medium">{{ selectedUser?.email }}</span></p>
+                        <p class="text-gray-600">Total Donated: <span class="font-medium">{{ selectedUser?.totalDonated }}</span></p>
                         <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded" (click)="closeModal2()">Close</button>
                     </div>
                 </div>
@@ -93,10 +93,13 @@
                 <div id="editModal" *ngIf="activeModal === 'editModal'" class="fixed inset-0 flex items-center justify-center bg-transparant bg-opacity-50">
                     <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
                         <h2 class="text-xl font-bold mb-4">Edit User</h2>
-                        <input type="text" [(ngModel)]="user.name" placeholder="Username" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                        <input type="email" [(ngModel)]="user.email" placeholder="Email" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <input type="text" [(ngModel)]="selectedUser.firstName" placeholder="Username" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <input type="text" [(ngModel)]="selectedUser.lastName" placeholder="Username" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <input type="text" [(ngModel)]="selectedUser.email" placeholder="Username" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <input type="text" [(ngModel)]="selectedUser.phoneNumber" placeholder="Username" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <input type="text" [(ngModel)]="selectedUser.DateOfBirth" placeholder="Username" class="border border-gray-300 rounded-lg p-3 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
                         <div class="flex justify-between">
-                            <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600">Save</button>
+                            <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600" (click)="update(selectedUser)">Save</button>
                             <button class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600" (click)="closeModal2()">Cancel</button>
                         </div>
                     </div>
@@ -108,7 +111,7 @@
                         <h2 class="text-xl font-bold mb-4 text-red-600">Confirm Action</h2>
                         <p class="text-gray-700 mb-4">Are you sure you want to restrict this user?</p>
                         <div class="flex justify-between">
-                            <button class="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600">Yes, Restrict</button>
+                            <button class="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600" (click)="delete(selectedUser)">Yes, Restrict</button>
                             <button class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600" (click)="closeModal2()">Cancel</button>
                         </div>
                     </div>

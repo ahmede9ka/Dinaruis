@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-entrepreneur-settings',
@@ -15,11 +16,7 @@ export class EntrepreneurSettingsComponent implements OnInit {
   avatarUrl = "/ahmed.jpg"
 
   profileForm = {
-    name: "",
-    username: "",
-    email: "",
     bio: "",
-    location: "",
     website: "",
   }
 
@@ -41,10 +38,17 @@ export class EntrepreneurSettingsComponent implements OnInit {
     payoutMethod: "ach",
     payoutSchedule: "weekly",
   }
-
-  constructor() {}
-
+  user:any;
+  token:any;
+  constructor(private userService:UsersService) {}
   ngOnInit(): void {
+    const userData = localStorage.getItem('user');
+    this.token = localStorage.getItem('token');
+    if (userData) {
+      this.user = JSON.parse(userData);
+      console.log(this.user.role);
+      
+    };
     // Initialize with sample data or fetch from API
     this.loadUserData()
   }
@@ -64,11 +68,26 @@ export class EntrepreneurSettingsComponent implements OnInit {
   }
 
   saveProfile(): void {
+    const updatedProfile = {
+      ...this.user,           // includes firstName, lastName, email, localisation
+    };
+    this.userService.updateUser(this.user._id,updatedProfile,this.token).subscribe((data:any)=>{
+      localStorage.setItem("user",JSON.stringify(data.data));
+      console.log(data.data);
+    })
     console.log("Saving profile", this.profileForm)
     // Implement API call to save profile data
   }
 
   saveSocial(): void {
+    const updatedProfile = {
+      ...this.user,           // includes firstName, lastName, email, localisation
+      
+    };
+    this.userService.updateUser(this.user._id,updatedProfile,this.token).subscribe((data:any)=>{
+      localStorage.setItem("user",JSON.stringify(data.data));
+      console.log(data.data);
+    })
     console.log("Saving social media", this.socialForm)
     // Implement API call to save social media data
   }
@@ -87,11 +106,7 @@ export class EntrepreneurSettingsComponent implements OnInit {
     // This would typically be an API call
     // For now, we'll just set some sample data
     this.profileForm = {
-      name: "John Doe",
-      username: "johndoe",
-      email: "john@example.com",
       bio: "Entrepreneur and innovator with a passion for sustainable technology.",
-      location: "San Francisco, CA",
       website: "https://johndoe.com",
     }
 

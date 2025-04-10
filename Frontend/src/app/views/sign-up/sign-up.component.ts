@@ -33,7 +33,8 @@ export class SignUpComponent implements OnInit {
       password: new FormControl('', Validators.required),
       confirmPassword: new FormControl('', Validators.required),
       DateOfBirth: new FormControl('', Validators.required), // Changed from `dob`
-      localisation: new FormControl('', Validators.required)
+      localisation: new FormControl('', Validators.required),
+      image:new FormControl('',Validators.required)
     });
 
     this.route.paramMap.subscribe(params => {
@@ -46,15 +47,26 @@ export class SignUpComponent implements OnInit {
   }
 
   onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0];
       const reader = new FileReader();
+  
       reader.onload = () => {
-        this.selectedImage = reader.result; // Convert image to base64
+        const result = reader.result as string;
+  
+        // Remove the "data:image/...;base64," part
+        const base64String = result.split(',')[1];
+  
+        // Store the pure base64 string
+        this.signUpForm.patchValue({ image: base64String });
+        this.selectedImage = base64String;
       };
+  
       reader.readAsDataURL(file);
     }
   }
+  
 
   onSubmit() {
     console.log(this.signUpForm);
@@ -67,14 +79,16 @@ export class SignUpComponent implements OnInit {
         new Date(this.signUpForm.value.DateOfBirth), // Convert string to Date object
         this.signUpForm.value.phoneNumber,
         this.role, // Assign retrieved role
-        this.signUpForm.value.localisation
+        this.signUpForm.value.localisation,
+        this.signUpForm.value.image
       );
       console.log(this.userObj);
       this.loginservice.signup(this.userObj).subscribe(
         (data: any) => {
           console.log('Signup Successful:', data);
+          console.log(data.data.newUser);
           this.token = data.token;
-          this.user = data.data;
+          this.user = JSON.stringify(data.data.newUser);
           localStorage.setItem("token",this.token);
           localStorage.setItem("user",this.user);
           this.router.navigate(['/']);

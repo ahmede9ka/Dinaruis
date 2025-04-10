@@ -18,7 +18,7 @@
       <!-- Avatar + Name (Shown if logged in) -->
       <div *ngIf="isLoggedIn()" class="relative">
         <div class="flex items-center space-x-2 cursor-pointer" (click)="toggleDropdown()">
-          <img [src]="user?.avatar || 'https://www.pngkey.com/png/detail/230-2301779_best-classified-apps-default-user-profile.png'" 
+          <img [src]="'data:image/png;base64,' + user.image"
             class="w-8 h-8 rounded-full object-cover" alt="User Avatar">
           <span class="text-[#4CAF50] font-medium">{{ user?.firstName }}</span>
         </div>

@@ -7,6 +7,7 @@ export class Usersignup {
     localisation: string;
     email: string;
     password: string;
+    image:string;
     constructor(
         email: string = '', 
         password: string = '', 
@@ -15,7 +16,8 @@ export class Usersignup {
         DateOfBirth: Date = new Date(),  // Set default value to a new Date object
         phoneNumber: string = '', 
         role: string = '', 
-        localisation: string = ''
+        localisation: string = '',
+        image:string='',
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,5 +27,6 @@ export class Usersignup {
         this.localisation = localisation;
         this.email = email;
         this.password = password;
+        this.image = image;
     }
 }

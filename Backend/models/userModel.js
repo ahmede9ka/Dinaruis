@@ -49,6 +49,22 @@ const userSchema = new Schema({
     enum: ["ADMIN", "ENTREPRENEUR", "INVESTOR"],
     default: "INVESTOR",
   },
+  bio:{
+    type:String,
+    default:""
+  },
+  twitterAccount:{
+    type:String,
+    default:""
+  },
+  instagramAccount:{
+    type:String,
+    default:""
+  },
+  linkedinAccount:{
+    type:String,
+    default:""
+  }
 });
 
 // Hash password before saving

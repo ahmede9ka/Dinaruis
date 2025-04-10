@@ -18,11 +18,19 @@ export class UsersService {
     });
     return this.http.get<any>(`${this.apiUrl}/getall`,{headers});
   }
-  updateUser(user:any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/${user._id}`,user);
+  updateUser(id:any,user:any,token:any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json', 
+    });
+    return this.http.put<any>(`${this.apiUrl}/${id}`,user,{headers});
   }
-  deleteUser(id:any): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  deleteUser(id:any,token:any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json', 
+    });
+    return this.http.delete<any>(`${this.apiUrl}/${id}`,{headers});
   }
   Donate(data:any,token:any): Observable<any> {
     const headers = new HttpHeaders({

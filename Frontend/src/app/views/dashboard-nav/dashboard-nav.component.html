@@ -41,9 +41,9 @@
                    aria-expanded="false" 
                    data-dropdown-toggle="dropdown-user">
               
-             <span class="text-white">Ahmed Kallel</span>
+             <span class="text-white">{{user.firstName}} {{user.lastName}}</span>
              <img class="w-8 h-8 rounded-full" 
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" 
+                  [src]="'data:image/png;base64,' + user.image" 
                   alt="Ahmed Kallel's profile photo">
            </button>
                   <button type="button" data-dropdown-toggle="dropdown-notif"
@@ -88,10 +88,10 @@
               <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
                   <p class="text-sm text-gray-900 dark:text-white" role="none">
-                    Ahmed Kallel
+                    {{user.firstName}} {{user.lastName}}
                   </p>
                   <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                    ahmedkallel.com
+                    {{user.email}}
                   </p>
                 </div>
                 <ul class="py-1" role="none">

@@ -20,7 +20,7 @@
       <div class="absolute -bottom-12 left-8">
         <div class="relative h-40 w-40  overflow-hidden rounded-full border-4 border-white bg-gray-100">
           <img
-            [src]="avatarUrl || '/assets/placeholder.jpg'"
+          [src]="'data:image/png;base64,' + user.image"
             alt="Profile avatar"
             class="h-full w-full object-cover"
           />
@@ -103,7 +103,7 @@
                     id="name" 
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     placeholder="John Doe"
-                    [(ngModel)]="profileForm.name"
+                    [(ngModel)]="user.firstName"
                   />
                 </div>
                 <div class="space-y-2">
@@ -113,7 +113,7 @@
                     id="username" 
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                     placeholder="johndoe"
-                    [(ngModel)]="profileForm.username"
+                    [(ngModel)]="user.lastName"
                   />
                 </div>
               </div>
@@ -124,7 +124,7 @@
                   id="email" 
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                   placeholder="john@example.com"
-                  [(ngModel)]="profileForm.email"
+                  [(ngModel)]="user.email"
                 />
               </div>
               <div class="space-y-2">
@@ -134,7 +134,7 @@
                   rows="4" 
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                   placeholder="Tell potential backers about yourself and your mission..."
-                  [(ngModel)]="profileForm.bio"
+                  [(ngModel)]="user.bio"
                 ></textarea>
               </div>
               <div class="space-y-2">
@@ -144,19 +144,10 @@
                   id="location" 
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                   placeholder="San Francisco, CA"
-                  [(ngModel)]="profileForm.location"
+                  [(ngModel)]="user.localisation"
                 />
               </div>
-              <div class="space-y-2">
-                <label for="website" class="block text-sm font-medium text-gray-700">Website</label>
-                <input 
-                  type="text" 
-                  id="website" 
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                  placeholder="https://yourwebsite.com"
-                  [(ngModel)]="profileForm.website"
-                />
-              </div>
+              
             </div>
             <div class="p-5 border-t border-gray-200 flex justify-end">
               <button 
@@ -193,7 +184,7 @@
                       type="text" 
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                       placeholder="Twitter username"
-                      [(ngModel)]="socialForm.twitter"
+                      [(ngModel)]="user.twitterAccount"
                     />
                   </div>
                   <button 
@@ -212,7 +203,7 @@
                       type="text" 
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                       placeholder="Instagram username"
-                      [(ngModel)]="socialForm.instagram"
+                      [(ngModel)]="user.instagramAccount"
                     />
                   </div>
                   <button 
@@ -231,7 +222,7 @@
                       type="text" 
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                       placeholder="LinkedIn profile URL"
-                      [(ngModel)]="socialForm.linkedin"
+                      [(ngModel)]="user.linkedinAccount"
                     />
                   </div>
                   <button 
@@ -241,25 +232,7 @@
                     Connect
                   </button>
                 </div>
-                <div class="flex items-center gap-4">
-                  <svg class="w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                  </svg>
-                  <div class="flex-1">
-                    <input 
-                      type="text" 
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                      placeholder="Personal website URL"
-                      [(ngModel)]="socialForm.website"
-                    />
-                  </div>
-                  <button 
-                    type="button" 
-                    class="py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
-                  >
-                    Connect
-                  </button>
-                </div>
+                
               </div>
             </div>
             <div class="p-5 border-t border-gray-200 flex justify-end">

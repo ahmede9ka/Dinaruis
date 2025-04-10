@@ -11,44 +11,31 @@ declare const simpleDatatables: any;
   standalone: true,
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
-  imports: [CommonModule,LucideAngularModule,FormsModule]
+  imports: [CommonModule, LucideAngularModule, FormsModule]
 })
 export class UserManagementComponent implements AfterViewInit, OnInit {
-  private dataTable: any;
   icons = { Eye, Edit, Slash };
   token: any;
   users: any[] = [];
-  currentPage: number = 1; // Initialize currentPage
-  itemsPerPage: number = 6; // Set items per page
+  filteredUsers: any[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 6;
   activeModal: string | null = null;
+  isModalOpen = false;
+  selectedUser: any = null;
+  private dataTable: any;
+
   constructor(private renderer: Renderer2, private userservice: UsersService) {}
-  
 
-  openModal2(modalId: string) {
-      this.activeModal = modalId;
-  }
-
-  closeModal2() {
-      this.activeModal = null;
-  }
   ngOnInit() {
     this.token = localStorage.getItem("token");
-    this.fetchUsers(); // Fetch the users when component initializes
+    this.fetchUsers(); // Fetch users on initialization
   }
-  isModalOpen = false;
-
-    openModal() {
-        this.isModalOpen = true;
-    }
-
-    closeModal() {
-        this.isModalOpen = false;
-    }
 
   ngAfterViewInit(): void {
     const tableElement = document.getElementById("search-table");
-    if (tableElement && typeof simpleDatatables.DataTable !== 'undefined') {
-      this.dataTable = new simpleDatatables.DataTable("#search-table", {
+    if (tableElement && typeof simpleDatatables?.DataTable !== 'undefined') {
+      this.dataTable = new simpleDatatables.DataTable(tableElement, {
         searchable: true,
         sortable: true,
         perPage: this.itemsPerPage
@@ -59,62 +46,112 @@ export class UserManagementComponent implements AfterViewInit, OnInit {
     }
   }
 
-  // Fetch all users
+  // Modal Logic
+  openModal2(modal: string, user: any) {
+    this.activeModal = modal;
+    this.selectedUser = { ...user };
+  }
+
+  closeModal2() {
+    this.activeModal = null;
+    this.selectedUser = null;
+  }
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  // Fetch Users
   fetchUsers() {
     this.userservice.getAllUsers(this.token).subscribe((data: any) => {
-      console.log(data);
-      this.users = data.data;
+      this.users = data.data || [];
+      this.filteredUsers = [...this.users];
     });
   }
 
-  // Setup search functionality
+  // Update User (Real-Time Update in the UI)
+  update(user: any) {
+    this.userservice.updateUser(user._id, user, this.token).subscribe({
+      next: (updatedUser: any) => {
+        // Update the user in the local array
+        this.users = this.users.map(u =>
+          u._id === user._id ? { ...u, ...updatedUser } : u
+        );
+        // Also update the filtered users array
+        this.filteredUsers = [...this.users];
+        this.closeModal2(); // Close the modal after updating
+      },
+      error: (err) => {
+        console.error('Error updating user:', err);
+      }
+    });
+  }
+
+  // Delete User (Real-Time Deletion in the UI)
+  delete(user: any) {
+    this.userservice.deleteUser(user._id, this.token).subscribe({
+      next: () => {
+        // Remove the user from the array
+        this.users = this.users.filter(u => u._id !== user._id);
+        // Also update the filtered users array
+        this.filteredUsers = [...this.users];
+        this.closeModal2(); // Close the modal after deleting
+      },
+      error: (err) => {
+        console.error('Error deleting user:', err);
+      }
+    });
+  }
+
+  // Search Setup
   private setupSearch(): void {
     const searchInput = document.getElementById("search-input") as HTMLInputElement;
     if (searchInput) {
       this.renderer.listen(searchInput, 'input', (event) => {
-        this.dataTable.search((event.target as HTMLInputElement).value);
+        const query = (event.target as HTMLInputElement).value.toLowerCase();
+        this.filteredUsers = this.users.filter(user =>
+          user.name?.toLowerCase().includes(query) ||
+          user.email?.toLowerCase().includes(query)
+        );
+        this.currentPage = 1;
       });
     }
   }
 
-  // Setup category filtering
+  // Filter Setup
   private setupFilter(): void {
     const filterSelect = document.getElementById("filter-category") as HTMLSelectElement;
     if (filterSelect) {
       this.renderer.listen(filterSelect, 'change', () => {
-        const selectedCategory = filterSelect.value.toLowerCase();
-        this.dataTable.rows().forEach((row: HTMLElement) => {
-          const categoryCell = row.children[2] as HTMLElement;
-          if (categoryCell) {
-            const categoryText = categoryCell.innerText.toLowerCase();
-            row.style.display = selectedCategory === "" || categoryText.includes(selectedCategory) ? "" : "none";
-          }
-        });
+        const selected = filterSelect.value.toLowerCase();
+        this.filteredUsers = selected
+          ? this.users.filter(user => user.role?.toLowerCase() === selected)
+          : [...this.users];
+        this.currentPage = 1;
       });
     }
   }
-  
 
-  // Calculate total pages for pagination
+  // Pagination logic
   get totalPages(): number {
-    return Math.ceil(this.users.length / this.itemsPerPage);
+    return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
   }
 
-  // Paginated users data
   paginatedUsers(): any[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.users.slice(startIndex, endIndex);
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredUsers.slice(start, start + this.itemsPerPage);
   }
 
-  // Navigate to the previous page
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
   }
 
-  // Navigate to the next page
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;

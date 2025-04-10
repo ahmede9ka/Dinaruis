@@ -51,6 +51,7 @@ export class DashboardEnterpreneurComponent implements OnInit, AfterViewInit {
       this.getTotalDonators();
 
       this.entrepreneurService.getTotalDonations(this.user._id, this.token).subscribe((data: any) => {
+        console.log(data);
         this.EntrepreneurDonation = data.totalDonations;
         this.EntrepreneurDonationMonth = data.totalDonationsThisMonth;
         this.EntrepreneurDonationToday = data.totalDonationsToday;
