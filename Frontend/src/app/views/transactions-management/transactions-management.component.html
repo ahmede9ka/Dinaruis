@@ -48,7 +48,7 @@
                     <p class="text-gray-600">User: <span class="font-medium">{{ selectedTransaction?.user.firstName }}</span></p>
                     <p class="text-gray-600">Type: <span class="font-medium">{{ selectedTransaction?.type }}</span></p>
                     <p class="text-gray-600">Amount: <span class="font-medium">{{ selectedTransaction?.amount }} {{ selectedTransaction?.currency }}</span></p>
-                    <p class="text-gray-600">Date: <span class="font-medium">{{ selectedTransaction?.date }}</span></p>
+                    <p class="text-gray-600">Date: <span class="font-medium">{{ selectedTransaction?.date | date:'dd MMM yyyy'  }}</span></p>
                     <p class="text-gray-600">Status: <span class="font-medium text-green-500">{{ selectedTransaction?.status }}</span></p>
                     <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded" (click)="closeModal()">Close</button>
                 </div>

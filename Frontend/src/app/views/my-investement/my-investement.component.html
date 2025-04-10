@@ -26,10 +26,10 @@
             {{investment.campaign.title}}
           </td>
           <td class="px-6 py-4">
-            {{investment.amount}}
+            {{investment.amount|| "N/A"}}
           </td>
           <td class="px-6 py-4">
-            {{investment.date}}
+            {{investment.date | date:'dd MMM yyyy' }}
           </td>
           <td class="px-6 py-4">
             <span class="px-2 py-1 text-white font-bold rounded-full"
