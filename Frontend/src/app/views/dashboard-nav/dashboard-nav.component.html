@@ -43,8 +43,9 @@
               
              <span class="text-white">{{user.firstName}} {{user.lastName}}</span>
              <img class="w-8 h-8 rounded-full" 
-                  [src]="'data:image/png;base64,' + user.image" 
-                  alt="Ahmed Kallel's profile photo">
+             [src]="user?.image ? 'data:image/png;base64,' + user.image : 'https://www.w3schools.com/howto/img_avatar.png'" 
+             alt="Ahmed Kallel's profile photo">
+
            </button>
                   <button type="button" data-dropdown-toggle="dropdown-notif"
                             class="relative p-2 text-gray-400 bg-[#4CAF50]  rounded-full hover:text-white focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">

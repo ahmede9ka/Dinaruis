@@ -53,6 +53,6 @@ export class AdminService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.get<any>(`http://localhost:8000/api/v1/entrepreneur/getTopInvestors/${id}`, { headers });
+    return this.http.get<any>(`http://localhost:8000/api/v1/admin/getTopInvestors`, { headers });
   }
 }

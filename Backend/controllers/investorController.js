@@ -62,12 +62,11 @@ const getTotalInvestment = async (req, res) => {
       return res.status(400).json({ message: "Invalid investor ID format" });
     }
 
-    // Find all donations made by this investor
-    const donations = await Transaction.find({ user: id });
+    // Query only donation-type transactions using the Donation discriminator
+    const donations = await Donation.find({ user: id });
 
-    // Calculate total amount donated (handle case where donations might be empty)
     const totalInvestment = donations.reduce(
-      (sum, donation) => sum + Number(donation.amount),
+      (sum, donation) => sum + Number(donation.amount || 0),
       0
     );
 
@@ -77,6 +76,7 @@ const getTotalInvestment = async (req, res) => {
     res.status(500).json({ message: "Server error, please try again later" });
   }
 };
+
 const getMonthlyInvestment = async (req, res) => {
   try {
     const investorId = req.params.id;

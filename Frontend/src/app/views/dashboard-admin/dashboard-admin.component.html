@@ -42,20 +42,20 @@
           <tr class="border-b">
             <th class="py-2 px-4 text-left text-lg font-medium text-[#4CAF50] dark:text-[#4CAF50]">Investor</th>
             <th class="py-2 px-4 text-left text-lg font-medium text-[#4CAF50] dark:text-[#4CAF50]">Total Invested</th>
-            <th class="py-2 px-4 text-left text-lg font-medium text-[#4CAF50] dark:text-[#4CAF50]">Projects</th>
+            <th class="py-2 px-4 text-left text-lg font-medium text-[#4CAF50] dark:text-[#4CAF50]">Number of donations</th>
           </tr>
         </thead>
         <tbody>
-          <!--
+          
           <tr *ngFor="let investor of topInvestors" class="border-b">
-            <td class="py-2 px-4 text-white dark:text-white flex items-center">
-              <img [src]="investor.photo" alt="Investor Photo" class="w-8 h-8 rounded-full mr-3">
-              {{ investor.name }}
+            <td class="py-2 px-4 text-green flex items-center">
+             
+              {{ investor.email }}
             </td>
-            <td class="py-2 px-4 text-white dark:text-white">${{ investor.totalInvested | number }}</td>
-            <td class="py-2 px-4 text-white dark:text-white">{{ investor.numberOfProjects }}</td>
+            <td class="py-2 px-4 text-green ">${{ investor.totalDonatedAmount}}</td>
+            <td class="py-2 px-4 text-green ">{{ investor.totalDonations }}</td>
           </tr>
-          -->
+          
         </tbody>
       </table>
     </div>

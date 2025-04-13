@@ -48,6 +48,7 @@ export class MyInvestementComponent implements OnInit {
       (response: any) => {
         if (response && response.data) {
           this.investments = response.data;
+          console.log(this.investments);
           this.totalPages = Math.ceil(this.investments.length / this.itemsPerPage);
         } else {
           console.error('Invalid response structure:', response);

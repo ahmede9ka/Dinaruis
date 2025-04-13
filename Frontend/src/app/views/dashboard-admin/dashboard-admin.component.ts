@@ -30,6 +30,7 @@ export class DashboardAdminComponent implements OnInit {
   nbInvestors:any;
   nbTransactions:any;
   user:any;
+  topInvestors:any;
   constructor(private adminService: AdminService,
      private campagneService: CampagneService,
     private investorService:InvestorService,
@@ -96,6 +97,8 @@ export class DashboardAdminComponent implements OnInit {
       //console.log(this.pending);
       this.adminService.getTopInvestors(this.user._id,this.token).subscribe((data:any)=>{
         console.log(data);
+        this.topInvestors = data.data;
+        console.log(this.topInvestors)
       })
     }
     
