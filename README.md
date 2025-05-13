@@ -1,8 +1,8 @@
 # Dinaruis - Crowdfunding Platform
 
-![Dinaruis Logo](https://via.placeholder.com/150)
+=
 <div align="center">
-    <img src="Frontend/public/logo.png" alt="Logo" width="100%" height="100%">
+    <img src="Frontend/public/logo.png" alt="Logo" width="10%" height="10%">
 </div>
 
 Dinaruis is a modern crowdfunding platform that empowers creators, entrepreneurs, and individuals to bring their ideas to life through community support.
